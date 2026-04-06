@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
+import logo from "../../assets/logo.png";
 
 const Footer = () => {
   return (
@@ -10,8 +11,10 @@ const Footer = () => {
           <Col xs={12} md={6} lg={3} className="d-flex align-items-center justify-content-center">
             <NavLink to="/">
               <img
-                alt="Logo Restaurante"
+              src={logo}
+                alt="Logo Catalogo de Vehiculos"
                 className="img-fluid"
+                width={150}
               />
             </NavLink>
           </Col>

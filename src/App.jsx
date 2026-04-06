@@ -9,6 +9,7 @@ import Administrador from "./components/pages/Administrador";
 import DetalleVehiculo from "./components/pages/DetalleVehiculo";
 import Formulario from "./components/pages/Formulario";
 import Error404 from "./components/pages/Error404";
+import Login from "./components/pages/Login";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Inicio></Inicio>}></Route>
         <Route path="/detalle" element={<DetalleVehiculo></DetalleVehiculo>}></Route>
+        <Route path="/login" element={<Login></Login>}></Route>
          <Route path="/administrador" element={<Administrador></Administrador>}></Route>
          <Route path="/administrador/crear" element={<Formulario></Formulario>}></Route>
          <Route path="/administrador/editar" element={<Formulario></Formulario>}></Route>
