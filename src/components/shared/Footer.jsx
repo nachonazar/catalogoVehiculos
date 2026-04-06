@@ -4,7 +4,7 @@ import { NavLink, Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-white pt-5 pb-4">
+    <footer className="bg-dark text-white pt-5 pb-4 mt-5">
       <Container>
         <Row className="g-4">
           <Col xs={12} md={6} lg={3} className="d-flex align-items-center justify-content-center">

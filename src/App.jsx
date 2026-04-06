@@ -1,18 +1,30 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Footer from "./components/shared/Footer";
-import { BrowserRouter } from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router";
 import Menu from "./components/shared/Menu";
 import Contacto from "./components/shared/Contacto";
 import Inicio from "./components/pages/Inicio";
 import Administrador from "./components/pages/Administrador";
+import DetalleVehiculo from "./components/pages/DetalleVehiculo";
+import Formulario from "./components/pages/Formulario";
+import Error404 from "./components/pages/Error404";
+
 
 function App() {
   return (
     <BrowserRouter>
       <Menu />
-      <Administrador />
-      <Contacto />
+      <main>
+      <Routes>
+        <Route path="/" element={<Inicio></Inicio>}></Route>
+        <Route path="/detalle" element={<DetalleVehiculo></DetalleVehiculo>}></Route>
+         <Route path="/administrador" element={<Administrador></Administrador>}></Route>
+         <Route path="/administrador/crear" element={<Formulario></Formulario>}></Route>
+         <Route path="/administrador/editar" element={<Formulario></Formulario>}></Route>
+         <Route path="*" element={<Error404></Error404>}></Route>
+      </Routes>
+      </main>
       <Footer />
     </BrowserRouter>
   );
