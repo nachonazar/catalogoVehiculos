@@ -1,14 +1,27 @@
 import React from "react";
-import { Navbar, Container, Nav } from "react-bootstrap";
-import { NavLink, Link } from "react-router";
+import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import { NavLink, Link, useNavigate } from "react-router";
 import logo from "../../assets/logo.png";
 
-const Menu = () => {
+const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
+  const navegacion = useNavigate();
+
+  const logout = () => {
+    setUsuarioAdmin(false);
+    sessionStorage.removeItem("userKey");
+    navegacion("/");
+  };
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          <img src={logo} alt="Logo Catalogo de Vehiculos" className="img-fluid" width={150} />
+          <img
+            src={logo}
+            alt="Logo Catalogo de Vehiculos"
+            className="img-fluid"
+            width={150}
+          />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -16,12 +29,20 @@ const Menu = () => {
             <NavLink className="nav-link" to="/">
               Inicio
             </NavLink>
-            <NavLink className="nav-link" to="/administrador">
-              Administrador
-            </NavLink>
-            <NavLink className="nav-link" to="/login">
-              Login
-            </NavLink>
+            {usuarioAdmin ? (
+              <>
+                <NavLink className="nav-link" to="/administrador">
+                  Administrador
+                </NavLink>
+                <Button className="nav-link" onClick={logout}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <NavLink className="nav-link" to="/login">
+                Login
+              </NavLink>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
