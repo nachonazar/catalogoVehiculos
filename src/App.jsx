@@ -11,6 +11,7 @@ import Formulario from "./components/pages/Formulario";
 import Error404 from "./components/pages/Error404";
 import Login from "./components/pages/Login";
 import { useState } from "react";
+import ProtectorAdmin from "./components/rutas/ProtectorAdmin";
 
 
 function App() {
@@ -25,9 +26,11 @@ function App() {
         <Route path="/" element={<Inicio></Inicio>}></Route>
         <Route path="/detalle" element={<DetalleVehiculo></DetalleVehiculo>}></Route>
         <Route path="/login" element={<Login setUsuarioAdmin={setUsuarioAdmin}></Login>}></Route>
-         <Route path="/administrador" element={<Administrador></Administrador>}></Route>
-         <Route path="/administrador/crear" element={<Formulario></Formulario>}></Route>
-         <Route path="/administrador/editar" element={<Formulario></Formulario>}></Route>
+         <Route path="/administrador" element={<ProtectorAdmin isAdmin={usuarioAdmin}></ProtectorAdmin>}>
+          <Route index element={<Administrador></Administrador>}></Route>
+         <Route path="crear" element={<Formulario></Formulario>}></Route>
+         <Route path="editar" element={<Formulario></Formulario>}></Route>
+         </Route>
          <Route path="*" element={<Error404></Error404>}></Route>
       </Routes>
       </main>
