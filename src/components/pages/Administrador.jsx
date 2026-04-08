@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Container, Table } from "react-bootstrap";
+import { Link } from "react-router";
 
 const Administrador = () => {
   return (
@@ -9,7 +10,7 @@ const Administrador = () => {
           <h2>Panel de Administración</h2>
           <p>Gestiona el inventario de vehículos</p>
         </div>
-        <Button>+ Agregar Vehículo</Button>
+        <Link className="btn btn-primary" to={"/administrador/crear"}>+ Agregar Vehículo</Link>
       </div>
       <Table responsive striped bordered hover>
       <thead>
