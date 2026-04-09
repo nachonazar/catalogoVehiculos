@@ -10,20 +10,35 @@ import DetalleVehiculo from "./components/pages/DetalleVehiculo";
 import Formulario from "./components/pages/Formulario";
 import Error404 from "./components/pages/Error404";
 import Login from "./components/pages/Login";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProtectorAdmin from "./components/routes/ProtectorAdmin";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const usuarioLogueado =
     JSON.parse(sessionStorage.getItem("userKey")) || false;
+    const vehiculosLocalstorage = JSON.parse(localStorage.getItem('catalogoVehiculos')) || []
   const [usuarioAdmin, setUsuarioAdmin] = useState(usuarioLogueado);
+  const [vehiculos, setVehiculos] = useState(vehiculosLocalstorage);
+
+  useEffect(() => {
+    localStorage.setItem("catalogoVehiculos", JSON.stringify(vehiculos));
+  }, [vehiculos]);
+
+  const crearVehiculo = (vehiculoNuevo) => {
+    //agregar un id unico al vehiculo Nuevo
+    vehiculoNuevo.id = uuidv4();
+    //agregar el vehiculo al state de vehiculos
+    setVehiculos([...vehiculos, vehiculoNuevo]);
+    return true;
+  };
 
   return (
     <BrowserRouter>
       <Menu usuarioAdmin={usuarioAdmin} setUsuarioAdmin={setUsuarioAdmin} />
       <main>
         <Routes>
-          <Route path="/" element={<Inicio></Inicio>}></Route>
+          <Route path="/" element={<Inicio vehiculos={vehiculos}></Inicio>}></Route>
           <Route
             path="/detalle"
             element={<DetalleVehiculo></DetalleVehiculo>}
@@ -37,14 +52,8 @@ function App() {
             element={<ProtectorAdmin isAdmin={usuarioAdmin}></ProtectorAdmin>}
           >
             <Route index element={<Administrador></Administrador>}></Route>
-            <Route
-              path="crear"
-              element={<Formulario></Formulario>}
-            ></Route>
-            <Route
-              path="editar"
-              element={<Formulario></Formulario>}
-            ></Route>
+            <Route path="crear" element={<Formulario crearVehiculo={crearVehiculo}></Formulario>}></Route>
+            <Route path="editar" element={<Formulario></Formulario>}></Route>
           </Route>
           <Route path="*" element={<Error404></Error404>}></Route>
         </Routes>

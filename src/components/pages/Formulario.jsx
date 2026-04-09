@@ -1,21 +1,50 @@
 import React from "react";
-import { Modal, Form, Button, Row, Col, FormText } from "react-bootstrap";
+import {
+  Modal,
+  Form,
+  Button,
+  Row,
+  Col,
+  FormText,
+  FormGroup,
+  FormLabel,
+  FormControl,
+} from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
-const Formulario = () => {
+const Formulario = ({ crearVehiculo }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
+  const navegacion = useNavigate();
+
+  const onSubmit = (vehiculo) => {
+    //crear el vehiculo nuevo
+    if (crearVehiculo(vehiculo)) {
+      Swal.fire({
+        title: "Vehiculo creado",
+        text: `El vehiculo ${vehiculo.modelo} fue creado correctamente`,
+        icon: "success",
+      }).then(() => {
+        reset();
+        navegacion("/");
+      });
+    }
+  };
+
   return (
-    <Modal show={true}>
+    <Modal show={true} onHide={() => navegacion("/administrador")}>
       <Modal.Header closeButton>
         <Modal.Title>Agregar Vehículo</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <Row className="mb-3">
             <Col>
               <Form.Group>
@@ -47,7 +76,7 @@ const Formulario = () => {
                 </Form.Text>
               </Form.Group>
             </Col>
-            <Col md={6}>
+            <Col>
               <Form.Group>
                 <Form.Label>Modelo*</Form.Label>
                 <Form.Control
@@ -73,7 +102,6 @@ const Formulario = () => {
               </Form.Group>
             </Col>
           </Row>
-
           <Row className="mb-3">
             <Col>
               <Form.Group>
@@ -151,7 +179,25 @@ const Formulario = () => {
               </Form.Group>
             </Col>
           </Row>
-
+          <FormGroup className="mb-3">
+            <FormLabel>Imagen URL*</FormLabel>
+            <FormControl
+              type="text"
+              placeholder="Ej: https://www.pexels.com/es-es/vans-en-blanco-y-negro-fuera-de-la-decoracion-para-colgar-en-la-pared-1230679/"
+              {...register("imagen", {
+                required: "La url de la imagen es un dato obligatorio",
+                pattern: {
+                  value:
+                    /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?(\.(jpg|jpeg|png|webp))$/,
+                  message:
+                    "La imagen debe ser una url de imagen valida terminada en (jpg|jpeg|png|webp)",
+                },
+              })}
+            ></FormControl>
+            <Form.Text className="text-danger">
+              {errors.imagen?.message}
+            </Form.Text>
+          </FormGroup>
           <Form.Group className="mb-3">
             <Form.Label>Descripción</Form.Label>
             <Form.Control
@@ -178,7 +224,12 @@ const Formulario = () => {
               </Button>
             </Col>
             <Col>
-              <Button variant="secondary" className="w-100">
+              <Button
+                variant="secondary"
+                type="button"
+                className="w-100"
+                onClick={() => navegacion("/administrador")}
+              >
                 Cancelar
               </Button>
             </Col>
