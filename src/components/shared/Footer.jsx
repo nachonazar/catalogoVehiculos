@@ -25,7 +25,7 @@ const Footer = () => {
             </Nav>
           </Col>
           <Col xs={12} md={6} lg={3} className="d-flex flex-column align-items-center">
-            <h5 className="fw-bold mb-2 text-center">Javier Nazar</h5>
+            <h5 className="fw-bold mb-2 text-center">Ignacio Nazar</h5>
             <p className="text-white-50 mb-2 text-center">Seguime en mis redes:</p>
             <div className="d-flex justify-content-center align-items-center gap-3">
               <a href="#" className="text-white fs-4"><i className="bi bi-instagram"></i></a>
