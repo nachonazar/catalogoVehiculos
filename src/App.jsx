@@ -42,6 +42,13 @@ function App() {
     return true;
   };
 
+  const buscarVehiculo = (idVehiculo) => {
+    const vehiculoBuscado = vehiculos.find(
+      (itemVehiculo) => itemVehiculo.id === idVehiculo,
+    );
+    return vehiculoBuscado;
+  };
+
   return (
     <BrowserRouter>
       <Menu usuarioAdmin={usuarioAdmin} setUsuarioAdmin={setUsuarioAdmin} />
@@ -63,12 +70,23 @@ function App() {
             path="/administrador"
             element={<ProtectorAdmin isAdmin={usuarioAdmin}></ProtectorAdmin>}
           >
-            <Route index element={<Administrador vehiculos={vehiculos} borrarVehiculo={borrarVehiculo}></Administrador>}></Route>
+            <Route
+              index
+              element={
+                <Administrador
+                  vehiculos={vehiculos}
+                  borrarVehiculo={borrarVehiculo}
+                ></Administrador>
+              }
+            ></Route>
             <Route
               path="crear"
-              element={<Formulario crearVehiculo={crearVehiculo}></Formulario>}
+              element={<Formulario crearVehiculo={crearVehiculo} titulo={"Crear Vehiculo"}></Formulario>}
             ></Route>
-            <Route path="editar" element={<Formulario></Formulario>}></Route>
+            <Route
+              path="editar/:id"
+              element={<Formulario titulo={"Editar Vehiculo"} buscarVehiculo={buscarVehiculo}></Formulario>}
+            ></Route>
           </Route>
           <Route path="*" element={<Error404></Error404>}></Route>
         </Routes>

@@ -50,7 +50,7 @@ const ItemVehiculo = ({ vehiculo, borrarVehiculo }) => {
       <td className="text-center">{vehiculo.precio}</td>
       <td className="text-center">Disponible</td>
       <td className="text-center">
-        <Link className="me-lg-2 btn btn-warning" to={"/administrador/editar"}>
+        <Link className="me-lg-2 btn btn-warning" to={'/administrador/editar/'+vehiculo.id}>
           <i className="bi bi-pencil-square"></i>
         </Link>
         <Button variant="danger" onClick={eliminarVehiculo}>

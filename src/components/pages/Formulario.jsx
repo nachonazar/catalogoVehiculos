@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Modal,
   Form,
@@ -11,16 +11,34 @@ import {
   FormControl,
 } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
 
-const Formulario = ({ crearVehiculo }) => {
+const Formulario = ({ crearVehiculo, buscarVehiculo, titulo }) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
+    setValue
   } = useForm();
+  const { id } = useParams();
+
+  useEffect(() => {
+    //verificar si estoy editando
+    if (titulo === "Editar Vehiculo") {
+      //busco el vehiculo por id y lo dibujo en el formulario
+      const vehiculoBuscado = buscarVehiculo(id);
+      setValue("marca", vehiculoBuscado.marca)
+       setValue("modelo", vehiculoBuscado.modelo)
+        setValue("anio", vehiculoBuscado.anio)
+        setValue("tipo", vehiculoBuscado.tipo)
+        setValue("precio", vehiculoBuscado.precio)
+        setValue("km", vehiculoBuscado.km)
+        setValue("imagen", vehiculoBuscado.imagen)
+        setValue("descripcion", vehiculoBuscado.descripcion)
+    }
+  }, []);
 
   const navegacion = useNavigate();
 
@@ -41,7 +59,7 @@ const Formulario = ({ crearVehiculo }) => {
   return (
     <Modal show={true} onHide={() => navegacion("/administrador")}>
       <Modal.Header closeButton>
-        <Modal.Title>Agregar Vehículo</Modal.Title>
+        <Modal.Title>{titulo}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
