@@ -17,7 +17,8 @@ import { v4 as uuidv4 } from "uuid";
 function App() {
   const usuarioLogueado =
     JSON.parse(sessionStorage.getItem("userKey")) || false;
-    const vehiculosLocalstorage = JSON.parse(localStorage.getItem('catalogoVehiculos')) || []
+  const vehiculosLocalstorage =
+    JSON.parse(localStorage.getItem("catalogoVehiculos")) || [];
   const [usuarioAdmin, setUsuarioAdmin] = useState(usuarioLogueado);
   const [vehiculos, setVehiculos] = useState(vehiculosLocalstorage);
 
@@ -33,12 +34,23 @@ function App() {
     return true;
   };
 
+  const borrarVehiculo = (idVehiculo) => {
+    const vehiculosFiltrados = vehiculos.filter(
+      (itemVehiculo) => itemVehiculo.id !== idVehiculo,
+    );
+    setVehiculos(vehiculosFiltrados);
+    return true;
+  };
+
   return (
     <BrowserRouter>
       <Menu usuarioAdmin={usuarioAdmin} setUsuarioAdmin={setUsuarioAdmin} />
       <main>
         <Routes>
-          <Route path="/" element={<Inicio vehiculos={vehiculos}></Inicio>}></Route>
+          <Route
+            path="/"
+            element={<Inicio vehiculos={vehiculos}></Inicio>}
+          ></Route>
           <Route
             path="/detalle"
             element={<DetalleVehiculo></DetalleVehiculo>}
@@ -51,8 +63,11 @@ function App() {
             path="/administrador"
             element={<ProtectorAdmin isAdmin={usuarioAdmin}></ProtectorAdmin>}
           >
-            <Route index element={<Administrador></Administrador>}></Route>
-            <Route path="crear" element={<Formulario crearVehiculo={crearVehiculo}></Formulario>}></Route>
+            <Route index element={<Administrador vehiculos={vehiculos} borrarVehiculo={borrarVehiculo}></Administrador>}></Route>
+            <Route
+              path="crear"
+              element={<Formulario crearVehiculo={crearVehiculo}></Formulario>}
+            ></Route>
             <Route path="editar" element={<Formulario></Formulario>}></Route>
           </Route>
           <Route path="*" element={<Error404></Error404>}></Route>

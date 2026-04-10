@@ -1,8 +1,9 @@
 import React from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { Link } from "react-router";
+import ItemVehiculo from "./vehiculo/ItemVehiculo";
 
-const Administrador = () => {
+const Administrador = ({vehiculos, borrarVehiculo}) => {
   return (
     <Container className="mt-5">
       <div className="d-flex justify-content-between align-items-center">
@@ -17,13 +18,18 @@ const Administrador = () => {
           <tr className="text-center">
             <th>VEHICULO</th>
             <th>TIPO</th>
+            <th>URL de imagen</th>
             <th>AÑO</th>
             <th>PRECIO</th>
             <th>ESTADO</th>
             <th>ACCIONES</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          {vehiculos.map((vehiculo) => (
+            <ItemVehiculo key={vehiculo.id} vehiculo={vehiculo} borrarVehiculo={borrarVehiculo}></ItemVehiculo>
+          ))}
+        </tbody>
         </Table>
     </Container>
   );
