@@ -11,7 +11,8 @@ const Inicio = ({ vehiculos }) => {
     setTerminoBusqueda(e.target.value);
   };
 
-  const vehiculosFiltrados = vehiculos.filter(
+  const vehiculosFiltrados = vehiculos.filter(v => v.disponible)
+  .filter(
     (vehiculo) =>
       vehiculo.marca.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
       vehiculo.modelo.toLowerCase().includes(terminoBusqueda.toLowerCase()),

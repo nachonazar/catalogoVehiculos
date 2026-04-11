@@ -14,20 +14,24 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
 
-const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) => {
+const Formulario = ({
+  crearVehiculo,
+  buscarVehiculo,
+  titulo,
+  editarVehiculo,
+}) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
     setValue,
+    watch,
   } = useForm();
   const { id } = useParams();
 
   useEffect(() => {
-    //verificar si estoy editando
     if (titulo === "Editar Vehiculo") {
-      //busco el vehiculo por id y lo dibujo en el formulario
       const vehiculoBuscado = buscarVehiculo(id);
       setValue("marca", vehiculoBuscado.marca);
       setValue("modelo", vehiculoBuscado.modelo);
@@ -36,6 +40,7 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) =
       setValue("precio", vehiculoBuscado.precio);
       setValue("km", vehiculoBuscado.km);
       setValue("imagen", vehiculoBuscado.imagen);
+      setValue("disponible", vehiculoBuscado.disponible);
       setValue("descripcion", vehiculoBuscado.descripcion);
     }
   }, []);
@@ -44,7 +49,6 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) =
 
   const onSubmit = (vehiculo) => {
     if (titulo === "Crear Vehiculo") {
-      //crear el vehiculo nuevo
       if (crearVehiculo(vehiculo)) {
         Swal.fire({
           title: "Vehiculo creado",
@@ -55,17 +59,16 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) =
           navegacion("/administrador");
         });
       }
-    }else{
-      //tomar los del formulario "vehiculo"
-     if(editarVehiculo(id, vehiculo)){
-      Swal.fire({
+    } else {
+      if (editarVehiculo(id, vehiculo)) {
+        Swal.fire({
           title: "Vehiculo editado",
           text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} fue editado correctamente`,
           icon: "success",
         }).then(() => {
           navegacion("/administrador");
         });
-     }
+      }
     }
   };
 
@@ -229,6 +232,15 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) =
               {errors.imagen?.message}
             </Form.Text>
           </FormGroup>
+          {titulo === "Editar Vehiculo" && (
+            <Form.Group className="mb-3">
+              <Form.Check
+                type="switch"
+                label={watch("disponible") ? "Disponible" : "Vendido"}
+                {...register("disponible")}
+              />
+            </Form.Group>
+          )}
           <Form.Group className="mb-3">
             <Form.Label>Descripción</Form.Label>
             <Form.Control

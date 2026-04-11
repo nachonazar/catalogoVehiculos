@@ -29,6 +29,7 @@ function App() {
   const crearVehiculo = (vehiculoNuevo) => {
     //agregar un id unico al vehiculo Nuevo
     vehiculoNuevo.id = uuidv4();
+    vehiculoNuevo.disponible = true;
     //agregar el vehiculo al state de vehiculos
     setVehiculos([...vehiculos, vehiculoNuevo]);
     return true;
