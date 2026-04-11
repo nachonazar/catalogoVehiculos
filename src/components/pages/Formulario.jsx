@@ -14,13 +14,13 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
 
-const Formulario = ({ crearVehiculo, buscarVehiculo, titulo }) => {
+const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm();
   const { id } = useParams();
 
@@ -29,30 +29,43 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo }) => {
     if (titulo === "Editar Vehiculo") {
       //busco el vehiculo por id y lo dibujo en el formulario
       const vehiculoBuscado = buscarVehiculo(id);
-      setValue("marca", vehiculoBuscado.marca)
-       setValue("modelo", vehiculoBuscado.modelo)
-        setValue("anio", vehiculoBuscado.anio)
-        setValue("tipo", vehiculoBuscado.tipo)
-        setValue("precio", vehiculoBuscado.precio)
-        setValue("km", vehiculoBuscado.km)
-        setValue("imagen", vehiculoBuscado.imagen)
-        setValue("descripcion", vehiculoBuscado.descripcion)
+      setValue("marca", vehiculoBuscado.marca);
+      setValue("modelo", vehiculoBuscado.modelo);
+      setValue("anio", vehiculoBuscado.anio);
+      setValue("tipo", vehiculoBuscado.tipo);
+      setValue("precio", vehiculoBuscado.precio);
+      setValue("km", vehiculoBuscado.km);
+      setValue("imagen", vehiculoBuscado.imagen);
+      setValue("descripcion", vehiculoBuscado.descripcion);
     }
   }, []);
 
   const navegacion = useNavigate();
 
   const onSubmit = (vehiculo) => {
-    //crear el vehiculo nuevo
-    if (crearVehiculo(vehiculo)) {
+    if (titulo === "Crear Vehiculo") {
+      //crear el vehiculo nuevo
+      if (crearVehiculo(vehiculo)) {
+        Swal.fire({
+          title: "Vehiculo creado",
+          text: `El vehiculo ${vehiculo.modelo} fue creado correctamente`,
+          icon: "success",
+        }).then(() => {
+          reset();
+          navegacion("/administrador");
+        });
+      }
+    }else{
+      //tomar los del formulario "vehiculo"
+     if(editarVehiculo(id, vehiculo)){
       Swal.fire({
-        title: "Vehiculo creado",
-        text: `El vehiculo ${vehiculo.modelo} fue creado correctamente`,
-        icon: "success",
-      }).then(() => {
-        reset();
-        navegacion("/");
-      });
+          title: "Vehiculo editado",
+          text: `El vehiculo ${vehiculo.modelo} fue editado correctamente`,
+          icon: "success",
+        }).then(() => {
+          navegacion("/administrador");
+        });
+     }
     }
   };
 
@@ -238,7 +251,7 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo }) => {
           <Row>
             <Col>
               <Button variant="primary" type="submit" className="w-100">
-                Agregar
+                Guardar
               </Button>
             </Col>
             <Col>

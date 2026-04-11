@@ -46,7 +46,7 @@ const ItemVehiculo = ({ vehiculo, borrarVehiculo }) => {
           alt={vehiculo.modelo}
         />
       </td>
-      <td className="text-center">{vehiculo.año}</td>
+      <td className="text-center">{vehiculo.anio}</td>
       <td className="text-center">{vehiculo.precio}</td>
       <td className="text-center">Disponible</td>
       <td className="text-center">

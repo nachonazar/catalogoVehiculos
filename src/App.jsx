@@ -49,6 +49,21 @@ function App() {
     return vehiculoBuscado;
   };
 
+  const editarVehiculo = (idVehiculo, vehiculoActualizado) => {
+    const vehiculosEditados = vehiculos.map((itemVehiculo) => {
+      if (itemVehiculo.id === idVehiculo) {
+        return {
+          ...itemVehiculo,
+          ...vehiculoActualizado,
+        };
+      } else {
+        return itemVehiculo;
+      }
+    });
+    setVehiculos(vehiculosEditados);
+    return true;
+  };
+
   return (
     <BrowserRouter>
       <Menu usuarioAdmin={usuarioAdmin} setUsuarioAdmin={setUsuarioAdmin} />
@@ -81,11 +96,22 @@ function App() {
             ></Route>
             <Route
               path="crear"
-              element={<Formulario crearVehiculo={crearVehiculo} titulo={"Crear Vehiculo"}></Formulario>}
+              element={
+                <Formulario
+                  crearVehiculo={crearVehiculo}
+                  titulo={"Crear Vehiculo"}
+                ></Formulario>
+              }
             ></Route>
             <Route
               path="editar/:id"
-              element={<Formulario titulo={"Editar Vehiculo"} buscarVehiculo={buscarVehiculo}></Formulario>}
+              element={
+                <Formulario
+                  titulo={"Editar Vehiculo"}
+                  buscarVehiculo={buscarVehiculo}
+                  editarVehiculo={editarVehiculo}
+                ></Formulario>
+              }
             ></Route>
           </Route>
           <Route path="*" element={<Error404></Error404>}></Route>
