@@ -17,7 +17,7 @@ const Administrador = ({vehiculos, borrarVehiculo}) => {
       <thead>
           <tr className="text-center">
             <th>VEHICULO</th>
-            <th>TIPO</th>
+            <th>CATEGORIA</th>
             <th>URL de imagen</th>
             <th>AÑO</th>
             <th>PRECIO</th>

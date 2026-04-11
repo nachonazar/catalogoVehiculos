@@ -9,7 +9,7 @@ const CardVehiculo = ({ vehiculo }) => {
         <div>
           <img
             src={vehiculo.imagen}
-            alt={vehiculo.modelo}
+            alt={`${vehiculo.marca} ${vehiculo.modelo}`}
             className="img-fluid"
           />
         </div>
@@ -18,7 +18,7 @@ const CardVehiculo = ({ vehiculo }) => {
           <Card.Title className="primary-font">{vehiculo.marca} {vehiculo.modelo}</Card.Title>
           <span className="badge bg-success">Disponible</span>
           </div>
-          <p>{vehiculo.tipo}</p>
+          <p>{vehiculo.categoria}</p>
           <p><i className="bi bi-calendar"></i>Año {vehiculo.anio}</p>
           <p><i className="bi bi-speedometer"></i>{vehiculo.km} km</p>
           <Card.Text>
@@ -28,7 +28,7 @@ const CardVehiculo = ({ vehiculo }) => {
           </Card.Text>
         </Card.Body>
         <CardFooter className="text-end">
-          <Link variant="primary" className="me-2 btn btn-primary">
+          <Link variant="primary" className="me-2 btn btn-primary" to={'/detalle/'+vehiculo.id}>
             Ver detalles
           </Link>
         </CardFooter>

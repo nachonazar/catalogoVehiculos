@@ -38,12 +38,12 @@ const ItemVehiculo = ({ vehiculo, borrarVehiculo }) => {
       <td className="text-center">
         {vehiculo.marca} {vehiculo.modelo}
       </td>
-      <td className="text-center">{vehiculo.tipo}</td>
+      <td className="text-center">{vehiculo.categoria}</td>
       <td className="text-center">
         <img
           src={vehiculo.imagen}
           className="img-thumbnail"
-          alt={vehiculo.modelo}
+          alt={`${vehiculo.marca} ${vehiculo.modelo}`}
         />
       </td>
       <td className="text-center">{vehiculo.anio}</td>

@@ -32,7 +32,7 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) =
       setValue("marca", vehiculoBuscado.marca);
       setValue("modelo", vehiculoBuscado.modelo);
       setValue("anio", vehiculoBuscado.anio);
-      setValue("tipo", vehiculoBuscado.tipo);
+      setValue("categoria", vehiculoBuscado.categoria);
       setValue("precio", vehiculoBuscado.precio);
       setValue("km", vehiculoBuscado.km);
       setValue("imagen", vehiculoBuscado.imagen);
@@ -48,7 +48,7 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) =
       if (crearVehiculo(vehiculo)) {
         Swal.fire({
           title: "Vehiculo creado",
-          text: `El vehiculo ${vehiculo.modelo} fue creado correctamente`,
+          text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} fue creado correctamente`,
           icon: "success",
         }).then(() => {
           reset();
@@ -60,7 +60,7 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) =
      if(editarVehiculo(id, vehiculo)){
       Swal.fire({
           title: "Vehiculo editado",
-          text: `El vehiculo ${vehiculo.modelo} fue editado correctamente`,
+          text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} fue editado correctamente`,
           icon: "success",
         }).then(() => {
           navegacion("/administrador");
@@ -160,10 +160,10 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) =
             </Col>
             <Col>
               <Form.Group>
-                <Form.Label>Tipo *</Form.Label>
+                <Form.Label>Categoria *</Form.Label>
                 <Form.Select
-                  {...register("tipo", {
-                    required: "Debe seleccionar el tipo de vehiculo",
+                  {...register("categoria", {
+                    required: "Debe seleccionar una categoria",
                   })}
                 >
                   <option value="">Seleccione una opcion</option>
@@ -173,7 +173,7 @@ const Formulario = ({ crearVehiculo, buscarVehiculo, titulo, editarVehiculo }) =
                   <option value="Deportivo">Deportivo</option>
                 </Form.Select>
                 <Form.Text className="text-danger">
-                  {errors.tipo?.message}
+                  {errors.categoria?.message}
                 </Form.Text>
               </Form.Group>
             </Col>

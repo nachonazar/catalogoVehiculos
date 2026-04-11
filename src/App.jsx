@@ -74,8 +74,8 @@ function App() {
             element={<Inicio vehiculos={vehiculos}></Inicio>}
           ></Route>
           <Route
-            path="/detalle"
-            element={<DetalleVehiculo></DetalleVehiculo>}
+            path="/detalle/:id"
+            element={<DetalleVehiculo buscarVehiculo={buscarVehiculo}></DetalleVehiculo>}
           ></Route>
           <Route
             path="/login"
