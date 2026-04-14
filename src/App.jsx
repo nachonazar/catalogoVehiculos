@@ -26,14 +26,16 @@ function App() {
     localStorage.setItem("catalogoVehiculos", JSON.stringify(vehiculos));
   }, [vehiculos]);
 
-  const crearVehiculo = (vehiculoNuevo) => {
-    //agregar un id unico al vehiculo Nuevo
-    vehiculoNuevo.id = uuidv4();
-    vehiculoNuevo.disponible = true;
-    //agregar el vehiculo al state de vehiculos
-    setVehiculos([...vehiculos, vehiculoNuevo]);
-    return true;
+  const crearVehiculo = (vehiculo) => {
+  const nuevoVehiculo = {
+    ...vehiculo, // 🔥 ESTO ES LO IMPORTANTE
+    id: crypto.randomUUID(),
+    disponible: true,
   };
+
+  setVehiculos([...vehiculos, nuevoVehiculo]);
+  return true;
+};
 
   const borrarVehiculo = (idVehiculo) => {
     const vehiculosFiltrados = vehiculos.filter(
@@ -50,20 +52,19 @@ function App() {
     return vehiculoBuscado;
   };
 
-  const editarVehiculo = (idVehiculo, vehiculoActualizado) => {
-    const vehiculosEditados = vehiculos.map((itemVehiculo) => {
-      if (itemVehiculo.id === idVehiculo) {
-        return {
-          ...itemVehiculo,
-          ...vehiculoActualizado,
-        };
-      } else {
-        return itemVehiculo;
-      }
-    });
-    setVehiculos(vehiculosEditados);
-    return true;
-  };
+  const editarVehiculo = (id, vehiculoEditado) => {
+  const nuevosVehiculos = vehiculos.map((v) =>
+    v.id === id
+      ? {
+          ...v,
+          ...vehiculoEditado, // 🔥 NO perder datos
+        }
+      : v
+  );
+
+  setVehiculos(nuevosVehiculos);
+  return true;
+};
 
   return (
     <BrowserRouter>

@@ -3,24 +3,36 @@ import { Col, Card, CardFooter } from "react-bootstrap";
 import { Link } from "react-router";
 
 const CardVehiculo = ({ vehiculo }) => {
+  const imagenMostrar =
+    vehiculo.imagenes?.[0] ||
+    vehiculo.imagen ||
+    "https://via.placeholder.com/300";
+
   return (
     <Col md={4} lg={3} className="mb-3">
       <Card className="h-100">
         <div>
           <img
-            src={vehiculo.imagen}
+            src={imagenMostrar}
             alt={`${vehiculo.marca} ${vehiculo.modelo}`}
             className="img-fluid"
           />
         </div>
         <Card.Body>
-            <div className="d-flex justify-content-between align-items-start">
-          <Card.Title className="primary-font">{vehiculo.marca} {vehiculo.modelo}</Card.Title>
-          <span className="badge bg-success">Disponible</span>
+          <div className="d-flex justify-content-between align-items-start">
+            <Card.Title className="primary-font">
+              {vehiculo.marca} {vehiculo.modelo}
+            </Card.Title>
+            <span className="badge bg-success">Disponible</span>
           </div>
           <p>{vehiculo.categoria}</p>
-          <p><i className="bi bi-calendar"></i>Año {vehiculo.anio}</p>
-          <p><i className="bi bi-speedometer"></i>{vehiculo.km} km</p>
+          <p>
+            <i className="bi bi-calendar"></i>Año {vehiculo.anio}
+          </p>
+          <p>
+            <i className="bi bi-speedometer"></i>
+            {vehiculo.km} km
+          </p>
           <Card.Text>
             Descripción: {vehiculo.descripcion}
             <br className="mb-2" />
@@ -28,7 +40,11 @@ const CardVehiculo = ({ vehiculo }) => {
           </Card.Text>
         </Card.Body>
         <CardFooter className="text-end">
-          <Link variant="primary" className="me-2 btn btn-primary" to={'/detalle/'+vehiculo.id}>
+          <Link
+            variant="primary"
+            className="me-2 btn btn-primary"
+            to={"/detalle/" + vehiculo.id}
+          >
             Ver detalles
           </Link>
         </CardFooter>

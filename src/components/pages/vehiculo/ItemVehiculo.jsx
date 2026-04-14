@@ -4,6 +4,11 @@ import { Button } from "react-bootstrap";
 import Swal from "sweetalert2";
 
 const ItemVehiculo = ({ vehiculo, borrarVehiculo }) => {
+  const imagenMostrar =
+    vehiculo.imagenes?.[0] ||
+    vehiculo.imagen ||
+    "https://via.placeholder.com/100";
+
   const eliminarVehiculo = () => {
     Swal.fire({
       title: "Eliminar Vehiculo",
@@ -17,13 +22,12 @@ const ItemVehiculo = ({ vehiculo, borrarVehiculo }) => {
     }).then((result) => {
       if (result.isConfirmed)
         if (borrarVehiculo(vehiculo.id)) {
-          //aqui borro efectivamente el vehiculo
           Swal.fire({
             title: "Vehiculo eliminado",
             text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} fue eliminado correctamente`,
             icon: "success",
           });
-        }else{
+        } else {
           Swal.fire({
             title: "Ocurrio un error",
             text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser eliminado`,
@@ -41,20 +45,27 @@ const ItemVehiculo = ({ vehiculo, borrarVehiculo }) => {
       <td className="text-center">{vehiculo.categoria}</td>
       <td className="text-center">
         <img
-          src={vehiculo.imagen}
+          src={imagenMostrar}
           className="img-thumbnail"
           alt={`${vehiculo.marca} ${vehiculo.modelo}`}
         />
       </td>
       <td className="text-center">{vehiculo.anio}</td>
       <td className="text-center">{vehiculo.precio}</td>
-      <td className="text-center"><td className="text-center">
-  <span className={`badge ${vehiculo.disponible ? "bg-success" : "bg-danger"}`}>
-    {vehiculo.disponible ? "Disponible" : "Vendido"}
-  </span>
-</td></td>
       <td className="text-center">
-        <Link className="me-lg-2 btn btn-warning" to={'/administrador/editar/'+vehiculo.id}>
+        <span
+          className={`badge ${
+            vehiculo.disponible ? "bg-success" : "bg-danger"
+          }`}
+        >
+          {vehiculo.disponible ? "Disponible" : "Vendido"}
+        </span>
+      </td>
+      <td className="text-center">
+        <Link
+          className="me-lg-2 btn btn-warning"
+          to={"/administrador/editar/" + vehiculo.id}
+        >
           <i className="bi bi-pencil-square"></i>
         </Link>
         <Button variant="danger" onClick={eliminarVehiculo}>
