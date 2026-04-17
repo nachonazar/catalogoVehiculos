@@ -97,8 +97,28 @@ const Formulario = ({
                 <Form.Control
                   type="text"
                   placeholder="Ej: Toyota"
-                  {...register("marca", { required: true })}
+                  {...register("marca", {
+                    required: "La marca del vehiculo es un dato obligatorio",
+                    minLength: {
+                      value: 2,
+                      message:
+                        "La marca del vehiculo debe tener al menos 2 caracteres",
+                    },
+                    maxLength: {
+                      value: 100,
+                      message:
+                        "La marca del vehiculo debe tener como maximo 100 caracteres",
+                    },
+                    pattern: {
+                      value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
+                      message:
+                        "La marca del vehiculo debe contener solo letras",
+                    },
+                  })}
                 />
+                <Form.Text className="text-danger">
+                  {errors.marca?.message}
+                </Form.Text>
               </Form.Group>
             </Col>
             <Col>
@@ -107,8 +127,23 @@ const Formulario = ({
                 <Form.Control
                   type="text"
                   placeholder="Ej: Corolla"
-                  {...register("modelo", { required: true })}
+                  {...register("modelo", {
+                    required: "El modelo del vehiculo es un dato obligatorio",
+                    minLength: {
+                      value: 2,
+                      message:
+                        "El modelo del vehiculo debe tener al menos 2 caracteres",
+                    },
+                    maxLength: {
+                      value: 100,
+                      message:
+                        "El modelo del vehiculo debe tener como maximo 100 caracteres",
+                    },
+                  })}
                 />
+                <Form.Text className="text-danger">
+                  {errors.modelo?.message}
+                </Form.Text>
               </Form.Group>
             </Col>
           </Row>
@@ -119,20 +154,42 @@ const Formulario = ({
                 <Form.Label>Año*</Form.Label>
                 <Form.Control
                   type="number"
-                  {...register("anio", { required: true })}
+                  placeholder="Ej: 2025"
+                  {...register("anio", {
+                    required: "El año es un dato obligatorio",
+                    valueAsNumber: true,
+                    min: {
+                      value: 1900,
+                      message: "Año inválido",
+                    },
+                    max: {
+                      value: new Date().getFullYear(),
+                      message: "No puede ser futuro",
+                    },
+                  })}
                 />
+                <Form.Text className="text-danger">
+                  {errors.anio?.message}
+                </Form.Text>
               </Form.Group>
             </Col>
             <Col>
               <Form.Group>
                 <Form.Label>Categoria*</Form.Label>
-                <Form.Select {...register("categoria", { required: true })}>
-                  <option value="">Seleccione</option>
+                <Form.Select
+                  {...register("categoria", {
+                    required: "Debe seleccionar una categoria",
+                  })}
+                >
+                  <option value="">Seleccione una opcion</option>
                   <option value="Sedán">Sedán</option>
                   <option value="SUV">SUV</option>
                   <option value="Camioneta">Camioneta</option>
                   <option value="Deportivo">Deportivo</option>
                 </Form.Select>
+                <Form.Text className="text-danger">
+                  {errors.categoria?.message}
+                </Form.Text>
               </Form.Group>
             </Col>
           </Row>
@@ -143,8 +200,14 @@ const Formulario = ({
                 <Form.Label>Precio*</Form.Label>
                 <Form.Control
                   type="number"
-                  {...register("precio", { required: true })}
+                  placeholder="Ej: 25000"
+                  {...register("precio", {
+                    required: "El precio es un valor obligatorio",
+                  })}
                 />
+                <FormText className="text-danger">
+                  {errors.precio?.message}
+                </FormText>
               </Form.Group>
             </Col>
             <Col>
@@ -152,8 +215,14 @@ const Formulario = ({
                 <Form.Label>Kilometraje*</Form.Label>
                 <Form.Control
                   type="number"
-                  {...register("km", { required: true })}
+                  placeholder="Ej: 45000"
+                  {...register("km", {
+                    required: "El kilometraje es un dato obligatorio",
+                  })}
                 />
+                <FormText className="text-danger">
+                  {errors.km?.message}
+                </FormText>
               </Form.Group>
             </Col>
           </Row>
@@ -203,7 +272,25 @@ const Formulario = ({
 
           <Form.Group className="mb-3">
             <Form.Label>Descripción</Form.Label>
-            <Form.Control as="textarea" rows={3} {...register("descripcion")} />
+            <Form.Control
+              as="textarea"
+              rows={4}
+              placeholder="Ej: Vehículo en excelente estado, único dueño y nunca chocado. Service al día en concesionaria oficial. Aire acondicionado, alarma, vidrios eléctricos y Bluetooth. Documentación completa al día."
+              {...register("descripcion", {
+                minLength: {
+                  value: 10,
+                  message: "La descrición debe tener al menos 10 caracteres",
+                },
+                maxLength: {
+                  value: 500,
+                  message:
+                    "La descrición debe tener como máximo 500 caracteres",
+                },
+              })}
+            />
+            <Form.Text className="text-danger">
+              {errors.descripcion?.message}
+            </Form.Text>
           </Form.Group>
 
           <Row>
