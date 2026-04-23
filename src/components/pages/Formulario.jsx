@@ -14,6 +14,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
 
+// Expresión regular para validar formato de URL
+const URL_PATTERN =
+  /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/#\w?=&.-]*)*\/?$/;
+
 const Formulario = ({
   crearVehiculo,
   buscarVehiculo,
@@ -31,6 +35,7 @@ const Formulario = ({
 
   const { id } = useParams();
   const [imagenes, setImagenes] = useState([""]);
+  const [errorImagenes, setErrorImagenes] = useState(""); // Estado para validación manual de imágenes
 
   useEffect(() => {
     if (titulo === "Editar Vehiculo") {
@@ -44,8 +49,6 @@ const Formulario = ({
       setValue("km", vehiculoBuscado.km);
       setValue("disponible", vehiculoBuscado.disponible);
       setValue("descripcion", vehiculoBuscado.descripcion);
-
-      // 🔥 cargar imágenes
       setImagenes(vehiculoBuscado.imagenes || [""]);
     }
   }, []);
@@ -53,9 +56,29 @@ const Formulario = ({
   const navegacion = useNavigate();
 
   const onSubmit = (vehiculo) => {
+    // Filtrar strings vacíos y espacios
+    const imagenesValidas = imagenes.filter((img) => img.trim() !== "");
+
+    // Validación manual de imágenes
+    if (imagenesValidas.length === 0) {
+      setErrorImagenes("Debe incluir al menos una URL de imagen");
+      return;
+    }
+
+    const todasUrlsValidas = imagenesValidas.every((img) =>
+      URL_PATTERN.test(img),
+    );
+    if (!todasUrlsValidas) {
+      setErrorImagenes("Una o más URLs tienen un formato inválido");
+      return;
+    }
+
+    // Si pasa las validaciones, limpiamos error y armamos el objeto
+    setErrorImagenes("");
+
     const vehiculoCompleto = {
       ...vehiculo,
-      imagenes: imagenes.filter((img) => img !== ""),
+      imagenes: imagenesValidas,
     };
 
     if (titulo === "Crear Vehiculo") {
@@ -110,9 +133,9 @@ const Formulario = ({
                         "La marca del vehiculo debe tener como maximo 100 caracteres",
                     },
                     pattern: {
-                      value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
+                      value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s\-\.()]+$/,
                       message:
-                        "La marca del vehiculo debe contener solo letras",
+                        "La marca solo puede contener letras, espacios, guiones, puntos y paréntesis",
                     },
                   })}
                 />
@@ -139,6 +162,11 @@ const Formulario = ({
                       message:
                         "El modelo del vehiculo debe tener como maximo 100 caracteres",
                     },
+                    pattern: {
+                      value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ0-9\s\-\.()/]+$/,
+                      message:
+                        "El modelo solo puede contener letras, números, espacios, guiones, puntos y paréntesis",
+                    },
                   })}
                 />
                 <Form.Text className="text-danger">
@@ -163,7 +191,7 @@ const Formulario = ({
                       message: "Año inválido",
                     },
                     max: {
-                      value: new Date().getFullYear(),
+                      value: new Date().getFullYear() + 1,
                       message: "No puede ser futuro",
                     },
                   })}
@@ -203,6 +231,14 @@ const Formulario = ({
                   placeholder="Ej: 25000"
                   {...register("precio", {
                     required: "El precio es un valor obligatorio",
+                    min: {
+                      value: 500000,
+                      message: "El precio mínimo es $500.000",
+                    },
+                    max: {
+                      value: 500000000,
+                      message: "El precio máximo es $500.000.000",
+                    },
                   })}
                 />
                 <FormText className="text-danger">
@@ -218,6 +254,14 @@ const Formulario = ({
                   placeholder="Ej: 45000"
                   {...register("km", {
                     required: "El kilometraje es un dato obligatorio",
+                    min: {
+                      value: 0,
+                      message: "El kilometraje no puede ser negativo",
+                    },
+                    max: {
+                      value: 500000,
+                      message: "El kilometraje máximo es 500.000",
+                    },
                   })}
                 />
                 <FormText className="text-danger">
@@ -226,38 +270,52 @@ const Formulario = ({
               </Form.Group>
             </Col>
           </Row>
-
-          {/* 🔥 NUEVO BLOQUE DE IMÁGENES */}
           <FormGroup className="mb-3">
             <FormLabel>Imágenes URL*</FormLabel>
 
             {imagenes.map((img, index) => (
-              <div key={index} className="d-flex mb-2">
-                <FormControl
-                  type="text"
-                  value={img}
-                  onChange={(e) => {
-                    const nuevas = [...imagenes];
-                    nuevas[index] = e.target.value;
-                    setImagenes(nuevas);
-                  }}
-                  placeholder="https://imagen.jpg"
-                />
-                <Button
-                  variant="danger"
-                  className="ms-2"
-                  onClick={() =>
-                    setImagenes(imagenes.filter((_, i) => i !== index))
-                  }
-                >
-                  X
-                </Button>
+              <div key={index} className="mb-2">
+                <div className="d-flex">
+                  <FormControl
+                    type="text"
+                    value={img}
+                    isInvalid={img !== "" && !URL_PATTERN.test(img)}
+                    onChange={(e) => {
+                      const nuevas = [...imagenes];
+                      nuevas[index] = e.target.value;
+                      setImagenes(nuevas);
+                      setErrorImagenes(""); // Limpia error general al escribir
+                    }}
+                    placeholder="https://imagen.jpg"
+                  />
+                  <Button
+                    variant="danger"
+                    className="ms-2"
+                    onClick={() =>
+                      setImagenes(imagenes.filter((_, i) => i !== index))
+                    }
+                  >
+                    X
+                  </Button>
+                </div>
+                {img !== "" && !URL_PATTERN.test(img) && (
+                  <FormText className="text-danger">
+                    Formato de URL no válido
+                  </FormText>
+                )}
               </div>
             ))}
 
             <Button onClick={() => setImagenes([...imagenes, ""])}>
               + Agregar imagen
             </Button>
+
+            {/* Mensaje de error para validación manual de imágenes */}
+            {errorImagenes && (
+              <div className="text-danger mt-1">
+                <small>{errorImagenes}</small>
+              </div>
+            )}
           </FormGroup>
 
           {titulo === "Editar Vehiculo" && (
