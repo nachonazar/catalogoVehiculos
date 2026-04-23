@@ -13,8 +13,6 @@ import {
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
-
-// Expresión regular para validar formato de URL
 const URL_PATTERN =
   /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/#\w?=&.-]*)*\/?$/;
 
@@ -35,8 +33,7 @@ const Formulario = ({
 
   const { id } = useParams();
   const [imagenes, setImagenes] = useState([""]);
-  const [errorImagenes, setErrorImagenes] = useState(""); // Estado para validación manual de imágenes
-
+  const [errorImagenes, setErrorImagenes] = useState("");
   useEffect(() => {
     if (titulo === "Editar Vehiculo") {
       const vehiculoBuscado = buscarVehiculo(id);
@@ -56,10 +53,7 @@ const Formulario = ({
   const navegacion = useNavigate();
 
   const onSubmit = (vehiculo) => {
-    // Filtrar strings vacíos y espacios
     const imagenesValidas = imagenes.filter((img) => img.trim() !== "");
-
-    // Validación manual de imágenes
     if (imagenesValidas.length === 0) {
       setErrorImagenes("Debe incluir al menos una URL de imagen");
       return;
@@ -72,8 +66,6 @@ const Formulario = ({
       setErrorImagenes("Una o más URLs tienen un formato inválido");
       return;
     }
-
-    // Si pasa las validaciones, limpiamos error y armamos el objeto
     setErrorImagenes("");
 
     const vehiculoCompleto = {
@@ -284,7 +276,7 @@ const Formulario = ({
                       const nuevas = [...imagenes];
                       nuevas[index] = e.target.value;
                       setImagenes(nuevas);
-                      setErrorImagenes(""); // Limpia error general al escribir
+                      setErrorImagenes("");
                     }}
                     placeholder="https://imagen.jpg"
                   />
@@ -310,7 +302,6 @@ const Formulario = ({
               + Agregar imagen
             </Button>
 
-            {/* Mensaje de error para validación manual de imágenes */}
             {errorImagenes && (
               <div className="text-danger mt-1">
                 <small>{errorImagenes}</small>
