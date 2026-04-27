@@ -1,21 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Card, Row, Col, Carousel } from "react-bootstrap";
 import { useParams } from "react-router";
+import { leerVehiculoPorId } from "../../../helpers/queries";
 
-const DetalleVehiculo = ({ buscarVehiculo }) => {
+const DetalleVehiculo = () => {
   const { id } = useParams();
-  const vehiculoBuscado = buscarVehiculo(id);
+  const [vehiculo, setVehiculo] = useState({});
 
-  if (!vehiculoBuscado) return <p>No existe el vehículo</p>;
+  if (!vehiculo) return <p>No existe el vehículo</p>;
+
+  useEffect(() => {
+    obtenerVehiculo();
+  }, []);
+
+  async function obtenerVehiculo(params) {
+    const respuesta = await leerVehiculoPorId(id);
+    if (respuesta.status === 200) {
+      const vehiculoBuscado = await respuesta.json();
+      setVehiculo(vehiculoBuscado);
+    }
+  }
 
   return (
     <Container className="my-3 mainSection">
       <Card>
         <Row>
           <Col md={6}>
-            {vehiculoBuscado.imagenes?.length > 0 ? (
+            {vehiculo.imagenes?.length > 0 ? (
               <Carousel>
-                {vehiculoBuscado.imagenes.map((img, index) => (
+                {vehiculo.imagenes.map((img, index) => (
                   <Carousel.Item key={index}>
                     <img
                       src={img}
@@ -38,26 +51,26 @@ const DetalleVehiculo = ({ buscarVehiculo }) => {
           <Col md={6}>
             <Card.Body>
               <Card.Title className="primary-font">
-                {vehiculoBuscado.marca} {vehiculoBuscado.modelo}
+                {vehiculo.marca} {vehiculo.modelo}
               </Card.Title>
               <hr />
               <Card.Text>
-                {vehiculoBuscado.descripcion}
+                {vehiculo.descripcion}
                 <br />
                 <span className="primary-font fw-semibold">
-                  Categoria: {vehiculoBuscado.categoria}
+                  Categoria: {vehiculo.categoria}
                 </span>
                 <br className="mb-3" />
                 <span className="primary-font fw-semibold">
-                  Precio: {vehiculoBuscado.precio}
+                  Precio: {vehiculo.precio}
                 </span>
                 <br className="mb-3" />
                 <span className="primary-font fw-semibold">
-                  Año: {vehiculoBuscado.anio}
+                  Año: {vehiculo.anio}
                 </span>
                 <br className="mb-3" />
                 <span className="primary-font fw-semibold">
-                  Kilometraje: {vehiculoBuscado.km}
+                  Kilometraje: {vehiculo.km}
                 </span>
               </Card.Text>
             </Card.Body>

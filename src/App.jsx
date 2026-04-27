@@ -77,7 +77,7 @@ function App() {
           ></Route>
           <Route
             path="/detalle/:id"
-            element={<DetalleVehiculo buscarVehiculo={buscarVehiculo}></DetalleVehiculo>}
+            element={<DetalleVehiculo></DetalleVehiculo>}
           ></Route>
           <Route
             path="/login"
