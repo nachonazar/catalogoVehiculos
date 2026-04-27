@@ -28,7 +28,7 @@ function App() {
 
   const crearVehiculo = (vehiculo) => {
   const nuevoVehiculo = {
-    ...vehiculo, // 🔥 ESTO ES LO IMPORTANTE
+    ...vehiculo,
     id: crypto.randomUUID(),
     disponible: true,
   };
@@ -57,7 +57,7 @@ function App() {
     v.id === id
       ? {
           ...v,
-          ...vehiculoEditado, // 🔥 NO perder datos
+          ...vehiculoEditado,
         }
       : v
   );
@@ -73,7 +73,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Inicio vehiculos={vehiculos}></Inicio>}
+            element={<Inicio></Inicio>}
           ></Route>
           <Route
             path="/detalle/:id"

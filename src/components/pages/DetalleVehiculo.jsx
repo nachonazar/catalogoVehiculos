@@ -6,7 +6,6 @@ const DetalleVehiculo = ({ buscarVehiculo }) => {
   const { id } = useParams();
   const vehiculoBuscado = buscarVehiculo(id);
 
-  // 🔥 evitar errores si no existe
   if (!vehiculoBuscado) return <p>No existe el vehículo</p>;
 
   return (
@@ -14,7 +13,6 @@ const DetalleVehiculo = ({ buscarVehiculo }) => {
       <Card>
         <Row>
           <Col md={6}>
-            {/* 🔥 CARRUSEL CON REACT-BOOTSTRAP */}
             {vehiculoBuscado.imagenes?.length > 0 ? (
               <Carousel>
                 {vehiculoBuscado.imagenes.map((img, index) => (

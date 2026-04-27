@@ -43,7 +43,7 @@ const CardVehiculo = ({ vehiculo }) => {
           <Link
             variant="primary"
             className="me-2 btn btn-primary"
-            to={"/detalle/" + vehiculo.id}
+            to={"/detalle/" + vehiculo._id}
           >
             Ver detalles
           </Link>

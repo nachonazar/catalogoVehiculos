@@ -1,10 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Form } from "react-bootstrap";
 import CardVehiculo from "./vehiculo/CardVehiculo";
 import Contacto from "../shared/Contacto";
+import { leerVehiculos } from "../../../helpers/queries.js";
 
-const Inicio = ({ vehiculos }) => {
+const Inicio = () => {
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
+  const [vehiculos, setVehiculos] = useState([]);
+
+  useEffect(() => {
+    obtenerVehiculos();
+  }, []);
+
+  const obtenerVehiculos = async () => {
+    const respuesta = await leerVehiculos();
+    if (respuesta.status === 200) {
+      const datos = await respuesta.json();
+      setVehiculos(datos);
+    } else {
+      console.info("Ocurrio un error al buscar los vehiculos");
+    }
+  };
 
   const handleInputChange = (e) => {
     console.log(e.target.value);
@@ -12,16 +28,16 @@ const Inicio = ({ vehiculos }) => {
   };
 
   const vehiculosFiltrados = vehiculos
-  .filter((v) => v.disponible)
-  .filter(
-    (vehiculo) =>
-      (vehiculo.marca || "")
-        .toLowerCase()
-        .includes(terminoBusqueda.toLowerCase()) ||
-      (vehiculo.modelo || "")
-        .toLowerCase()
-        .includes(terminoBusqueda.toLowerCase())
-  );
+    .filter((v) => v.disponible)
+    .filter(
+      (vehiculo) =>
+        (vehiculo.marca || "")
+          .toLowerCase()
+          .includes(terminoBusqueda.toLowerCase()) ||
+        (vehiculo.modelo || "")
+          .toLowerCase()
+          .includes(terminoBusqueda.toLowerCase()),
+    );
 
   return (
     <div>
@@ -42,7 +58,7 @@ const Inicio = ({ vehiculos }) => {
           {vehiculosFiltrados.length > 0 ? (
             vehiculosFiltrados.map((vehiculo) => (
               <CardVehiculo
-                key={vehiculo.id}
+                key={vehiculo._id}
                 vehiculo={vehiculo}
               ></CardVehiculo>
             ))
