@@ -50,6 +50,7 @@ const Administrador = ({ vehiculos, borrarVehiculo }) => {
               key={vehiculo._id}
               vehiculo={vehiculo}
               borrarVehiculo={borrarVehiculo}
+              setListaVehiculos= {setListaVehiculos}
             ></ItemVehiculo>
           ))}
         </tbody>

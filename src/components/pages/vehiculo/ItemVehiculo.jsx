@@ -2,8 +2,12 @@ import React from "react";
 import { Link } from "react-router";
 import { Button } from "react-bootstrap";
 import Swal from "sweetalert2";
+import {
+  borrarVehiculosPorId,
+  leerVehiculos,
+} from "../../../../helpers/queries.js";
 
-const ItemVehiculo = ({ vehiculo, borrarVehiculo }) => {
+const ItemVehiculo = ({ vehiculo, setListaVehiculos }) => {
   const imagenMostrar =
     vehiculo.imagenes?.[0] ||
     vehiculo.imagen ||
@@ -19,14 +23,18 @@ const ItemVehiculo = ({ vehiculo, borrarVehiculo }) => {
       cancelButtonColor: "rgb(108, 117, 125)",
       confirmButtonText: "Eliminar",
       cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed)
-        if (borrarVehiculo(vehiculo.id)) {
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const respuesta = await borrarVehiculosPorId(vehiculo._id);
+        if (respuesta.status === 200) {
           Swal.fire({
             title: "Vehiculo eliminado",
             text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} fue eliminado correctamente`,
             icon: "success",
           });
+          const respuestaVehiculos = await leerVehiculos();
+          const vehiculosActualizados = await respuestaVehiculos.json();
+          setListaVehiculos(vehiculosActualizados);
         } else {
           Swal.fire({
             title: "Ocurrio un error",
@@ -34,6 +42,7 @@ const ItemVehiculo = ({ vehiculo, borrarVehiculo }) => {
             icon: "error",
           });
         }
+      }
     });
   };
 
