@@ -73,7 +73,7 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos }) => {
       <td className="text-center">
         <Link
           className="me-lg-2 btn btn-warning"
-          to={"/administrador/editar/" + vehiculo.id}
+          to={"/administrador/editar/" + vehiculo._id}
         >
           <i className="bi bi-pencil-square"></i>
         </Link>

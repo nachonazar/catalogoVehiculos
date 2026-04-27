@@ -13,11 +13,11 @@ import {
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
-import { crearVehiculo } from "../../../helpers/queries.js";
+import { crearVehiculo, leerVehiculoPorId, editarVehiculosPorId } from "../../../helpers/queries.js";
 const URL_PATTERN =
   /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/#\w?=&.-]*)*\/?$/;
 
-const Formulario = ({ buscarVehiculo, titulo, editarVehiculo }) => {
+const Formulario = ({ buscarVehiculo, titulo }) => {
   const {
     register,
     handleSubmit,
@@ -31,20 +31,26 @@ const Formulario = ({ buscarVehiculo, titulo, editarVehiculo }) => {
   const [imagenes, setImagenes] = useState([""]);
   const [errorImagenes, setErrorImagenes] = useState("");
   useEffect(() => {
-    if (titulo === "Editar Vehiculo") {
-      const vehiculoBuscado = buscarVehiculo(id);
-
-      setValue("marca", vehiculoBuscado.marca);
-      setValue("modelo", vehiculoBuscado.modelo);
-      setValue("anio", vehiculoBuscado.anio);
-      setValue("categoria", vehiculoBuscado.categoria);
-      setValue("precio", vehiculoBuscado.precio);
-      setValue("km", vehiculoBuscado.km);
-      setValue("disponible", vehiculoBuscado.disponible);
-      setValue("descripcion", vehiculoBuscado.descripcion);
-      setImagenes(vehiculoBuscado.imagenes || [""]);
-    }
+    obtenerVehiculo();
   }, []);
+
+  const obtenerVehiculo = async () => {
+    if (titulo === "Editar Vehiculo") {
+      const respuesta = await leerVehiculoPorId(id);
+      if (respuesta.status === 200) {
+        const vehiculoBuscado = await respuesta.json();
+        setValue("marca", vehiculoBuscado.marca);
+        setValue("modelo", vehiculoBuscado.modelo);
+        setValue("anio", vehiculoBuscado.anio);
+        setValue("categoria", vehiculoBuscado.categoria);
+        setValue("precio", vehiculoBuscado.precio);
+        setValue("km", vehiculoBuscado.km);
+        setValue("disponible", vehiculoBuscado.disponible);
+        setValue("descripcion", vehiculoBuscado.descripcion);
+        setImagenes(vehiculoBuscado.imagenes || [""]);
+      }
+    }
+  };
 
   const navegacion = useNavigate();
 
@@ -83,7 +89,8 @@ const Formulario = ({ buscarVehiculo, titulo, editarVehiculo }) => {
         });
       }
     } else {
-      if (editarVehiculo(id, vehiculoCompleto)) {
+      const respuesta = await editarVehiculosPorId(vehiculoCompleto, id)
+      if (respuesta.status === 200) {
         Swal.fire({
           title: "Vehiculo editado",
           text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} fue editado correctamente`,
