@@ -13,15 +13,11 @@ import {
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
+import { crearVehiculo } from "../../../helpers/queries.js";
 const URL_PATTERN =
   /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/#\w?=&.-]*)*\/?$/;
 
-const Formulario = ({
-  crearVehiculo,
-  buscarVehiculo,
-  titulo,
-  editarVehiculo,
-}) => {
+const Formulario = ({ buscarVehiculo, titulo, editarVehiculo }) => {
   const {
     register,
     handleSubmit,
@@ -52,7 +48,7 @@ const Formulario = ({
 
   const navegacion = useNavigate();
 
-  const onSubmit = (vehiculo) => {
+  const onSubmit = async (vehiculo) => {
     const imagenesValidas = imagenes.filter((img) => img.trim() !== "");
     if (imagenesValidas.length === 0) {
       setErrorImagenes("Debe incluir al menos una URL de imagen");
@@ -74,7 +70,8 @@ const Formulario = ({
     };
 
     if (titulo === "Crear Vehiculo") {
-      if (crearVehiculo(vehiculoCompleto)) {
+      const respuesta = await crearVehiculo(vehiculoCompleto);
+      if (respuesta.status === 200 || respuesta.status === 201) {
         Swal.fire({
           title: "Vehiculo creado",
           text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} fue creado correctamente`,
@@ -326,6 +323,7 @@ const Formulario = ({
               rows={4}
               placeholder="Ej: Vehículo en excelente estado, único dueño y nunca chocado. Service al día en concesionaria oficial. Aire acondicionado, alarma, vidrios eléctricos y Bluetooth. Documentación completa al día."
               {...register("descripcion", {
+                required: "La descripcion es un dato obligatorio",
                 minLength: {
                   value: 10,
                   message: "La descrición debe tener al menos 10 caracteres",
