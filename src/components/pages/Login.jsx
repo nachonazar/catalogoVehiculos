@@ -1,8 +1,10 @@
 import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
-import login from "../../assets/login.png";
+import imgLogin from "../../assets/login.png";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { login } from "../../../helpers/queries.js";
+import Swal from "sweetalert2";
 
 const Login = ({ setUsuarioAdmin }) => {
   const {
@@ -12,21 +14,41 @@ const Login = ({ setUsuarioAdmin }) => {
   } = useForm();
   const navegacion = useNavigate();
 
-  const iniciarSesion = (usuario) => {
-    console.log(usuario);
-    if (
-      usuario.email === import.meta.env.VITE_API_EMAIL &&
-      import.meta.env.VITE_API_PASSWORD
-    ) {
-      //soy el administrador
-      console.log("Soy el administrador");
-      setUsuarioAdmin(true);
-      sessionStorage.setItem("userKey", true);
-      navegacion("/administrador")
+  const iniciarSesion = async (usuario) => {
+    const respuesta = await login(usuario);
+    if (respuesta.status === 200) {
+      const datos = await respuesta.json();
+      console.log(datos);
+      //actualizar el state usuarioAdmin
+      //guardar los datos en el sessionStorage
+      Swal.fire({
+        title: "Inicio de sesion correcto",
+        text: "Bienvenido",
+        icon: "success",
+      });
     } else {
-      console.log("Email o contraseña incorrecto");
+      Swal.fire({
+        title: "Error al iniciar sesion",
+        text: "Credenciales incorrectas",
+        icon: "error",
+      });
     }
   };
+
+  // console.log(usuario);
+  //if (
+  //usuario.email === import.meta.env.VITE_API_EMAIL &&
+  //import.meta.env.VITE_API_PASSWORD
+  //) {
+  //soy el administrador
+  //console.log("Soy el administrador");
+  //setUsuarioAdmin(true);
+  //sessionStorage.setItem("userKey", true);
+  //navegacion("/administrador");
+  //} else {
+  //console.log("Email o contraseña incorrecto");
+  //}
+  //};
 
   return (
     <section className="container my-3">
@@ -78,7 +100,7 @@ const Login = ({ setUsuarioAdmin }) => {
           </Form>
         </Col>
         <Col>
-          <img src={login} alt="autos" className="img-fluid" />
+          <img src={imgLogin} alt="autos" className="img-fluid" />
         </Col>
       </Row>
     </section>

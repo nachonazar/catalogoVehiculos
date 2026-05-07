@@ -1,4 +1,5 @@
 const urlvehiculos = import.meta.env.VITE_API_VEHICULOS;
+const urlUsuarios = import.meta.env.VITE_API_USUARIOS;
 
 //get, post, put, delete
 console.log(urlvehiculos);
@@ -61,6 +62,23 @@ export const borrarVehiculosPorId = async (id) => {
     const respuesta = await fetch(urlvehiculos + `/${id}`, {
       method: "DELETE",
     });
+    return respuesta;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const login = async (datosAdmin) => {
+  try {
+    const respuesta = await fetch(urlUsuarios+"/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datosAdmin),
+    });
+    console.log(respuesta)
     return respuesta;
   } catch (error) {
     console.error(error);
