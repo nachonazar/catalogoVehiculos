@@ -26,6 +26,10 @@ function App() {
     localStorage.setItem("catalogoVehiculos", JSON.stringify(vehiculos));
   }, [vehiculos]);
 
+  useEffect(() => {
+    sessionStorage.setItem("userKey", JSON.stringify(usuarioAdmin));
+  }, [usuarioAdmin]);
+
   const crearVehiculo = (vehiculo) => {
   const nuevoVehiculo = {
     ...vehiculo,
