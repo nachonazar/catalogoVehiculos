@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import ItemVehiculo from "./vehiculo/ItemVehiculo";
 import { leerVehiculos } from "../../../helpers/queries.js";
 
-const Administrador = ({ vehiculos, borrarVehiculo }) => {
+const Administrador = () => {
   const [listaVehiculos, setListaVehiculos] = useState([]);
 
   useEffect(() => {
@@ -49,7 +49,6 @@ const Administrador = ({ vehiculos, borrarVehiculo }) => {
             <ItemVehiculo
               key={vehiculo._id}
               vehiculo={vehiculo}
-              borrarVehiculo={borrarVehiculo}
               setListaVehiculos= {setListaVehiculos}
             ></ItemVehiculo>
           ))}

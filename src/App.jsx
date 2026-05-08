@@ -95,8 +95,6 @@ function App() {
               index
               element={
                 <Administrador
-                  vehiculos={vehiculos}
-                  borrarVehiculo={borrarVehiculo}
                 ></Administrador>
               }
             ></Route>
