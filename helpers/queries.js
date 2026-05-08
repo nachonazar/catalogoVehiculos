@@ -20,10 +20,11 @@ export const crearVehiculo = async (vehiculoNuevo) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-token": JSON.parse(sessionStorage.getItem("userKey")).token,
       },
       body: JSON.stringify(vehiculoNuevo),
     });
-    console.log(respuesta)
+    console.log(respuesta);
     return respuesta;
   } catch (error) {
     console.error(error);
@@ -47,6 +48,7 @@ export const editarVehiculosPorId = async (vehiculoEditado, id) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "x-token": JSON.parse(sessionStorage.getItem("userKey")).token,
       },
       body: JSON.stringify(vehiculoEditado),
     });
@@ -61,6 +63,9 @@ export const borrarVehiculosPorId = async (id) => {
   try {
     const respuesta = await fetch(urlvehiculos + `/${id}`, {
       method: "DELETE",
+      headers: {
+        "x-token": JSON.parse(sessionStorage.getItem("userKey")).token,
+      },
     });
     return respuesta;
   } catch (error) {
@@ -71,14 +76,14 @@ export const borrarVehiculosPorId = async (id) => {
 
 export const login = async (datosAdmin) => {
   try {
-    const respuesta = await fetch(urlUsuarios+"/login", {
+    const respuesta = await fetch(urlUsuarios + "/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(datosAdmin),
     });
-    console.log(respuesta)
+    console.log(respuesta);
     return respuesta;
   } catch (error) {
     console.error(error);
