@@ -13,7 +13,11 @@ import {
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
-import { crearVehiculo, leerVehiculoPorId, editarVehiculosPorId } from "../../../helpers/queries.js";
+import {
+  crearVehiculo,
+  leerVehiculoPorId,
+  editarVehiculosPorId,
+} from "../../../helpers/queries.js";
 const URL_PATTERN =
   /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/#\w?=&.-]*)*\/?$/;
 
@@ -89,7 +93,7 @@ const Formulario = ({ titulo }) => {
         });
       }
     } else {
-      const respuesta = await editarVehiculosPorId(vehiculoCompleto, id)
+      const respuesta = await editarVehiculosPorId(vehiculoCompleto, id);
       if (respuesta.status === 200) {
         Swal.fire({
           title: "Vehiculo editado",

@@ -19,14 +19,14 @@ const Login = ({ setUsuarioAdmin }) => {
     if (respuesta.status === 200) {
       const datos = await respuesta.json();
       //actualizar el state usuarioAdmin
-      setUsuarioAdmin({nombreAdmin: datos.nombreAdmin, token: datos.token})
+      setUsuarioAdmin({ nombreAdmin: datos.nombreAdmin, token: datos.token });
       //guardar los datos en el sessionStorage
       Swal.fire({
         title: "Inicio de sesion correcto",
         text: `Bienvenido ${datos.nombreAdmin}`,
         icon: "success",
       });
-      navegacion("/administrador")
+      navegacion("/administrador");
     } else {
       Swal.fire({
         title: "Error al iniciar sesion",

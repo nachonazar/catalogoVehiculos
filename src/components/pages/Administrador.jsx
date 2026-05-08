@@ -49,7 +49,7 @@ const Administrador = () => {
             <ItemVehiculo
               key={vehiculo._id}
               vehiculo={vehiculo}
-              setListaVehiculos= {setListaVehiculos}
+              setListaVehiculos={setListaVehiculos}
             ></ItemVehiculo>
           ))}
         </tbody>
