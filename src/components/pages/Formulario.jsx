@@ -17,7 +17,7 @@ import { crearVehiculo, leerVehiculoPorId, editarVehiculosPorId } from "../../..
 const URL_PATTERN =
   /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/#\w?=&.-]*)*\/?$/;
 
-const Formulario = ({ buscarVehiculo, titulo }) => {
+const Formulario = ({ titulo }) => {
   const {
     register,
     handleSubmit,

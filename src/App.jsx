@@ -12,73 +12,21 @@ import Error404 from "./components/pages/Error404";
 import Login from "./components/pages/Login";
 import { useEffect, useState } from "react";
 import ProtectorAdmin from "./components/routes/ProtectorAdmin";
-import { v4 as uuidv4 } from "uuid";
 
 function App() {
-  const usuarioLogueado =
-    JSON.parse(sessionStorage.getItem("userKey")) || {};
-  const vehiculosLocalstorage =
-    JSON.parse(localStorage.getItem("catalogoVehiculos")) || [];
+  const usuarioLogueado = JSON.parse(sessionStorage.getItem("userKey")) || {};
   const [usuarioAdmin, setUsuarioAdmin] = useState(usuarioLogueado);
-  const [vehiculos, setVehiculos] = useState(vehiculosLocalstorage);
-
-  useEffect(() => {
-    localStorage.setItem("catalogoVehiculos", JSON.stringify(vehiculos));
-  }, [vehiculos]);
 
   useEffect(() => {
     sessionStorage.setItem("userKey", JSON.stringify(usuarioAdmin));
   }, [usuarioAdmin]);
-
-  const crearVehiculo = (vehiculo) => {
-  const nuevoVehiculo = {
-    ...vehiculo,
-    id: crypto.randomUUID(),
-    disponible: true,
-  };
-
-  setVehiculos([...vehiculos, nuevoVehiculo]);
-  return true;
-};
-
-  const borrarVehiculo = (idVehiculo) => {
-    const vehiculosFiltrados = vehiculos.filter(
-      (itemVehiculo) => itemVehiculo.id !== idVehiculo,
-    );
-    setVehiculos(vehiculosFiltrados);
-    return true;
-  };
-
-  const buscarVehiculo = (idVehiculo) => {
-    const vehiculoBuscado = vehiculos.find(
-      (itemVehiculo) => itemVehiculo.id === idVehiculo,
-    );
-    return vehiculoBuscado;
-  };
-
-  const editarVehiculo = (id, vehiculoEditado) => {
-  const nuevosVehiculos = vehiculos.map((v) =>
-    v.id === id
-      ? {
-          ...v,
-          ...vehiculoEditado,
-        }
-      : v
-  );
-
-  setVehiculos(nuevosVehiculos);
-  return true;
-};
 
   return (
     <BrowserRouter>
       <Menu usuarioAdmin={usuarioAdmin} setUsuarioAdmin={setUsuarioAdmin} />
       <main>
         <Routes>
-          <Route
-            path="/"
-            element={<Inicio></Inicio>}
-          ></Route>
+          <Route path="/" element={<Inicio></Inicio>}></Route>
           <Route
             path="/detalle/:id"
             element={<DetalleVehiculo></DetalleVehiculo>}
@@ -91,31 +39,14 @@ function App() {
             path="/administrador"
             element={<ProtectorAdmin isAdmin={usuarioAdmin}></ProtectorAdmin>}
           >
-            <Route
-              index
-              element={
-                <Administrador
-                ></Administrador>
-              }
-            ></Route>
+            <Route index element={<Administrador></Administrador>}></Route>
             <Route
               path="crear"
-              element={
-                <Formulario
-                  crearVehiculo={crearVehiculo}
-                  titulo={"Crear Vehiculo"}
-                ></Formulario>
-              }
+              element={<Formulario titulo={"Crear Vehiculo"}></Formulario>}
             ></Route>
             <Route
               path="editar/:id"
-              element={
-                <Formulario
-                  titulo={"Editar Vehiculo"}
-                  buscarVehiculo={buscarVehiculo}
-                  editarVehiculo={editarVehiculo}
-                ></Formulario>
-              }
+              element={<Formulario titulo={"Editar Vehiculo"}></Formulario>}
             ></Route>
           </Route>
           <Route path="*" element={<Error404></Error404>}></Route>
