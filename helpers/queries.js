@@ -2,7 +2,6 @@ const urlvehiculos = import.meta.env.VITE_API_VEHICULOS;
 const urlUsuarios = import.meta.env.VITE_API_USUARIOS;
 
 //get, post, put, delete
-console.log(urlvehiculos);
 
 export const leerVehiculos = async () => {
   try {
@@ -24,7 +23,6 @@ export const crearVehiculo = async (vehiculoNuevo) => {
       },
       body: JSON.stringify(vehiculoNuevo),
     });
-    console.log(respuesta);
     return respuesta;
   } catch (error) {
     console.error(error);
@@ -83,7 +81,6 @@ export const login = async (datosAdmin) => {
       },
       body: JSON.stringify(datosAdmin),
     });
-    console.log(respuesta);
     return respuesta;
   } catch (error) {
     console.error(error);
