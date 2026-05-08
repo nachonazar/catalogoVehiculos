@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router';
 
 const ProtectorAdmin = ({isAdmin}) => {
     //si no soy adm
-    if(!isAdmin){
+    if(!isAdmin.token){
         return <Navigate to={"/"}></Navigate>
     }
 
