@@ -91,6 +91,13 @@ const Formulario = ({ titulo }) => {
           setImagenes([""]);
           navegacion("/administrador");
         });
+      } else {
+        const datosErroneos = await respuesta.json();
+         Swal.fire({
+          title: "Ocurrio un error",
+          text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser creado. ${datosErroneos.mensaje}`,
+          icon: "error",
+        })
       }
     } else {
       const respuesta = await editarVehiculosPorId(vehiculoCompleto, id);
@@ -102,6 +109,13 @@ const Formulario = ({ titulo }) => {
         }).then(() => {
           navegacion("/administrador");
         });
+      }else{
+        const datosErroneos = await respuesta.json();
+         Swal.fire({
+          title: "Ocurrio un error",
+          text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser editado. ${datosErroneos.mensaje}`,
+          icon: "error",
+        })
       }
     }
   };
