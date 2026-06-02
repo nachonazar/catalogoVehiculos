@@ -54,6 +54,23 @@ const Administrador = () => {
           ))}
         </tbody>
       </Table>
+      <div className="d-flex justify-content-center align-items-center my-3">
+        <Button
+          variant="secondary"
+          
+        >
+          Anterior
+        </Button>
+        <span className="mx-3">
+          Página 1 de 3
+        </span>
+        <Button
+          variant="secondary"
+      
+        >
+          Siguiente
+        </Button>
+      </div>
     </Container>
   );
 };
