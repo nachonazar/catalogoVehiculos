@@ -2,20 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { Link } from "react-router";
 import ItemVehiculo from "./vehiculo/ItemVehiculo";
-import { leerVehiculos } from "../../../helpers/queries.js";
+import { leerVehiculosPaginados } from "../../../helpers/queries.js";
 
 const Administrador = () => {
   const [listaVehiculos, setListaVehiculos] = useState([]);
+  const [page, setPage] = useState(1); //número de página actual
+  const [limit] = useState(3); //cantidad de productos por página (fijo en 10).
+  const [totalPages, setTotalPages] = useState(1); //total de páginas disponibles (lo devuelve el backend).
 
   useEffect(() => {
     obtenerVehiculos();
-  }, []);
+  }, [page]);
 
   const obtenerVehiculos = async () => {
-    const respuesta = await leerVehiculos();
+    const respuesta = await leerVehiculosPaginados(page, limit);
     if (respuesta.status === 200) {
       const datos = await respuesta.json();
-      setListaVehiculos(datos);
+      setListaVehiculos(datos.vehiculos);
+      setTotalPages(datos.totalPages)
     } else {
       console.info("Ocurrio un error al buscar los vehiculos");
     }
@@ -57,16 +61,18 @@ const Administrador = () => {
       <div className="d-flex justify-content-center align-items-center my-3">
         <Button
           variant="secondary"
-          
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
         >
           Anterior
         </Button>
         <span className="mx-3">
-          Página 1 de 3
+          Página {page} de {totalPages}
         </span>
         <Button
           variant="secondary"
-      
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={page === totalPages}
         >
           Siguiente
         </Button>
