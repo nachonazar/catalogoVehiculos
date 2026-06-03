@@ -39,6 +39,7 @@ const Administrador = () => {
       <Table responsive striped bordered hover>
         <thead>
           <tr className="text-center">
+            <th>Cod</th>
             <th>VEHICULO</th>
             <th>CATEGORIA</th>
             <th>URL de imagen</th>
@@ -49,11 +50,14 @@ const Administrador = () => {
           </tr>
         </thead>
         <tbody>
-          {listaVehiculos.map((vehiculo) => (
+          {listaVehiculos.map((vehiculo, indice) => (
             <ItemVehiculo
               key={vehiculo._id}
               vehiculo={vehiculo}
+              fila={(page - 1) * limit + indice +1}
               setListaVehiculos={setListaVehiculos}
+              page={page}
+              limit={limit}
             ></ItemVehiculo>
           ))}
         </tbody>

@@ -4,10 +4,10 @@ import { Button } from "react-bootstrap";
 import Swal from "sweetalert2";
 import {
   borrarVehiculosPorId,
-  leerVehiculos,
+  leerVehiculosPaginados,
 } from "../../../../helpers/queries.js";
 
-const ItemVehiculo = ({ vehiculo, setListaVehiculos }) => {
+const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
   const imagenMostrar =
     vehiculo.imagenes?.[0] ||
     vehiculo.imagen ||
@@ -32,9 +32,9 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos }) => {
             text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} fue eliminado correctamente`,
             icon: "success",
           });
-          const respuestaVehiculos = await leerVehiculos();
+          const respuestaVehiculos = await leerVehiculosPaginados(page, limit);
           const vehiculosActualizados = await respuestaVehiculos.json();
-          setListaVehiculos(vehiculosActualizados);
+          setListaVehiculos(vehiculosActualizados.vehiculos);
         } else {
           Swal.fire({
             title: "Ocurrio un error",
@@ -48,6 +48,9 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos }) => {
 
   return (
     <tr>
+      <td className="text-center">
+        {fila}
+      </td>
       <td className="text-center">
         {vehiculo.marca} {vehiculo.modelo}
       </td>
