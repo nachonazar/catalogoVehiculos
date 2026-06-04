@@ -15,13 +15,23 @@ export const leerVehiculos = async () => {
 
 export const crearVehiculo = async (vehiculoNuevo) => {
   try {
+    const formData = new FormData();
+    formData.append("marca", vehiculoNuevo.marca);
+    formData.append("modelo", vehiculoNuevo.modelo);
+    formData.append("anio", vehiculoNuevo.anio);
+    formData.append("categoria", vehiculoNuevo.categoria);
+    formData.append("precio", vehiculoNuevo.precio);
+    formData.append("km", vehiculoNuevo.km);
+    formData.append("disponible", vehiculoNuevo.disponible);
+    formData.append("descripcion", vehiculoNuevo.descripcion);
+    formData.append("imagenes", vehiculoNuevo.imagenes);
+
     const respuesta = await fetch(urlvehiculos, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         "x-token": JSON.parse(sessionStorage.getItem("userKey")).token,
       },
-      body: JSON.stringify(vehiculoNuevo),
+      body: formData,
     });
     return respuesta;
   } catch (error) {

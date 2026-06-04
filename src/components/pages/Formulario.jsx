@@ -18,22 +18,22 @@ import {
   leerVehiculoPorId,
   editarVehiculosPorId,
 } from "../../../helpers/queries.js";
-const URL_PATTERN =
-  /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/#\w?=&.-]*)*\/?$/;
+import "./vehiculo/Formulario.css";
 
 const Formulario = ({ titulo }) => {
   const {
     register,
     handleSubmit,
     reset,
+    resetField,
     formState: { errors },
     setValue,
     watch,
   } = useForm();
 
   const { id } = useParams();
-  const [imagenes, setImagenes] = useState([""]);
-  const [errorImagenes, setErrorImagenes] = useState("");
+  const [imagenActual, setImagenActual] = useState("");
+  const [preview, setPreview] = useState("");
   useEffect(() => {
     obtenerVehiculo();
   }, []);
@@ -51,7 +51,7 @@ const Formulario = ({ titulo }) => {
         setValue("km", vehiculoBuscado.km);
         setValue("disponible", vehiculoBuscado.disponible);
         setValue("descripcion", vehiculoBuscado.descripcion);
-        setImagenes(vehiculoBuscado.imagenes || [""]);
+        setImagenActual(vehiculoBuscado.imagenes);
       }
     }
   };
@@ -59,45 +59,32 @@ const Formulario = ({ titulo }) => {
   const navegacion = useNavigate();
 
   const onSubmit = async (vehiculo) => {
-    const imagenesValidas = imagenes.filter((img) => img.trim() !== "");
-    if (imagenesValidas.length === 0) {
-      setErrorImagenes("Debe incluir al menos una URL de imagen");
-      return;
-    }
-
-    const todasUrlsValidas = imagenesValidas.every((img) =>
-      URL_PATTERN.test(img),
-    );
-    if (!todasUrlsValidas) {
-      setErrorImagenes("Una o más URLs tienen un formato inválido");
-      return;
-    }
-    setErrorImagenes("");
-
+    console.log(vehiculo);
     const vehiculoCompleto = {
       ...vehiculo,
-      imagenes: imagenesValidas,
+      imagenes: vehiculo.imagenes[0],
+      disponible: titulo === "Crear Vehiculo" ? true : vehiculo.disponible,
     };
-
     if (titulo === "Crear Vehiculo") {
       const respuesta = await crearVehiculo(vehiculoCompleto);
-      if (respuesta.status === 200 || respuesta.status === 201) {
+      if (respuesta.status === 201) {
         Swal.fire({
           title: "Vehiculo creado",
           text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} fue creado correctamente`,
           icon: "success",
         }).then(() => {
           reset();
-          setImagenes([""]);
+          setPreview("");
+          setImagenActual("");
           navegacion("/administrador");
         });
       } else {
         const datosErroneos = await respuesta.json();
-         Swal.fire({
+        Swal.fire({
           title: "Ocurrio un error",
           text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser creado. ${datosErroneos.mensaje}`,
           icon: "error",
-        })
+        });
       }
     } else {
       const respuesta = await editarVehiculosPorId(vehiculoCompleto, id);
@@ -109,13 +96,13 @@ const Formulario = ({ titulo }) => {
         }).then(() => {
           navegacion("/administrador");
         });
-      }else{
+      } else {
         const datosErroneos = await respuesta.json();
-         Swal.fire({
+        Swal.fire({
           title: "Ocurrio un error",
           text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser editado. ${datosErroneos.mensaje}`,
           icon: "error",
-        })
+        });
       }
     }
   };
@@ -284,52 +271,57 @@ const Formulario = ({ titulo }) => {
               </Form.Group>
             </Col>
           </Row>
-          <FormGroup className="mb-3">
-            <FormLabel>Imágenes URL*</FormLabel>
-
-            {imagenes.map((img, index) => (
-              <div key={index} className="mb-2">
-                <div className="d-flex">
-                  <FormControl
-                    type="text"
-                    value={img}
-                    isInvalid={img !== "" && !URL_PATTERN.test(img)}
-                    onChange={(e) => {
-                      const nuevas = [...imagenes];
-                      nuevas[index] = e.target.value;
-                      setImagenes(nuevas);
-                      setErrorImagenes("");
-                    }}
-                    placeholder="https://imagen.jpg"
-                  />
-                  <Button
-                    variant="danger"
-                    className="ms-2"
-                    onClick={() =>
-                      setImagenes(imagenes.filter((_, i) => i !== index))
-                    }
-                  >
-                    X
-                  </Button>
-                </div>
-                {img !== "" && !URL_PATTERN.test(img) && (
-                  <FormText className="text-danger">
-                    Formato de URL no válido
-                  </FormText>
-                )}
-              </div>
-            ))}
-
-            <Button onClick={() => setImagenes([...imagenes, ""])}>
-              + Agregar imagen
-            </Button>
-
-            {errorImagenes && (
-              <div className="text-danger mt-1">
-                <small>{errorImagenes}</small>
+          <Form.Group className="mb-3" controlId="formImagen">
+            <Form.Label>Imagenes URL*</Form.Label>
+            <Form.Control
+              type="file"
+              accept="image/*"
+              {...register("imagenes", {
+                required:
+                  titulo === "Crear producto"
+                    ? "La imagen es obligatoria"
+                    : false,
+                validate: {
+                  fileSize: (files) =>
+                    !files[0] ||
+                    files[0].size <= 2 * 1024 * 1024 ||
+                    "La imagen no debe superar los 2MB.",
+                },
+              })}
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  setPreview(URL.createObjectURL(file)); //crea una URL temporal en el navegador
+                } else {
+                  setPreview("");
+                }
+              }}
+            />
+            {(preview || imagenActual) && (
+              <div className="mb-2 position-relative d-inline-block mt-3">
+                <img
+                  className="rounded-3 img-preview"
+                  src={preview || imagenActual}
+                  alt="Imagenes"
+                />
+                <Button
+                  variant="light"
+                  size="sm"
+                  className="p-0 d-flex align-items-center justify-content-center shadow btn-img-preview"
+                  onClick={() => {
+                    setPreview("");
+                    setImagenActual("");
+                    resetField("imagenes");
+                  }}
+                >
+                  <i className="bi bi-x fs-5 text-danger"></i>
+                </Button>
               </div>
             )}
-          </FormGroup>
+            <Form.Text className="text-danger">
+              {errors.imagenes?.message}
+            </Form.Text>
+          </Form.Group>
 
           {titulo === "Editar Vehiculo" && (
             <Form.Group className="mb-3">
