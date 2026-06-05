@@ -36,7 +36,7 @@ export const crearVehiculo = async (vehiculoNuevo) => {
     return respuesta;
   } catch (error) {
     console.error(error);
-    return null;
+    return false;
   }
 };
 
@@ -52,18 +52,30 @@ export const leerVehiculoPorId = async (id) => {
 
 export const editarVehiculosPorId = async (vehiculoEditado, id) => {
   try {
+    const formData = new FormData();
+    formData.append("marca", vehiculoEditado.marca);
+    formData.append("modelo", vehiculoEditado.modelo);
+    formData.append("anio", vehiculoEditado.anio);
+    formData.append("categoria", vehiculoEditado.categoria);
+    formData.append("precio", vehiculoEditado.precio);
+    formData.append("km", vehiculoEditado.km);
+    formData.append("disponible", vehiculoEditado.disponible);
+    formData.append("descripcion", vehiculoEditado.descripcion);
+    if (vehiculoEditado.imagenes instanceof File) {
+      formData.append("imagenes", vehiculoEditado.imagenes);
+    }
+
     const respuesta = await fetch(urlvehiculos + `/${id}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
         "x-token": JSON.parse(sessionStorage.getItem("userKey")).token,
       },
-      body: JSON.stringify(vehiculoEditado),
+      body: formData,
     });
     return respuesta;
   } catch (error) {
     console.error(error);
-    return null;
+    return false;
   }
 };
 

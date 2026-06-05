@@ -57,7 +57,7 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
       <td className="text-center">{vehiculo.categoria}</td>
       <td className="text-center">
         <img
-          src={imagenMostrar}
+          src={vehiculo.imagenes}
           className="img-thumbnail"
           alt={`${vehiculo.marca} ${vehiculo.modelo}`}
         />
