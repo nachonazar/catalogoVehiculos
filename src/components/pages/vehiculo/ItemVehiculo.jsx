@@ -8,10 +8,6 @@ import {
 } from "../../../../helpers/queries.js";
 
 const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
-  const imagenMostrar =
-    vehiculo.imagenes?.[0] ||
-    vehiculo.imagen ||
-    "https://via.placeholder.com/100";
 
   const eliminarVehiculo = () => {
     Swal.fire({
@@ -57,7 +53,7 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
       <td className="text-center">{vehiculo.categoria}</td>
       <td className="text-center">
         <img
-          src={vehiculo.imagenes}
+          src={vehiculo.imagenes[0]}
           className="img-thumbnail"
           alt={`${vehiculo.marca} ${vehiculo.modelo}`}
         />

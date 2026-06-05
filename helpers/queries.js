@@ -24,7 +24,9 @@ export const crearVehiculo = async (vehiculoNuevo) => {
     formData.append("km", vehiculoNuevo.km);
     formData.append("disponible", vehiculoNuevo.disponible);
     formData.append("descripcion", vehiculoNuevo.descripcion);
-    formData.append("imagenes", vehiculoNuevo.imagenes);
+    Array.from(vehiculoNuevo.imagenes).forEach((img) => {
+      formData.append("imagenes", img);
+    });
 
     const respuesta = await fetch(urlvehiculos, {
       method: "POST",
@@ -61,8 +63,12 @@ export const editarVehiculosPorId = async (vehiculoEditado, id) => {
     formData.append("km", vehiculoEditado.km);
     formData.append("disponible", vehiculoEditado.disponible);
     formData.append("descripcion", vehiculoEditado.descripcion);
-    if (vehiculoEditado.imagenes instanceof File) {
-      formData.append("imagenes", vehiculoEditado.imagenes);
+    if (Array.isArray(vehiculoEditado.imagenes) && vehiculoEditado.imagenes[0] instanceof File) {
+      // son archivos nuevos
+      vehiculoEditado.imagenes.forEach((img) => formData.append("imagenes", img));
+    } else if (Array.isArray(vehiculoEditado.imagenes)) {
+      // son URLs existentes que el usuario quiere mantener
+      vehiculoEditado.imagenes.forEach((url) => formData.append("imagenesExistentes", url));
     }
 
     const respuesta = await fetch(urlvehiculos + `/${id}`, {

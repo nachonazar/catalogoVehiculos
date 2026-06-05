@@ -5,13 +5,13 @@ import { leerVehiculoPorId } from "../../../helpers/queries";
 
 const DetalleVehiculo = () => {
   const { id } = useParams();
-  const [vehiculo, setVehiculo] = useState({});
-
-  if (!vehiculo) return <p>No existe el vehículo</p>;
+  const [vehiculo, setVehiculo] = useState(null);
 
   useEffect(() => {
     obtenerVehiculo();
   }, []);
+
+  if (!vehiculo) return <p>No existe el vehículo</p>;
 
   async function obtenerVehiculo(params) {
     const respuesta = await leerVehiculoPorId(id);

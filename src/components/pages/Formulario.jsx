@@ -32,8 +32,9 @@ const Formulario = ({ titulo }) => {
   } = useForm();
 
   const { id } = useParams();
-  const [imagenActual, setImagenActual] = useState("");
-  const [preview, setPreview] = useState("");
+  const [imagenActual, setImagenActual] = useState([]);
+  const [preview, setPreview] = useState([]);
+  const [archivos, setArchivos] = useState([]);
   useEffect(() => {
     obtenerVehiculo();
   }, []);
@@ -62,7 +63,7 @@ const Formulario = ({ titulo }) => {
     console.log(vehiculo);
     const vehiculoCompleto = {
       ...vehiculo,
-      imagenes: vehiculo.imagenes[0],
+       imagenes: archivos.length > 0 ? archivos : imagenActual,
       disponible: titulo === "Crear Vehiculo" ? true : vehiculo.disponible,
     };
     if (titulo === "Crear Vehiculo") {
@@ -74,8 +75,9 @@ const Formulario = ({ titulo }) => {
           icon: "success",
         }).then(() => {
           reset();
-          setPreview("");
-          setImagenActual("");
+          setPreview([]);
+          setImagenActual([]);
+          setArchivos([]);
           navegacion("/administrador");
         });
       } else {
@@ -276,6 +278,7 @@ const Formulario = ({ titulo }) => {
             <Form.Control
               type="file"
               accept="image/*"
+              multiple
               {...register("imagenes", {
                 required:
                   titulo === "Crear producto"
@@ -284,39 +287,55 @@ const Formulario = ({ titulo }) => {
                 validate: {
                   fileSize: (files) =>
                     !files[0] ||
-                    files[0].size <= 2 * 1024 * 1024 ||
-                    "La imagen no debe superar los 2MB.",
+                    Array.from(files).every((f) => f.size <= 2 * 1024 * 1024) ||
+                    "Alguna imagen supera los 2MB.",
                 },
               })}
               onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  setPreview(URL.createObjectURL(file)); //crea una URL temporal en el navegador
+                const files = Array.from(e.target.files);
+                if (files.length > 0) {
+                  setArchivos(files);
+                  setPreview(files.map((file) => URL.createObjectURL(file)));
                 } else {
-                  setPreview("");
+                  setArchivos([]);
+                  setPreview([]);
                 }
               }}
             />
-            {(preview || imagenActual) && (
-              <div className="mb-2 position-relative d-inline-block mt-3">
-                <img
-                  className="rounded-3 img-preview"
-                  src={preview || imagenActual}
-                  alt="Imagenes"
-                />
-                <Button
-                  variant="light"
-                  size="sm"
-                  className="p-0 d-flex align-items-center justify-content-center shadow btn-img-preview"
-                  onClick={() => {
-                    setPreview("");
-                    setImagenActual("");
-                    resetField("imagenes");
-                  }}
+            {[...(preview.length > 0 ? preview : imagenActual)].map(
+              (src, index) => (
+                <div
+                  key={index}
+                  className="mb-2 position-relative d-inline-block mt-3 me-2"
                 >
-                  <i className="bi bi-x fs-5 text-danger"></i>
-                </Button>
-              </div>
+                  <img
+                    className="rounded-3 img-preview"
+                    src={src}
+                    alt="Imagenes"
+                  />
+                  <Button
+                    variant="light"
+                    size="sm"
+                    className="p-0 d-flex align-items-center justify-content-center shadow btn-img-preview"
+                    onClick={() => {
+                      if (preview.length > 0) {
+                        setPreview((prev) =>
+                          prev.filter((_, i) => i !== index),
+                        );
+                        setArchivos((prev) =>
+                          prev.filter((_, i) => i !== index),
+                        );
+                      } else {
+                        setImagenActual((prev) =>
+                          prev.filter((_, i) => i !== index),
+                        );
+                      }
+                    }}
+                  >
+                    <i className="bi bi-x fs-5 text-danger"></i>
+                  </Button>
+                </div>
+              ),
             )}
             <Form.Text className="text-danger">
               {errors.imagenes?.message}

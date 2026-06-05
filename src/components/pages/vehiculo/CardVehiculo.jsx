@@ -9,7 +9,7 @@ const CardVehiculo = ({ vehiculo }) => {
       <Card className="h-100">
         <div>
           <img
-            src={vehiculo.imagenes}
+            src={vehiculo.imagenes[0]}
             alt={`${vehiculo.marca} ${vehiculo.modelo}`}
             className="img-fluid"
           />
