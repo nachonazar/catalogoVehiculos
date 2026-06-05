@@ -3,17 +3,13 @@ import { Col, Card, CardFooter } from "react-bootstrap";
 import { Link } from "react-router";
 
 const CardVehiculo = ({ vehiculo }) => {
-  const imagenMostrar =
-    vehiculo.imagenes?.[0] ||
-    vehiculo.imagen ||
-    "https://via.placeholder.com/300";
 
   return (
     <Col md={4} lg={3} className="mb-3">
       <Card className="h-100">
         <div>
           <img
-            src={imagenMostrar}
+            src={vehiculo.imagenes}
             alt={`${vehiculo.marca} ${vehiculo.modelo}`}
             className="img-fluid"
           />
