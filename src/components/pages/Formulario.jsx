@@ -60,10 +60,9 @@ const Formulario = ({ titulo }) => {
   const navegacion = useNavigate();
 
   const onSubmit = async (vehiculo) => {
-    console.log(vehiculo);
     const vehiculoCompleto = {
       ...vehiculo,
-       imagenes: archivos.length > 0 ? archivos : imagenActual,
+      imagenes: archivos.length > 0 ? archivos : imagenActual,
       disponible: titulo === "Crear Vehiculo" ? true : vehiculo.disponible,
     };
     if (titulo === "Crear Vehiculo") {
@@ -102,7 +101,7 @@ const Formulario = ({ titulo }) => {
         const datosErroneos = await respuesta.json();
         Swal.fire({
           title: "Ocurrio un error",
-          text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser editado. ${datosErroneos.mensaje}`,
+          text: `El vehiculo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser editado. ${datosErroneos[0]?.mensaje}`,
           icon: "error",
         });
       }

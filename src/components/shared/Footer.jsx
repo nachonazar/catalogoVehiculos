@@ -50,10 +50,20 @@ const Footer = () => {
               <a href="#" className="text-white fs-4">
                 <i className="bi bi-instagram"></i>
               </a>
-              <a href="#" className="text-white fs-4">
-                <i className="bi bi-twitter"></i>
+              <a
+                href="https://wa.me/5493816289462?text=Hola!%20Me%20interesa%20un%20vehículo%20del%20catálogo"
+                target="_blank"
+                rel="noreferrer"
+                className="text-white fs-4"
+              >
+                <i className="bi bi-whatsapp"></i>
               </a>
-              <a href="#" className="text-white fs-4">
+              <a
+                href="https://m.me/Ignacio Nazar"
+                target="_blank"
+                rel="noreferrer"
+                className="text-white fs-4"
+              >
                 <i className="bi bi-facebook"></i>
               </a>
             </div>

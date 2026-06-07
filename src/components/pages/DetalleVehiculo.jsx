@@ -72,6 +72,15 @@ const DetalleVehiculo = () => {
                 <span className="primary-font fw-semibold">
                   Kilometraje: {vehiculo.km}
                 </span>
+                <br className="mb-3" />
+                <a
+                  href={`https://wa.me/5493816289462?text=Hola!%20Me%20interesa%20el%20${vehiculo.marca}%20${vehiculo.modelo}%20${vehiculo.anio}%20que%20vi%20en%20el%20catálogo`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-success mt-3 w-100"
+                >
+                  <i className="bi bi-whatsapp me-2"></i>Consultar por WhatsApp
+                </a>
               </Card.Text>
             </Card.Body>
           </Col>
