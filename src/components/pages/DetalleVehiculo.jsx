@@ -55,14 +55,12 @@ const DetalleVehiculo = () => {
               </Card.Title>
               <hr />
               <Card.Text>
-                {vehiculo.descripcion}
-                <br />
                 <span className="primary-font fw-semibold">
                   Categoria: {vehiculo.categoria}
                 </span>
                 <br className="mb-3" />
                 <span className="primary-font fw-semibold">
-                  Precio: {vehiculo.precio}
+                  Precio: ${vehiculo.precio.toLocaleString("es-AR")}
                 </span>
                 <br className="mb-3" />
                 <span className="primary-font fw-semibold">
@@ -71,6 +69,10 @@ const DetalleVehiculo = () => {
                 <br className="mb-3" />
                 <span className="primary-font fw-semibold">
                   Kilometraje: {vehiculo.km}
+                </span>
+                <br className="mb-3" />
+                <span className="primary-font fw-semibold">
+                  Descripción: {vehiculo.descripcion}
                 </span>
                 <br className="mb-3" />
                 <a

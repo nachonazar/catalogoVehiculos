@@ -60,7 +60,7 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
         />
       </td>
       <td className="text-center">{vehiculo.anio}</td>
-      <td className="text-center">{vehiculo.precio}</td>
+      <td className="text-center">${vehiculo.precio.toLocaleString("es-AR")}</td>
       <td className="text-center">
         <span
           className={`badge ${

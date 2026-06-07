@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Form, Button } from "react-bootstrap";
+import { Container, Row, Form, Button, Col } from "react-bootstrap";
 import CardVehiculo from "./vehiculo/CardVehiculo";
 import Contacto from "../shared/Contacto";
 import { leerVehiculosPaginados } from "../../../helpers/queries.js";
@@ -10,6 +10,7 @@ const Inicio = () => {
   const [page, setPage] = useState(1); //número de página actual
   const [limit] = useState(3); //cantidad de productos por página (fijo en 10).
   const [totalPages, setTotalPages] = useState(1); //total de páginas disponibles (lo devuelve el backend).
+  const [categoriaElegida, setCategoriaElegida] = useState("");
 
   useEffect(() => {
     obtenerVehiculos();
@@ -32,6 +33,9 @@ const Inicio = () => {
 
   const vehiculosFiltrados = vehiculos
     .filter((v) => v.disponible)
+    .filter((vehiculo) =>
+      categoriaElegida ? vehiculo.categoria === categoriaElegida : true,
+    )
     .filter(
       (vehiculo) =>
         (vehiculo.marca || "")
@@ -47,16 +51,31 @@ const Inicio = () => {
       <Container className="mt-5">
         <h2>Vehiculos Disponibles</h2>
         <p>Explora nuestro catálogo de vehículos</p>
-        <Form>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Row className="mb-3">
+          <Col md={8}>
             <Form.Control
               type="text"
               placeholder="Buscar por marca o modelo..."
               onChange={handleInputChange}
               value={terminoBusqueda}
             />
-          </Form.Group>
-        </Form>
+          </Col>
+          <Col md={4}>
+            <Form.Select
+              value={categoriaElegida}
+              onChange={(e) => {
+                setCategoriaElegida(e.target.value);
+                setPage(1);
+              }}
+            >
+              <option value="">Todas las categorías</option>
+              <option value="Sedán">Sedán</option>
+              <option value="SUV">SUV</option>
+              <option value="Camioneta">Camioneta</option>
+              <option value="Deportivo">Deportivo</option>
+            </Form.Select>
+          </Col>
+        </Row>
         <Row>
           {vehiculosFiltrados.length > 0 ? (
             vehiculosFiltrados.map((vehiculo) => (

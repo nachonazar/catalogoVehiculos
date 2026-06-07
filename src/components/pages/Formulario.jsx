@@ -273,7 +273,7 @@ const Formulario = ({ titulo }) => {
             </Col>
           </Row>
           <Form.Group className="mb-3" controlId="formImagen">
-            <Form.Label>Imagenes URL*</Form.Label>
+            <Form.Label>Imagenes*</Form.Label>
             <Form.Control
               type="file"
               accept="image/*"

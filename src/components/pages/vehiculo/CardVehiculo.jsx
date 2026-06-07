@@ -33,7 +33,7 @@ const CardVehiculo = ({ vehiculo }) => {
           <Card.Text>
             Descripción: {vehiculo.descripcion}
             <br className="mb-2" />
-            <span className="fw-bold">Precio: ${vehiculo.precio}</span>
+            <span className="fw-bold">Precio: ${vehiculo.precio.toLocaleString("es-AR")}</span>
           </Card.Text>
         </Card.Body>
         <CardFooter className="text-end">
