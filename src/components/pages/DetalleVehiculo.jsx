@@ -53,6 +53,7 @@ const DetalleVehiculo = () => {
               <Card.Title className="primary-font">
                 {vehiculo.marca} {vehiculo.modelo}
               </Card.Title>
+              <span className="badge bg-success">Disponible</span>
               <hr />
               <Card.Text>
                 <span className="primary-font fw-semibold">
