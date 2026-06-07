@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Card, CardFooter } from "react-bootstrap";
 import { Link } from "react-router";
+import "./CardVehiculo.css"
 
 const CardVehiculo = ({ vehiculo }) => {
 
@@ -11,7 +12,7 @@ const CardVehiculo = ({ vehiculo }) => {
           <img
             src={vehiculo.imagenes[0]}
             alt={`${vehiculo.marca} ${vehiculo.modelo}`}
-            className="img-fluid"
+            className="img-fluid img-card"
           />
         </div>
         <Card.Body>

@@ -6,6 +6,7 @@ import {
   borrarVehiculosPorId,
   leerVehiculosPaginados,
 } from "../../../../helpers/queries.js";
+import "./ItemVehiculo.css"
 
 const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
 
@@ -54,7 +55,7 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
       <td className="text-center">
         <img
           src={vehiculo.imagenes[0]}
-          className="img-thumbnail"
+          className="img-thumbnail img-item"
           alt={`${vehiculo.marca} ${vehiculo.modelo}`}
         />
       </td>
