@@ -63,12 +63,26 @@ export const editarVehiculosPorId = async (vehiculoEditado, id) => {
     formData.append("km", vehiculoEditado.km);
     formData.append("disponible", vehiculoEditado.disponible);
     formData.append("descripcion", vehiculoEditado.descripcion);
-    if (Array.isArray(vehiculoEditado.imagenes) && vehiculoEditado.imagenes[0] instanceof File) {
-      // son archivos nuevos
-      vehiculoEditado.imagenes.forEach((img) => formData.append("imagenes", img));
-    } else if (Array.isArray(vehiculoEditado.imagenes)) {
-      // son URLs existentes que el usuario quiere mantener
-      vehiculoEditado.imagenes.forEach((url) => formData.append("imagenesExistentes", url));
+    if (Array.isArray(vehiculoEditado.imagenes)) {
+      if (vehiculoEditado.imagenes[0] instanceof File) {
+        vehiculoEditado.imagenes.forEach((img) =>
+          formData.append("imagenes", img),
+        );
+      } else {
+        vehiculoEditado.imagenes.forEach((url) =>
+          formData.append("imagenesExistentes", url),
+        );
+      }
+    } else if (
+      vehiculoEditado.imagenes?.nuevas ||
+      vehiculoEditado.imagenes?.existentes
+    ) {
+      vehiculoEditado.imagenes.nuevas?.forEach((img) =>
+        formData.append("imagenes", img),
+      );
+      vehiculoEditado.imagenes.existentes?.forEach((url) =>
+        formData.append("imagenesExistentes", url),
+      );
     }
 
     const respuesta = await fetch(urlvehiculos + `/${id}`, {

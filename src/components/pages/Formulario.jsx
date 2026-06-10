@@ -60,9 +60,20 @@ const Formulario = ({ titulo }) => {
   const navegacion = useNavigate();
 
   const onSubmit = async (vehiculo) => {
+    console.log("archivos:", archivos);
+    console.log("imagenActual:", imagenActual);
+    console.log(
+      "vehiculoCompleto.imagenes:",
+      titulo === "Crear Vehiculo"
+        ? archivos
+        : { nuevas: archivos, existentes: imagenActual },
+    );
     const vehiculoCompleto = {
       ...vehiculo,
-      imagenes: archivos.length > 0 ? archivos : imagenActual,
+      imagenes:
+        titulo === "Crear Vehiculo"
+          ? archivos
+          : { nuevas: archivos, existentes: imagenActual },
       disponible: titulo === "Crear Vehiculo" ? true : vehiculo.disponible,
     };
     if (titulo === "Crear Vehiculo") {
@@ -280,7 +291,7 @@ const Formulario = ({ titulo }) => {
               multiple
               {...register("imagenes", {
                 required:
-                  titulo === "Crear producto"
+                  titulo === "Crear Vehiculo" && archivos.length === 0
                     ? "La imagen es obligatoria"
                     : false,
                 validate: {
@@ -288,54 +299,64 @@ const Formulario = ({ titulo }) => {
                     !files[0] ||
                     Array.from(files).every((f) => f.size <= 2 * 1024 * 1024) ||
                     "Alguna imagen supera los 2MB.",
+                  imagenRequerida: () => {
+                    if (
+                      titulo === "Editar Vehiculo" &&
+                      archivos.length === 0 &&
+                      imagenActual.length === 0
+                    ) {
+                      return "Debe tener al menos una imagen";
+                    }
+                    return true;
+                  },
                 },
               })}
               onChange={(e) => {
                 const files = Array.from(e.target.files);
                 if (files.length > 0) {
-                  setArchivos(files);
-                  setPreview(files.map((file) => URL.createObjectURL(file)));
-                } else {
-                  setArchivos([]);
-                  setPreview([]);
+                  setArchivos((prev) => [...prev, ...files]);
+                  setPreview((prev) => [
+                    ...prev,
+                    ...files.map((file) => URL.createObjectURL(file)),
+                  ]);
                 }
               }}
             />
-            {[...(preview.length > 0 ? preview : imagenActual)].map(
-              (src, index) => (
-                <div
-                  key={index}
-                  className="mb-2 position-relative d-inline-block mt-3 me-2"
+            {[...imagenActual, ...preview].map((src, index) => (
+              <div
+                key={index}
+                className="mb-2 position-relative d-inline-block mt-3 me-2"
+              >
+                <img
+                  className="rounded-3 img-preview"
+                  src={src}
+                  alt="Imagenes"
+                />
+                <Button
+                  variant="light"
+                  size="sm"
+                  className="p-0 d-flex align-items-center justify-content-center shadow btn-img-preview"
+                  onClick={() => {
+                    const esExistente = index < imagenActual.length;
+                    if (esExistente) {
+                      setImagenActual((prev) =>
+                        prev.filter((_, i) => i !== index),
+                      );
+                    } else {
+                      const previewIndex = index - imagenActual.length;
+                      setPreview((prev) =>
+                        prev.filter((_, i) => i !== previewIndex),
+                      );
+                      setArchivos((prev) =>
+                        prev.filter((_, i) => i !== previewIndex),
+                      );
+                    }
+                  }}
                 >
-                  <img
-                    className="rounded-3 img-preview"
-                    src={src}
-                    alt="Imagenes"
-                  />
-                  <Button
-                    variant="light"
-                    size="sm"
-                    className="p-0 d-flex align-items-center justify-content-center shadow btn-img-preview"
-                    onClick={() => {
-                      if (preview.length > 0) {
-                        setPreview((prev) =>
-                          prev.filter((_, i) => i !== index),
-                        );
-                        setArchivos((prev) =>
-                          prev.filter((_, i) => i !== index),
-                        );
-                      } else {
-                        setImagenActual((prev) =>
-                          prev.filter((_, i) => i !== index),
-                        );
-                      }
-                    }}
-                  >
-                    <i className="bi bi-x fs-5 text-danger"></i>
-                  </Button>
-                </div>
-              ),
-            )}
+                  <i className="bi bi-x fs-5 text-danger"></i>
+                </Button>
+              </div>
+            ))}
             <Form.Text className="text-danger">
               {errors.imagenes?.message}
             </Form.Text>
