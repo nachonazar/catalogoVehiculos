@@ -48,7 +48,7 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
       <td className="text-center">
         {fila}
       </td>
-      <td className="text-center">
+      <td className="text-center item-titulo">
         {vehiculo.marca} {vehiculo.modelo}
       </td>
       <td className="text-center">{vehiculo.categoria}</td>

@@ -1,10 +1,9 @@
 import React from "react";
 import { Col, Card, CardFooter } from "react-bootstrap";
 import { Link } from "react-router";
-import "./CardVehiculo.css"
+import "./CardVehiculo.css";
 
 const CardVehiculo = ({ vehiculo }) => {
-
   return (
     <Col md={4} lg={3} className="mb-3">
       <Card className="h-100">
@@ -17,7 +16,7 @@ const CardVehiculo = ({ vehiculo }) => {
         </div>
         <Card.Body>
           <div className="d-flex justify-content-between align-items-start">
-            <Card.Title className="primary-font">
+            <Card.Title className="primary-font card-titulo">
               {vehiculo.marca} {vehiculo.modelo}
             </Card.Title>
             <span className="badge bg-success">Disponible</span>
@@ -28,12 +27,15 @@ const CardVehiculo = ({ vehiculo }) => {
           </p>
           <p>
             <i className="bi bi-speedometer"></i>
-            {vehiculo.km} km
+            {vehiculo.km.toLocaleString("es-AR")} km
           </p>
           <Card.Text>
-            Descripción: {vehiculo.descripcion}
+            <span>Descripción:</span>{" "}
+            <span className="card-descripcion">{vehiculo.descripcion}</span>
             <br className="mb-2" />
-            <span className="fw-bold">Precio: ${vehiculo.precio.toLocaleString("es-AR")}</span>
+            <span className="fw-bold">
+              Precio: ${vehiculo.precio.toLocaleString("es-AR")}
+            </span>
           </Card.Text>
         </Card.Body>
         <CardFooter className="text-end">

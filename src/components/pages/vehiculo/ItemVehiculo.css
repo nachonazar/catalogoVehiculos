@@ -3,6 +3,9 @@
   height: 100px;
   object-fit: cover;
 }
+.item-titulo{
+    text-transform: capitalize;
+}
 
 @media (max-width: 768px) {
   .img-item {

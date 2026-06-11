@@ -3,3 +3,16 @@
     width: 100%;
     object-fit: cover;
 }
+
+.card-titulo {
+    text-transform: capitalize;
+}
+
+.card-descripcion {
+    display: inline-block;
+    text-transform: lowercase;
+}
+
+.card-descripcion::first-letter {
+    text-transform: uppercase;
+}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Card, Row, Col, Carousel } from "react-bootstrap";
 import { useParams } from "react-router";
 import { leerVehiculoPorId } from "../../../helpers/queries";
+import "./vehiculo/CardVehiculo.css"
 
 const DetalleVehiculo = () => {
   const { id } = useParams();
@@ -69,12 +70,13 @@ const DetalleVehiculo = () => {
                 </span>
                 <br className="mb-3" />
                 <span className="primary-font fw-semibold">
-                  Kilometraje: {vehiculo.km}
+                  Kilometraje: {vehiculo.km.toLocaleString("es-AR")}
                 </span>
                 <br className="mb-3" />
                 <span className="primary-font fw-semibold">
-                  Descripción: {vehiculo.descripcion}
-                </span>
+                  Descripción:
+                </span>{" "}
+                <span className="card-descripcion">{vehiculo.descripcion}</span>
                 <br className="mb-3" />
                 <a
                   href={`https://wa.me/5493816289462?text=Hola!%20Me%20interesa%20el%20${vehiculo.marca}%20${vehiculo.modelo}%20${vehiculo.anio}%20que%20vi%20en%20el%20catálogo`}
