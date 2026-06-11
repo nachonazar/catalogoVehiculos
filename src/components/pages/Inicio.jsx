@@ -8,7 +8,7 @@ const Inicio = () => {
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
   const [vehiculos, setVehiculos] = useState([]);
   const [page, setPage] = useState(1); //número de página actual
-  const [limit] = useState(6); //cantidad de productos por página (fijo en 10).
+  const [limit] = useState(4); //cantidad de productos por página (fijo en 10).
   const [totalPages, setTotalPages] = useState(1); //total de páginas disponibles (lo devuelve el backend).
   const [categoriaElegida, setCategoriaElegida] = useState("");
 

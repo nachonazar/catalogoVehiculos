@@ -5,7 +5,7 @@ import "./CardVehiculo.css";
 
 const CardVehiculo = ({ vehiculo }) => {
   return (
-    <Col md={4} lg={3} className="mb-3">
+    <Col md={4} className="mb-3">
       <Card className="h-100">
         <div>
           <img
