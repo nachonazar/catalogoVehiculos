@@ -8,7 +8,7 @@ const Inicio = () => {
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
   const [vehiculos, setVehiculos] = useState([]);
   const [page, setPage] = useState(1); //número de página actual
-  const [limit] = useState(3); //cantidad de productos por página (fijo en 10).
+  const [limit] = useState(6); //cantidad de productos por página (fijo en 10).
   const [totalPages, setTotalPages] = useState(1); //total de páginas disponibles (lo devuelve el backend).
   const [categoriaElegida, setCategoriaElegida] = useState("");
 
@@ -88,23 +88,31 @@ const Inicio = () => {
             <p>No se encontraron vehiculos para mostrar</p>
           )}
         </Row>
-        <div className="d-flex justify-content-center align-items-center my-3">
+        <div className="d-flex justify-content-center align-items-center my-3 gap-2">
           <Button
-            variant="secondary"
+            variant="outline-secondary"
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             disabled={page === 1}
           >
-            Anterior
+            &laquo;
           </Button>
-          <span className="mx-3">
-            Página {page} de {totalPages}
-          </span>
+
+          {[...Array(totalPages)].map((_, i) => (
+            <Button
+              key={i + 1}
+              variant={page === i + 1 ? "primary" : "outline-secondary"}
+              onClick={() => setPage(i + 1)}
+            >
+              {i + 1}
+            </Button>
+          ))}
+
           <Button
-            variant="secondary"
+            variant="outline-secondary"
             onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={page === totalPages}
           >
-            Siguiente
+            &raquo;
           </Button>
         </div>
       </Container>

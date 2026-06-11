@@ -7,7 +7,7 @@ import { leerVehiculosPaginados } from "../../../helpers/queries.js";
 const Administrador = () => {
   const [listaVehiculos, setListaVehiculos] = useState([]);
   const [page, setPage] = useState(1); //número de página actual
-  const [limit] = useState(3); //cantidad de productos por página (fijo en 10).
+  const [limit] = useState(4); //cantidad de productos por página (fijo en 10).
   const [totalPages, setTotalPages] = useState(1); //total de páginas disponibles (lo devuelve el backend).
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Administrador = () => {
     if (respuesta.status === 200) {
       const datos = await respuesta.json();
       setListaVehiculos(datos.vehiculos);
-      setTotalPages(datos.totalPages)
+      setTotalPages(datos.totalPages);
     } else {
       console.info("Ocurrio un error al buscar los vehiculos");
     }
@@ -54,7 +54,7 @@ const Administrador = () => {
             <ItemVehiculo
               key={vehiculo._id}
               vehiculo={vehiculo}
-              fila={(page - 1) * limit + indice +1}
+              fila={(page - 1) * limit + indice + 1}
               setListaVehiculos={setListaVehiculos}
               page={page}
               limit={limit}
@@ -62,23 +62,31 @@ const Administrador = () => {
           ))}
         </tbody>
       </Table>
-      <div className="d-flex justify-content-center align-items-center my-3">
+      <div className="d-flex justify-content-center align-items-center my-3 gap-2">
         <Button
-          variant="secondary"
+          variant="outline-secondary"
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
         >
-          Anterior
+          &laquo;
         </Button>
-        <span className="mx-3">
-          Página {page} de {totalPages}
-        </span>
+
+        {[...Array(totalPages)].map((_, i) => (
+          <Button
+            key={i + 1}
+            variant={page === i + 1 ? "primary" : "outline-secondary"}
+            onClick={() => setPage(i + 1)}
+          >
+            {i + 1}
+          </Button>
+        ))}
+
         <Button
-          variant="secondary"
+          variant="outline-secondary"
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={page === totalPages}
         >
-          Siguiente
+          &raquo;
         </Button>
       </div>
     </Container>
