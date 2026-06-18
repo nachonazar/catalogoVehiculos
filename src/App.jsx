@@ -1,7 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Footer from "./components/shared/Footer";
-import { BrowserRouter, Route, Routes } from "react-router";
+// Agregamos useLocation a tu importación existente
+import { BrowserRouter, Route, Routes, useLocation } from "react-router"; 
 import Menu from "./components/shared/Menu";
 import Contacto from "./components/shared/Contacto";
 import Inicio from "./components/pages/Inicio";
@@ -13,6 +14,17 @@ import Login from "./components/pages/Login";
 import { useEffect, useState } from "react";
 import ProtectorAdmin from "./components/routes/ProtectorAdmin";
 
+// 1. Creamos este pequeño componente interceptor
+const ElementosPublicos = ({ children }) => {
+  const location = useLocation();
+  
+  // Si la ruta empieza con "/administrador" o es exactamente "/login", ocultamos el contenido
+  const ocultar = location.pathname.startsWith("/administrador") || location.pathname === "/login";
+
+  if (ocultar) return null;
+  return <>{children}</>;
+};
+
 function App() {
   const usuarioLogueado = JSON.parse(sessionStorage.getItem("userKey")) || {};
   const [usuarioAdmin, setUsuarioAdmin] = useState(usuarioLogueado);
@@ -23,7 +35,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Menu usuarioAdmin={usuarioAdmin} setUsuarioAdmin={setUsuarioAdmin} />
+      {/* 2. Envolvemos el Menu con el interceptor */}
+      <ElementosPublicos>
+        <Menu usuarioAdmin={usuarioAdmin} setUsuarioAdmin={setUsuarioAdmin} />
+      </ElementosPublicos>
+
       <main>
         <Routes>
           <Route path="/" element={<Inicio></Inicio>}></Route>
@@ -35,6 +51,7 @@ function App() {
             path="/login"
             element={<Login setUsuarioAdmin={setUsuarioAdmin}></Login>}
           ></Route>
+          
           <Route
             path="/administrador"
             element={<ProtectorAdmin isAdmin={usuarioAdmin}></ProtectorAdmin>}
@@ -49,10 +66,15 @@ function App() {
               element={<Formulario titulo={"Editar Vehiculo"}></Formulario>}
             ></Route>
           </Route>
+          
           <Route path="*" element={<Error404></Error404>}></Route>
         </Routes>
       </main>
-      <Footer />
+
+      {/* 3. Envolvemos el Footer con el interceptor */}
+      <ElementosPublicos>
+        <Footer />
+      </ElementosPublicos>
     </BrowserRouter>
   );
 }

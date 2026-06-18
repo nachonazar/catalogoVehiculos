@@ -1,18 +1,125 @@
-.img-card {
-    height: 200px;
-    width: 100%;
-    object-fit: cover;
+.card-vehiculo {
+  background: var(--color-surface-container-lowest);
+  border-radius: 12px;
+  border: 1px solid var(--color-surface-container-highest);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 0px 5px 15px rgba(27, 38, 59, 0.03);
+  transition: all 0.3s ease;
 }
 
-.card-titulo {
-    text-transform: capitalize;
+.card-vehiculo:hover {
+  box-shadow: 0px 15px 35px rgba(27, 38, 59, 0.08);
+  transform: translateY(-4px);
 }
 
-.card-descripcion {
-    display: inline-block;
-    text-transform: lowercase;
+.card-vehiculo-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/2;
+  overflow: hidden;
+  background: var(--color-surface-container);
 }
 
-.card-descripcion::first-letter {
-    text-transform: uppercase;
+.card-vehiculo-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-vehiculo-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(25, 135, 84, 0.9);
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(4px);
+}
+
+.card-vehiculo-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-vehiculo-titulo {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-transform: capitalize;
+  margin-bottom: 12px;
+}
+
+.card-vehiculo-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.card-vehiculo-tag {
+  background: var(--color-surface-container);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-vehiculo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid var(--color-surface-container-highest);
+  padding-top: 12px;
+  margin-top: auto;
+}
+
+.card-vehiculo-precio-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-outline);
+  margin-bottom: 2px;
+}
+
+.card-vehiculo-precio {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: 0;
+}
+
+.card-vehiculo-btn {
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  background: transparent;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.card-vehiculo-btn:hover {
+  background: var(--color-primary);
+  color: #ffffff;
 }

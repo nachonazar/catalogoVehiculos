@@ -1,3 +1,39 @@
+/* 1. Primero las importaciones de fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@600;700&display=swap');
+
+/* 2. Luego las directivas obligatorias de Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3. Tus variables CSS originales (útiles si tienes componentes que aún las usan) */
+:root {
+  --color-primary: #051125;
+  --color-primary-container: #1b263b;
+  --color-secondary: #0055c9;
+  --color-surface: #fbf8fb;
+  --color-surface-container: #f0edef;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-highest: #e4e2e4;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #828da7;
+  --color-on-surface: #1b1b1d;
+  --color-on-surface-variant: #45474d;
+  --color-outline: #75777d;
+  --color-outline-variant: #c5c6cd;
+  --color-success: #198754;
+  --color-text-main: #212529;
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* 4. Tus reglas globales y de estructura base */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+}
+
 #root {
   display: flex;
   flex-direction: column;

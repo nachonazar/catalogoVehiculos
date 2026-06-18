@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Form, Button, Col } from "react-bootstrap";
+import { Container, Row, Button } from "react-bootstrap";
 import CardVehiculo from "./vehiculo/CardVehiculo";
 import Contacto from "../shared/Contacto";
 import { leerVehiculosPaginados } from "../../../helpers/queries.js";
+import "./Inicio.css";
 
 const Inicio = () => {
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
   const [vehiculos, setVehiculos] = useState([]);
-  const [page, setPage] = useState(1); //número de página actual
-  const [limit] = useState(4); //cantidad de productos por página (fijo en 10).
-  const [totalPages, setTotalPages] = useState(1); //total de páginas disponibles (lo devuelve el backend).
+  const [page, setPage] = useState(1);
+  const [limit] = useState(6);
+  const [totalPages, setTotalPages] = useState(1);
   const [categoriaElegida, setCategoriaElegida] = useState("");
 
   useEffect(() => {
@@ -27,96 +28,102 @@ const Inicio = () => {
     }
   };
 
-  const handleInputChange = (e) => {
-    setTerminoBusqueda(e.target.value);
-  };
-
   const vehiculosFiltrados = vehiculos
     .filter((v) => v.disponible)
-    .filter((vehiculo) =>
-      categoriaElegida ? vehiculo.categoria === categoriaElegida : true,
-    )
-    .filter(
-      (vehiculo) =>
-        (vehiculo.marca || "")
-          .toLowerCase()
-          .includes(terminoBusqueda.toLowerCase()) ||
-        (vehiculo.modelo || "")
-          .toLowerCase()
-          .includes(terminoBusqueda.toLowerCase()),
+    .filter((v) => categoriaElegida ? v.categoria === categoriaElegida : true)
+    .filter((v) =>
+      (v.marca || "").toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+      (v.modelo || "").toLowerCase().includes(terminoBusqueda.toLowerCase())
     );
 
   return (
-    <div>
-      <Container className="mt-5">
-        <h2>Vehiculos Disponibles</h2>
-        <p>Explora nuestro catálogo de vehículos</p>
-        <Row className="mb-3">
-          <Col md={8}>
-            <Form.Control
+    <div style={{ backgroundColor: "var(--color-surface)" }}>
+
+      {/* HERO */}
+      <section className="inicio-hero">
+        <div className="inicio-hero-overlay" />
+        <div className="inicio-hero-gradient" />
+        <div className="inicio-hero-content">
+          <h1 className="inicio-hero-title">Encontrá tu próximo vehículo</h1>
+          <p className="inicio-hero-subtitle">
+            El catálogo más completo de vehículos seleccionados para vos.
+          </p>
+          <a href="#vehiculos" className="inicio-hero-btn">
+            Ver Inventario
+          </a>
+        </div>
+      </section>
+
+      {/* FILTROS FLOTANTES */}
+      <section className="inicio-filtros-wrapper">
+        <div className="inicio-filtros">
+          <div className="inicio-filtros-search">
+            <i className="bi bi-search inicio-filtros-icon" />
+            <input
               type="text"
-              placeholder="Buscar por marca o modelo..."
-              onChange={handleInputChange}
+              placeholder="Buscar modelo o marca..."
+              className="inicio-filtros-input"
               value={terminoBusqueda}
+              onChange={(e) => { setTerminoBusqueda(e.target.value); setPage(1); }}
             />
-          </Col>
-          <Col md={4}>
-            <Form.Select
-              value={categoriaElegida}
-              onChange={(e) => {
-                setCategoriaElegida(e.target.value);
-                setPage(1);
-              }}
-            >
-              <option value="">Todas las categorías</option>
-              <option value="Sedán">Sedán</option>
-              <option value="SUV">SUV</option>
-              <option value="Camioneta">Camioneta</option>
-              <option value="Deportivo">Deportivo</option>
-            </Form.Select>
-          </Col>
-        </Row>
+          </div>
+          <select
+            className="inicio-filtros-select"
+            value={categoriaElegida}
+            onChange={(e) => { setCategoriaElegida(e.target.value); setPage(1); }}
+          >
+            <option value="">Todas las categorías</option>
+            <option value="Sedán">Sedán</option>
+            <option value="SUV">SUV</option>
+            <option value="Camioneta">Camioneta</option>
+            <option value="Deportivo">Deportivo</option>
+          </select>
+        </div>
+      </section>
+
+      {/* GRID DE VEHICULOS */}
+      <main className="inicio-main" id="vehiculos">
+        <h2 className="inicio-section-title">Vehículos Disponibles</h2>
+        <p className="inicio-section-subtitle">Explora nuestro catálogo de vehículos</p>
         <Row>
           {vehiculosFiltrados.length > 0 ? (
             vehiculosFiltrados.map((vehiculo) => (
-              <CardVehiculo
-                key={vehiculo._id}
-                vehiculo={vehiculo}
-              ></CardVehiculo>
+              <CardVehiculo key={vehiculo._id} vehiculo={vehiculo} />
             ))
           ) : (
-            <p>No se encontraron vehiculos para mostrar</p>
+            <p className="text-muted">No se encontraron vehículos para mostrar</p>
           )}
         </Row>
-        <div className="d-flex justify-content-center align-items-center my-3 gap-2">
+
+        {/* PAGINACION */}
+        <div className="inicio-paginacion">
           <Button
-            variant="outline-secondary"
+            className="inicio-paginacion-btn"
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             disabled={page === 1}
           >
             &laquo;
           </Button>
-
           {[...Array(totalPages)].map((_, i) => (
             <Button
               key={i + 1}
-              variant={page === i + 1 ? "primary" : "outline-secondary"}
+              className={`inicio-paginacion-btn ${page === i + 1 ? "active" : ""}`}
               onClick={() => setPage(i + 1)}
             >
               {i + 1}
             </Button>
           ))}
-
           <Button
-            variant="outline-secondary"
+            className="inicio-paginacion-btn"
             onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={page === totalPages}
           >
             &raquo;
           </Button>
         </div>
-      </Container>
-      <Contacto></Contacto>
+      </main>
+
+      <Contacto />
     </div>
   );
 };
