@@ -1,8 +1,6 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/shared/Footer";
-// Agregamos useLocation a tu importación existente
-import { BrowserRouter, Route, Routes, useLocation } from "react-router"; 
 import Menu from "./components/shared/Menu";
 import Contacto from "./components/shared/Contacto";
 import Inicio from "./components/pages/Inicio";
@@ -11,14 +9,10 @@ import DetalleVehiculo from "./components/pages/DetalleVehiculo";
 import Formulario from "./components/pages/Formulario";
 import Error404 from "./components/pages/Error404";
 import Login from "./components/pages/Login";
-import { useEffect, useState } from "react";
 import ProtectorAdmin from "./components/routes/ProtectorAdmin";
 
-// 1. Creamos este pequeño componente interceptor
 const ElementosPublicos = ({ children }) => {
   const location = useLocation();
-  
-  // Si la ruta empieza con "/administrador" o es exactamente "/login", ocultamos el contenido
   const ocultar = location.pathname.startsWith("/administrador") || location.pathname === "/login";
 
   if (ocultar) return null;
@@ -35,43 +29,26 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* 2. Envolvemos el Menu con el interceptor */}
       <ElementosPublicos>
         <Menu usuarioAdmin={usuarioAdmin} setUsuarioAdmin={setUsuarioAdmin} />
       </ElementosPublicos>
 
       <main>
         <Routes>
-          <Route path="/" element={<Inicio></Inicio>}></Route>
-          <Route
-            path="/detalle/:id"
-            element={<DetalleVehiculo></DetalleVehiculo>}
-          ></Route>
-          <Route
-            path="/login"
-            element={<Login setUsuarioAdmin={setUsuarioAdmin}></Login>}
-          ></Route>
+          <Route path="/" element={<Inicio />} />
+          <Route path="/detalle/:id" element={<DetalleVehiculo />} />
+          <Route path="/login" element={<Login setUsuarioAdmin={setUsuarioAdmin} />} />
           
-          <Route
-            path="/administrador"
-            element={<ProtectorAdmin isAdmin={usuarioAdmin}></ProtectorAdmin>}
-          >
-            <Route index element={<Administrador></Administrador>}></Route>
-            <Route
-              path="crear"
-              element={<Formulario titulo={"Crear Vehiculo"}></Formulario>}
-            ></Route>
-            <Route
-              path="editar/:id"
-              element={<Formulario titulo={"Editar Vehiculo"}></Formulario>}
-            ></Route>
+          <Route path="/administrador" element={<ProtectorAdmin isAdmin={usuarioAdmin} />}>
+            <Route index element={<Administrador />} />
+            <Route path="crear" element={<Formulario titulo="Crear Vehiculo" />} />
+            <Route path="editar/:id" element={<Formulario titulo="Editar Vehiculo" />} />
           </Route>
           
-          <Route path="*" element={<Error404></Error404>}></Route>
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </main>
 
-      {/* 3. Envolvemos el Footer con el interceptor */}
       <ElementosPublicos>
         <Footer />
       </ElementosPublicos>

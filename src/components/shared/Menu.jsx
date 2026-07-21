@@ -12,13 +12,18 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
     navegacion("/");
   };
 
+  // Función auxiliar para ir a inicio y forzar el scroll hacia arriba
+  const irArriba = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <header className="fixed top-0 w-full z-50 shadow-[0px_10px_30px_rgba(27,38,59,0.05)] bg-surface dark:bg-inverse-surface">
       <div className="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto md:px-8 px-4">
-        
         {/* Logo */}
-        <Link 
-          to="/" 
+        <Link
+          to="/"
+          onClick={irArriba}
           className="cursor-pointer transition-transform active:scale-95 flex items-center no-underline"
         >
           <img
@@ -30,24 +35,25 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
 
         {/* Menú Desktop */}
         <nav className="hidden md:flex items-center space-x-8">
-          <NavLink 
-            to="/" 
+          <NavLink
+            to="/"
+            onClick={irArriba}
             className="text-on-surface-variant hover:text-secondary font-label-sm text-label-sm uppercase tracking-wider transition-all no-underline"
           >
             Inicio
           </NavLink>
 
-          {/* NUEVO: Enlace de Contacto */}
-          <a 
-            href="#contacto" 
+          {/* Enlace de Contacto */}
+          <a
+            href="#contacto"
             className="text-on-surface-variant hover:text-secondary font-label-sm text-label-sm uppercase tracking-wider transition-all no-underline cursor-pointer"
           >
             Contacto
           </a>
 
           {usuarioAdmin.token && (
-            <NavLink 
-              to="/administrador" 
+            <NavLink
+              to="/administrador"
               className="text-on-surface-variant hover:text-secondary font-label-sm text-label-sm uppercase tracking-wider transition-all no-underline"
             >
               Administrador
@@ -74,7 +80,7 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
           )}
 
           {/* Botón menú móvil */}
-          <button 
+          <button
             className="md:hidden text-primary flex items-center bg-transparent border-0"
             onClick={() => setIsMobileOpen(!isMobileOpen)}
           >
@@ -86,17 +92,20 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
       {/* Menú Móvil Desplegable */}
       {isMobileOpen && (
         <div className="md:hidden bg-surface dark:bg-inverse-surface border-t border-outline-variant px-4 py-4 flex flex-col space-y-4 shadow-lg">
-          <NavLink 
-            to="/" 
-            onClick={() => setIsMobileOpen(false)}
+          <NavLink
+            to="/"
+            onClick={() => {
+              setIsMobileOpen(false);
+              irArriba();
+            }}
             className="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider no-underline"
           >
             Inicio
           </NavLink>
 
-          {/* NUEVO: Enlace de Contacto en Móvil */}
-          <a 
-            href="#contacto" 
+          {/* Enlace de Contacto en Móvil */}
+          <a
+            href="#contacto"
             onClick={() => setIsMobileOpen(false)}
             className="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider no-underline"
           >
@@ -104,24 +113,25 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
           </a>
 
           {usuarioAdmin.token && (
-            <NavLink 
-              to="/administrador" 
+            <NavLink
+              to="/administrador"
               onClick={() => setIsMobileOpen(false)}
               className="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider no-underline"
             >
               Administrador
             </NavLink>
           )}
+
           {usuarioAdmin.token ? (
-            <button 
-              onClick={logout} 
+            <button
+              onClick={logout}
               className="text-left text-error font-label-sm text-label-sm uppercase tracking-wider bg-transparent border-0 p-0"
             >
               Logout
             </button>
           ) : (
-            <Link 
-              to="/login" 
+            <Link
+              to="/login"
               onClick={() => setIsMobileOpen(false)}
               className="text-left text-secondary font-label-sm text-label-sm uppercase tracking-wider no-underline"
             >

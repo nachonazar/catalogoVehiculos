@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Carousel } from "react-bootstrap";
-import { useParams, Link } from "react-router-dom"; // Cambiado a react-router-dom
+import { useParams, Link } from "react-router-dom";
 import { leerVehiculoPorId } from "../../../helpers/queries";
-
-// Mantienes tu CSS para el Modal a pantalla completa
-import "./vehiculo/Modal.css"; 
 
 const DetalleVehiculo = () => {
   const { id } = useParams();
@@ -25,11 +21,16 @@ const DetalleVehiculo = () => {
     }
   }
 
-  const handleSelect = (selectedIndex) => {
-    setIndexFoto(selectedIndex);
+  const nextImg = (e) => {
+    e.stopPropagation();
+    setIndexFoto((prev) => (prev === vehiculo.imagenes.length - 1 ? 0 : prev + 1));
   };
 
-  // Pantalla de carga mientras trae el vehículo
+  const prevImg = (e) => {
+    e.stopPropagation();
+    setIndexFoto((prev) => (prev === 0 ? vehiculo.imagenes.length - 1 : prev - 1));
+  };
+
   if (!vehiculo) {
     return (
       <div className="flex justify-center items-center h-screen bg-surface">
@@ -41,7 +42,7 @@ const DetalleVehiculo = () => {
   return (
     <main className="pt-28 pb-10 max-w-container-max mx-auto px-4 md:px-gutter">
       
-      {/* Breadcrumbs (Navegación) */}
+      {/* Breadcrumbs */}
       <nav aria-label="Breadcrumb" className="mb-stack-md flex items-center space-x-2 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
         <Link to="/" className="hover:text-primary no-underline transition-colors">Inicio</Link>
         <span className="material-symbols-outlined text-[16px]">chevron_right</span>
@@ -50,15 +51,13 @@ const DetalleVehiculo = () => {
         <span className="text-primary font-bold">{vehiculo.marca} {vehiculo.modelo}</span>
       </nav>
 
-      {/* Grid Principal (Layout Bento) */}
+      {/* Grid Principal */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
         
-        {/* Columna Izquierda: Galería y Detalles (8 columnas) */}
+        {/* Columna Izquierda */}
         <div className="lg:col-span-8 flex flex-col gap-stack-lg">
           
-          {/* Galería de Imágenes */}
           <div className="bg-surface-lowest rounded-2xl overflow-hidden shadow-[0px_10px_30px_rgba(27,38,59,0.05)] border border-surface-variant">
-            {/* Imagen Principal (Hereda tu lógica de abrir Modal) */}
             <div 
               className="relative w-full aspect-[4/3] md:aspect-video bg-surface-container-highest cursor-zoom-in group"
               onClick={() => setShowModal(true)}
@@ -76,13 +75,11 @@ const DetalleVehiculo = () => {
                   alt="sin imagen" 
                 />
               )}
-              {/* Etiqueta "Disponible" */}
               <div className="absolute top-4 left-4 bg-success-green/90 backdrop-blur-md text-on-primary px-4 py-1.5 rounded-full font-label-sm text-label-sm shadow-lg">
                 Disponible
               </div>
             </div>
 
-            {/* Miniaturas (Controlan el índice del estado indexFoto) */}
             {vehiculo.imagenes?.length > 1 && (
               <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 md:gap-4 p-4 bg-surface-lowest">
                 {vehiculo.imagenes.map((img, index) => (
@@ -102,7 +99,6 @@ const DetalleVehiculo = () => {
             )}
           </div>
 
-          {/* Especificaciones Técnicas Adaptadas a tus Datos */}
           <section className="bg-surface-lowest rounded-2xl p-gutter shadow-[0px_10px_30px_rgba(27,38,59,0.05)] border border-surface-variant">
             <h2 className="font-headline-md text-headline-md text-primary mb-stack-md">Especificaciones</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-gutter">
@@ -124,21 +120,18 @@ const DetalleVehiculo = () => {
             </div>
           </section>
 
-          {/* Descripción del Vehículo */}
           <section className="bg-surface-lowest rounded-2xl p-gutter shadow-[0px_10px_30px_rgba(27,38,59,0.05)] border border-surface-variant mb-6 lg:mb-0">
             <h2 className="font-headline-md text-headline-md text-primary mb-stack-md">Descripción General</h2>
             <p className="font-body-md text-body-md text-on-surface-variant whitespace-pre-line">
               {vehiculo.descripcion}
             </p>
           </section>
-
         </div>
 
-        {/* Columna Derecha: Sidebar Fija (4 columnas) */}
+        {/* Columna Derecha */}
         <div className="lg:col-span-4 relative">
           <div className="sticky top-[100px] flex flex-col gap-stack-lg">
             
-            {/* Tarjeta de Precio y Acción Principal */}
             <div className="bg-surface-lowest rounded-2xl p-gutter shadow-[0px_10px_30px_rgba(27,38,59,0.05)] border border-surface-variant flex flex-col gap-stack-md">
               <div>
                 <h1 className="font-display-lg text-headline-lg-mobile md:text-headline-lg  mb-2 capitalize">
@@ -151,7 +144,6 @@ const DetalleVehiculo = () => {
                 </div>
               </div>
 
-              {/* Chips Informativos */}
               <div className="flex flex-wrap gap-2 py-4 border-y border-surface-variant">
                 <div className="flex items-center gap-1 bg-surface px-3 py-1.5 rounded border border-surface-variant">
                   <span className="material-symbols-outlined text-[18px] text-on-surface-variant">calendar_today</span>
@@ -163,7 +155,6 @@ const DetalleVehiculo = () => {
                 </div>
               </div>
 
-              {/* Botón WhatsApp (Tu Lógica Original) */}
               <div className="flex flex-col gap-3 mt-2">
                 <a
                   href={`https://wa.me/5493816289462?text=Hola!%20Me%20interesa%20el%20${vehiculo.marca}%20${vehiculo.modelo}%20${vehiculo.anio}%20que%20vi%20en%20el%20catálogo`}
@@ -171,13 +162,14 @@ const DetalleVehiculo = () => {
                   rel="noreferrer"
                   className="w-full no-underline bg-success-green text-on-primary h-14 rounded-lg font-label-sm text-label-sm uppercase tracking-wider hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform duration-200"
                 >
-                  <i className="bi bi-whatsapp text-xl"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+                  </svg>
                   Consultar por WhatsApp
                 </a>
               </div>
             </div>
 
-            {/* Tarjeta de Información del Concesionario/Vendedor */}
             <div className="bg-surface-lowest rounded-2xl p-gutter shadow-[0px_10px_30px_rgba(27,38,59,0.05)] border border-surface-variant hidden md:block">
               <h3 className="font-headline-md text-[20px] text-primary mb-4 border-b border-surface-variant pb-2">Información del Vendedor</h3>
               <div className="flex flex-col gap-4">
@@ -202,54 +194,54 @@ const DetalleVehiculo = () => {
         </div>
       </div>
 
-      {/* --- MODAL PANTALLA COMPLETA (MANTENIDO DE TU CÓDIGO ORIGINAL) --- */}
-      <Modal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        fullscreen={true}
-        centered
-        contentClassName="bg-transparent border-0 m-0 p-0"
-      >
-        <button
-          type="button"
-          className="btn-close btn-close-white position-absolute top-0 end-0 m-4 fs-4"
-          style={{ zIndex: 1050 }}
+      {/* MODAL NATIVO TAILWIND */}
+      {showModal && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm"
           onClick={() => setShowModal(false)}
-          aria-label="Close"
-        ></button>
-
-        <div
-          className="position-absolute top-0 start-0 m-4 text-light font-body-md fs-5 drop-shadow-md"
-          style={{ zIndex: 1050 }}
         >
-          {indexFoto + 1} / {vehiculo.imagenes?.length}
-        </div>
-
-        <Modal.Body
-          className="p-0 vh-100 w-100 flex items-center justify-center"
-          style={{
-            backgroundColor: "rgba(0, 0, 0, 0.9)",
-            backdropFilter: "blur(8px)",
-          }}
-        >
-          <Carousel
-            activeIndex={indexFoto}
-            onSelect={handleSelect}
-            interval={null}
-            className="w-100 h-100"
+          {/* Botón Cerrar */}
+          <button 
+            className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors"
+            onClick={() => setShowModal(false)}
           >
-            {vehiculo.imagenes?.map((img, index) => (
-              <Carousel.Item key={index} className="h-100 text-center">
-                <img
-                  src={img}
-                  alt={`Zoom-${index}`}
-                  className="img-fluid modal-imagen-ml"
-                />
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        </Modal.Body>
-      </Modal>
+            <span className="material-symbols-outlined text-4xl">close</span>
+          </button>
+
+          {/* Contador */}
+          <div className="absolute top-6 left-6 text-white/90 font-body-md text-lg">
+            {indexFoto + 1} / {vehiculo.imagenes?.length}
+          </div>
+
+          {/* Botón Anterior */}
+          {vehiculo.imagenes?.length > 1 && (
+            <button 
+              className="absolute left-4 md:left-10 text-white/50 hover:text-white transition-colors"
+              onClick={prevImg}
+            >
+              <span className="material-symbols-outlined text-5xl md:text-7xl">chevron_left</span>
+            </button>
+          )}
+
+          {/* Imagen Actual */}
+          <img
+            src={vehiculo.imagenes[indexFoto]}
+            alt={`Zoom-${indexFoto}`}
+            className="max-w-[90vw] max-h-[85vh] object-contain select-none"
+            onClick={(e) => e.stopPropagation()} 
+          />
+
+          {/* Botón Siguiente */}
+          {vehiculo.imagenes?.length > 1 && (
+            <button 
+              className="absolute right-4 md:right-10 text-white/50 hover:text-white transition-colors"
+              onClick={nextImg}
+            >
+              <span className="material-symbols-outlined text-5xl md:text-7xl">chevron_right</span>
+            </button>
+          )}
+        </div>
+      )}
     </main>
   );
 };

@@ -1,14 +1,14 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectorAdmin = ({ isAdmin }) => {
-  //si no soy adm
+  // si no soy adm
   if (!isAdmin.token) {
-    return <Navigate to={"/"}></Navigate>;
+    return <Navigate to={"/"} />;
   }
 
-  //si soy administrador muestro las rutas
-  return <Outlet></Outlet>;
+  // si soy administrador muestro las rutas
+  return <Outlet />;
 };
 
 export default ProtectorAdmin;
