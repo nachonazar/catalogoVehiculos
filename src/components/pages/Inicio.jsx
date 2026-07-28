@@ -69,7 +69,9 @@ const Inicio = () => {
       <section className="relative z-20 -mt-7 px-gutter max-w-[1100px] mx-auto">
         <div className="bg-surface-container-lowest rounded-xl shadow-[0px_10px_30px_rgba(27,38,59,0.08)] p-4 flex flex-col md:flex-row gap-3 items-center">
           <div className="relative flex-grow w-full">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">
+              search
+            </span>
             <input
               type="text"
               placeholder="Buscar modelo o marca..."

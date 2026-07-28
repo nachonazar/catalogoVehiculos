@@ -10,10 +10,13 @@ import Formulario from "./components/pages/Formulario";
 import Error404 from "./components/pages/Error404";
 import Login from "./components/pages/Login";
 import ProtectorAdmin from "./components/routes/ProtectorAdmin";
+import EstadisticasVehiculos from "./components/pages/EstadisticasVehiculos";
 
 const ElementosPublicos = ({ children }) => {
   const location = useLocation();
-  const ocultar = location.pathname.startsWith("/administrador") || location.pathname === "/login";
+  const ocultar =
+    location.pathname.startsWith("/administrador") ||
+    location.pathname === "/login";
 
   if (ocultar) return null;
   return <>{children}</>;
@@ -37,14 +40,27 @@ function App() {
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/detalle/:id" element={<DetalleVehiculo />} />
-          <Route path="/login" element={<Login setUsuarioAdmin={setUsuarioAdmin} />} />
-          
-          <Route path="/administrador" element={<ProtectorAdmin isAdmin={usuarioAdmin} />}>
+          <Route
+            path="/login"
+            element={<Login setUsuarioAdmin={setUsuarioAdmin} />}
+          />
+
+          <Route
+            path="/administrador"
+            element={<ProtectorAdmin isAdmin={usuarioAdmin} />}
+          >
             <Route index element={<Administrador />} />
-            <Route path="crear" element={<Formulario titulo="Crear Vehiculo" />} />
-            <Route path="editar/:id" element={<Formulario titulo="Editar Vehiculo" />} />
+            <Route path="estadisticas" element={<EstadisticasVehiculos />} />
+            <Route
+              path="crear"
+              element={<Formulario titulo="Crear Vehiculo" />}
+            />
+            <Route
+              path="editar/:id"
+              element={<Formulario titulo="Editar Vehiculo" />}
+            />
           </Route>
-          
+
           <Route path="*" element={<Error404 />} />
         </Routes>
       </main>
