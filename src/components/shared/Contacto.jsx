@@ -19,10 +19,10 @@ const Contacto = () => {
     setEstado(null);
     try {
       await emailjs.send(
-        "service_gzxuuhj",
-        "template_y6j272a",
+        import.meta.env.VITE_SERVICE_ID,
+        import.meta.env.VITE_TEMPLATE_ID,
         form,
-        "0yFSwzX2IV2ZWEgMJ",
+        import.meta.env.VITE_PUBLIC_KEY,
       );
       setEstado("ok");
       reset(); // Limpia el formulario automáticamente si se envía bien
