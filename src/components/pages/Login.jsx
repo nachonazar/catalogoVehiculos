@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom"; // Asegúrate de usar reac
 import { login } from "../../../helpers/queries.js";
 import Swal from "sweetalert2";
 import imgLogin from "../../assets/login.png"; // Tu imagen original
+import logo from "../../assets/logo.png";
 
 const Login = ({ setUsuarioAdmin }) => {
   const {
@@ -60,9 +61,11 @@ const Login = ({ setUsuarioAdmin }) => {
 
           {/* Encabezado */}
           <div className="mb-stack-lg text-center lg:text-left">
-            <h1 className="font-display-lg text-[40px] md:text-display-lg text-primary tracking-tighter">
-              LUXE AUTO
-            </h1>
+             <img
+                          src={logo}
+                          alt="Logo Catalogo de Vehiculos"
+                          className="w-[150px] h-auto object-contain mb-6"
+                        />
             <p className="font-body-md text-body-md text-on-surface-variant mt-2">
               Bienvenido de nuevo. Ingresa tus credenciales para continuar.
             </p>
