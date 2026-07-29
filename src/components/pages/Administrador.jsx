@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ItemVehiculo from "./vehiculo/ItemVehiculo";
+import logo from "../../assets/logo.png";
 import {
   leerVehiculosPaginados,
   leerVehiculos,
@@ -77,13 +78,17 @@ const Administrador = () => {
   return (
     <div className="bg-neutral-bg text-on-surface font-body-md min-h-screen flex">
       {/* PANEL LATERAL IZQUIERDO */}
-      <nav className="hidden lg:flex flex-col h-screen w-64 fixed left-0 top-0 bg-[#051125] shadow-lg z-50 p-4 text-on-primary font-body-md transition-all duration-300">
+      <nav className="hidden lg:flex flex-col h-screen w-64 fixed left-0 top-0 bg-black shadow-lg z-50 p-4 text-on-primary font-body-md transition-all duration-300">
         <div className="mb-8 px-4 py-2">
           <Link
             to="/"
             className="font-headline-md text-headline-md font-bold text-on-primary tracking-tight hover:text-secondary-fixed transition-colors no-underline"
           >
-            LUXE AUTO
+            <img
+              src={logo}
+              alt="Logo Catalogo de Vehiculos"
+              className="w-[150px] h-auto mb-stack-sm invert object-contain"
+            />
           </Link>
           <p className="text-on-primary/70 text-sm mt-1">
             Panel de Administración

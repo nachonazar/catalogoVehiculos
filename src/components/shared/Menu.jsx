@@ -18,7 +18,7 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
   };
 
   return (
-    <header className="fixed top-0 w-full z-50 shadow-[0px_10px_30px_rgba(27,38,59,0.05)] bg-surface dark:bg-inverse-surface">
+    <header className="fixed top-0 w-full z-50 shadow-[0px_10px_30px_rgba(27,38,59,0.05)] bg-white dark:bg-inverse-surface">
       <div className="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto md:px-8 px-4">
         {/* Logo */}
         <Link

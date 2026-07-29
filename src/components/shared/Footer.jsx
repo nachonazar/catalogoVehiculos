@@ -4,7 +4,7 @@ import logo from "../../assets/logo.png";
 
 const Footer = () => {
   return (
-    <footer className="w-full py-stack-lg bg-[#051125] mt-stack-lg">
+    <footer className="w-full py-stack-lg bg-black mt-stack-lg">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter px-gutter max-w-container-max mx-auto md:px-8 px-4">
         {/* Columna 1: Logo */}
         <div className="col-span-1 flex flex-col items-center md:items-start justify-center text-center md:text-left mb-6 md:mb-0">
@@ -12,7 +12,7 @@ const Footer = () => {
             <img
               src={logo}
               alt="Logo Catalogo de Vehiculos"
-              className="w-[150px] h-auto mb-stack-sm object-contain"
+              className="w-[150px] h-auto mb-stack-sm invert object-contain"
             />
           </NavLink>
           <p className="font-body-md text-body-md text-on-primary-container mt-4">
