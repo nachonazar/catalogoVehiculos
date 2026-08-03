@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { login } from "../../../helpers/queries.js";
 import Swal from "sweetalert2";
 import imgLogin from "../../assets/login.png";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo-transparente.png";
 
 const Login = ({ setUsuarioAdmin }) => {
   const {
@@ -68,14 +68,22 @@ const Login = ({ setUsuarioAdmin }) => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(iniciarSesion)} className="flex flex-col gap-5">
+          <form
+            onSubmit={handleSubmit(iniciarSesion)}
+            className="flex flex-col gap-5"
+          >
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-label !normal-case !tracking-normal">
+              <label
+                htmlFor="email"
+                className="text-label !normal-case !tracking-normal"
+              >
                 Email
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-on-surface-variant pointer-events-none">
-                  <span className="material-symbols-outlined text-[18px]">mail</span>
+                  <span className="material-symbols-outlined text-[18px]">
+                    mail
+                  </span>
                 </span>
                 <input
                   id="email"
@@ -85,8 +93,10 @@ const Login = ({ setUsuarioAdmin }) => {
                   {...register("email", {
                     required: "El email es un dato obligatorio",
                     pattern: {
-                      value: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
-                      message: "El email debe tener un formato válido (ej: juan@gmail.com)",
+                      value:
+                        /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
+                      message:
+                        "El email debe tener un formato válido (ej: juan@gmail.com)",
                     },
                   })}
                 />
@@ -97,12 +107,17 @@ const Login = ({ setUsuarioAdmin }) => {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="password" className="text-label !normal-case !tracking-normal">
+              <label
+                htmlFor="password"
+                className="text-label !normal-case !tracking-normal"
+              >
                 Contraseña
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-on-surface-variant pointer-events-none">
-                  <span className="material-symbols-outlined text-[18px]">lock</span>
+                  <span className="material-symbols-outlined text-[18px]">
+                    lock
+                  </span>
                 </span>
                 <input
                   id="password"
@@ -112,15 +127,19 @@ const Login = ({ setUsuarioAdmin }) => {
                   {...register("password", {
                     required: "La contraseña es obligatoria",
                     pattern: {
-                      value: /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/,
-                      message: "Debe tener 8-16 caracteres, mayúsculas, minúsculas, un número y un símbolo especial.",
+                      value:
+                        /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/,
+                      message:
+                        "Debe tener 8-16 caracteres, mayúsculas, minúsculas, un número y un símbolo especial.",
                     },
                   })}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  aria-label={
+                    showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
                   className="absolute inset-y-0 right-0 flex items-center pr-4 text-on-surface-variant hover:text-on-surface transition-colors bg-transparent border-0 cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-[18px]">
@@ -165,7 +184,8 @@ const Login = ({ setUsuarioAdmin }) => {
             Diseñado para la excelencia
           </p>
           <p className="text-sm text-white/70 max-w-md leading-relaxed">
-            Administra tu inventario, gestiona los vehículos y ofrece una experiencia premium a tus clientes.
+            Administra tu inventario, gestiona los vehículos y ofrece una
+            experiencia premium a tus clientes.
           </p>
         </div>
       </div>

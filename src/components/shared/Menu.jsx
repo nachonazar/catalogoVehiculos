@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo-transparente.png";
 
 const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
   const navegacion = useNavigate();
@@ -17,7 +17,7 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
   };
 
   const linkClass = ({ isActive }) =>
-    `nav-link ${isActive ? "nav-link-active" : ""}`;
+    `nav-link ${isActive ? "nav-link-active dark:!text-white" : "dark:!text-zinc-300 dark:hover:!text-white"} transition-colors`;
 
   return (
     <header className="fixed top-0 w-full z-50 glass">
@@ -31,7 +31,7 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
           <img
             src={logo}
             alt="Logo Catálogo de Vehículos"
-            className="h-9 md:h-10 w-auto object-contain"
+            className="h-9 md:h-10 w-auto object-contain transition-all dark:invert"
           />
         </Link>
 
@@ -40,7 +40,10 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
           <NavLink to="/" end onClick={irArriba} className={linkClass}>
             Inicio
           </NavLink>
-          <a href="#contacto" className="nav-link">
+          <a
+            href="#contacto"
+            className="nav-link dark:!text-zinc-300 dark:hover:!text-white transition-colors"
+          >
             Contacto
           </a>
           {usuarioAdmin.token && (
@@ -53,11 +56,17 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
         {/* Actions */}
         <div className="flex items-center gap-3">
           {usuarioAdmin.token ? (
-            <button onClick={logout} className="btn-danger hidden md:inline-flex !py-2.5 !px-5 !text-xs">
+            <button
+              onClick={logout}
+              className="btn-danger hidden md:inline-flex !py-2.5 !px-5 !text-xs"
+            >
               Cerrar sesión
             </button>
           ) : (
-            <Link to="/login" className="btn-primary hidden md:inline-flex !py-2.5 !px-5 !text-xs no-underline">
+            <Link
+              to="/login"
+              className="btn-primary hidden md:inline-flex !py-2.5 !px-5 !text-xs no-underline"
+            >
               Ingresar
             </Link>
           )}
@@ -82,10 +91,15 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
           <NavLink
             to="/"
             end
-            onClick={() => { setIsMobileOpen(false); irArriba(); }}
+            onClick={() => {
+              setIsMobileOpen(false);
+              irArriba();
+            }}
             className={({ isActive }) =>
               `block px-4 py-3 rounded-xl text-sm font-medium no-underline transition-colors ${
-                isActive ? "bg-surface-container text-on-surface" : "text-on-surface-variant hover:bg-surface-container-low"
+                isActive
+                  ? "bg-surface-container text-on-surface"
+                  : "text-on-surface-variant hover:bg-surface-container-low"
               }`
             }
           >
@@ -104,7 +118,9 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
               onClick={() => setIsMobileOpen(false)}
               className={({ isActive }) =>
                 `block px-4 py-3 rounded-xl text-sm font-medium no-underline transition-colors ${
-                  isActive ? "bg-surface-container text-on-surface" : "text-on-surface-variant hover:bg-surface-container-low"
+                  isActive
+                    ? "bg-surface-container text-on-surface"
+                    : "text-on-surface-variant hover:bg-surface-container-low"
                 }`
               }
             >
@@ -113,10 +129,7 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
           )}
           <div className="pt-2 mt-2 border-t border-outline-variant/60">
             {usuarioAdmin.token ? (
-              <button
-                onClick={logout}
-                className="w-full btn-danger !text-xs"
-              >
+              <button onClick={logout} className="w-full btn-danger !text-xs">
                 Cerrar sesión
               </button>
             ) : (

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo-transparente.png";
 import { useTheme } from "../../context/ThemeContext";
 
 const LayoutAdmin = ({ titulo, headerExtra, children }) => {
@@ -22,8 +22,17 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
   };
 
   const navItems = [
-    { to: "/administrador", icon: "directions_car", label: "Inventario", exact: true },
-    { to: "/administrador/estadisticas", icon: "bar_chart", label: "Estadísticas" },
+    {
+      to: "/administrador",
+      icon: "directions_car",
+      label: "Inventario",
+      exact: true,
+    },
+    {
+      to: "/administrador/estadisticas",
+      icon: "bar_chart",
+      label: "Estadísticas",
+    },
   ];
 
   return (
@@ -38,7 +47,9 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
               className="w-[130px] h-auto invert opacity-90 hover:opacity-100 transition-opacity object-contain"
             />
           </Link>
-          <p className="text-zinc-500 text-xs mt-3 font-medium">Panel de administración</p>
+          <p className="text-zinc-500 text-xs mt-3 font-medium">
+            Panel de administración
+          </p>
         </div>
 
         <ul className="flex flex-col gap-1 p-3 flex-grow list-none m-0">
@@ -78,7 +89,9 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
             onClick={logout}
             className="sidebar-link sidebar-link-inactive w-full bg-transparent border-0 cursor-pointer text-left !text-zinc-500 hover:!text-red-400"
           >
-            <span className="material-symbols-outlined text-[20px]">logout</span>
+            <span className="material-symbols-outlined text-[20px]">
+              logout
+            </span>
             Cerrar sesión
           </button>
         </div>
@@ -126,7 +139,9 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
                 {usuarioLogueado?.nombreAdmin || "Admin"}
               </span>
               <div className="w-8 h-8 rounded-xl bg-surface-container flex items-center justify-center border border-outline-variant">
-                <span className="material-symbols-outlined text-[16px] text-on-surface-variant">person</span>
+                <span className="material-symbols-outlined text-[16px] text-on-surface-variant">
+                  person
+                </span>
               </div>
             </div>
           </div>
