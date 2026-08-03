@@ -10,12 +10,14 @@ const Inicio = () => {
   const [limit] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
   const [categoriaElegida, setCategoriaElegida] = useState("");
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
     obtenerVehiculos();
   }, [page]);
 
   const obtenerVehiculos = async () => {
+    setCargando(true);
     const respuesta = await leerVehiculosPaginados(page, limit);
     if (respuesta.status === 200) {
       const datos = await respuesta.json();
@@ -24,6 +26,7 @@ const Inicio = () => {
     } else {
       console.info("Ocurrio un error al buscar los vehiculos");
     }
+    setCargando(false);
   };
 
   const vehiculosFiltrados = vehiculos
@@ -38,44 +41,46 @@ const Inicio = () => {
   return (
     <div className="bg-surface">
       {/* HERO */}
-      <section
-        className="relative w-full h-[600px] flex items-center justify-center overflow-hidden"
-        style={{
-          backgroundImage:
-            "url('https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="absolute inset-0 bg-[#051125]/72 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent" />
-        <div className="relative z-10 text-center max-w-3xl mx-auto px-6 flex flex-col items-center">
-          <h1 className="font-display-lg text-display-lg text-white mb-3 drop-shadow-lg">
+      <section className="relative w-full min-h-[520px] md:min-h-[600px] flex items-center justify-center overflow-hidden pt-[72px]">
+        <div
+          className="absolute inset-0 bg-cover bg-center scale-105"
+          style={{
+            backgroundImage:
+              "url('https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg')",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-surface" />
+
+        <div className="relative z-10 container-app text-center py-20 md:py-28 animate-slide-up">
+          <p className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-xs font-medium mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse" />
+            Catálogo actualizado
+          </p>
+          <h1 className="font-display-lg text-display-lg text-white mb-4 max-w-3xl mx-auto">
             Encontrá tu próximo vehículo
           </h1>
-          <p className="font-body-lg text-body-lg text-on-primary-container mb-8 drop-shadow-md">
+          <p className="font-body-lg text-body-lg text-white/70 mb-10 max-w-xl mx-auto">
             El catálogo más completo de vehículos seleccionados para vos.
           </p>
-          <a
-            href="#vehiculos"
-            className="bg-blue-600 text-white no-underline rounded-lg px-8 py-4 text-[14px] font-semibold uppercase tracking-widest hover:bg-blue-800 hover:scale-105 transition-all shadow-lg hover:shadow-xl"
-          >
-            Ver Inventario
+          <a href="#vehiculos" className="btn-secondary !px-8 !py-3.5 no-underline shadow-float">
+            Ver inventario
+            <span className="material-symbols-outlined text-[18px]">arrow_downward</span>
           </a>
         </div>
       </section>
 
-      {/* FILTROS FLOTANTES */}
-      <section className="relative z-20 -mt-7 px-gutter max-w-[1100px] mx-auto">
-        <div className="bg-surface-container-lowest rounded-xl shadow-[0px_10px_30px_rgba(27,38,59,0.08)] p-4 flex flex-col md:flex-row gap-3 items-center">
-          <div className="relative flex-grow w-full">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">
+      {/* FILTERS */}
+      <section className="relative z-20 -mt-8 container-app">
+        <div className="card p-4 md:p-5 flex flex-col md:flex-row gap-3 shadow-float">
+          <div className="relative flex-grow">
+            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px] pointer-events-none">
               search
             </span>
             <input
               type="text"
-              placeholder="Buscar modelo o marca..."
-              className="w-full h-12 pl-10 pr-4 rounded-lg border border-outline-variant bg-surface text-[16px] text-text-main outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors"
+              placeholder="Buscar por marca o modelo..."
+              aria-label="Buscar vehículos"
+              className="input-base !pl-11"
               value={terminoBusqueda}
               onChange={(e) => {
                 setTerminoBusqueda(e.target.value);
@@ -84,7 +89,8 @@ const Inicio = () => {
             />
           </div>
           <select
-            className="w-full md:w-[200px] h-12 px-4 rounded-lg border border-outline-variant bg-surface text-[16px] text-text-main outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors"
+            aria-label="Filtrar por categoría"
+            className="select-base md:w-52"
             value={categoriaElegida}
             onChange={(e) => {
               setCategoriaElegida(e.target.value);
@@ -100,60 +106,92 @@ const Inicio = () => {
         </div>
       </section>
 
-      {/* VEHICULOS */}
-      <main className="max-w-[1200px] mx-auto px-6 py-12" id="vehiculos">
-        <h2 className="font-headline-lg text-headline-lg text-on-surface mb-1">
-          Vehículos Disponibles
-        </h2>
-        <p className="font-body-md text-on-surface-variant mb-8">
-          Explora nuestro catálogo de vehículos
-        </p>
+      {/* CATALOG */}
+      <section className="container-app section-padding !pb-12" id="vehiculos">
+        <div className="mb-10 md:mb-12">
+          <p className="text-label mb-2">Inventario</p>
+          <h2 className="font-heading text-headline-lg text-on-surface mb-2">
+            Vehículos disponibles
+          </h2>
+          <p className="text-body-md text-on-surface-variant">
+            Explorá nuestro catálogo de vehículos seleccionados
+          </p>
+        </div>
 
-        <div className="flex flex-wrap -mx-2">
-          {vehiculosFiltrados.length > 0 ? (
-            vehiculosFiltrados.map((vehiculo) => (
+        {cargando ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 -mx-2">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-6">
+                <div className="card overflow-hidden">
+                  <div className="skeleton aspect-[4/3] w-full !rounded-none" />
+                  <div className="p-5 space-y-3">
+                    <div className="skeleton h-4 w-1/3" />
+                    <div className="skeleton h-6 w-2/3" />
+                    <div className="skeleton h-4 w-full" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : vehiculosFiltrados.length > 0 ? (
+          <div className="flex flex-wrap -mx-2">
+            {vehiculosFiltrados.map((vehiculo) => (
               <CardVehiculo key={vehiculo._id} vehiculo={vehiculo} />
-            ))
-          ) : (
-            <p className="text-on-surface-variant px-2">
-              No se encontraron vehículos para mostrar
+            ))}
+          </div>
+        ) : (
+          <div className="empty-state card">
+            <div className="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center mb-4">
+              <span className="material-symbols-outlined text-[32px] text-on-surface-variant">
+                directions_car
+              </span>
+            </div>
+            <h3 className="font-heading text-lg font-semibold text-on-surface mb-2">
+              Sin resultados
+            </h3>
+            <p className="text-sm text-on-surface-variant max-w-sm">
+              {terminoBusqueda || categoriaElegida
+                ? "No encontramos vehículos con esos filtros. Probá con otra búsqueda."
+                : "No hay vehículos disponibles en este momento."}
             </p>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* PAGINACION */}
-        <div className="flex justify-center items-center mt-10 gap-2">
-          <button
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-            disabled={page === 1}
-            className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-blue-300 hover:text-white hover:border-blue-300 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-600 disabled:hover:border-gray-300 transition-colors bg-transparent"
-          >
-            &laquo;
-          </button>
-
-          {[...Array(totalPages)].map((_, i) => (
+        {/* PAGINATION */}
+        {totalPages > 1 && (
+          <nav aria-label="Paginación" className="flex justify-center items-center mt-12 gap-1.5">
             <button
-              key={i + 1}
-              onClick={() => setPage(i + 1)}
-              className={`w-9 h-9 flex items-center justify-center rounded-lg font-semibold text-[14px] transition-colors border ${
-                page === i + 1
-                  ? "bg-[#051125] text-white border-[#051125]"
-                  : "border-gray-300 text-gray-600 hover:bg-blue-300 hover:text-white hover:border-blue-300 bg-transparent"
-              }`}
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              disabled={page === 1}
+              aria-label="Página anterior"
+              className="pagination-btn"
             >
-              {i + 1}
+              <span className="material-symbols-outlined text-[18px]">chevron_left</span>
             </button>
-          ))}
 
-          <button
-            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={page === totalPages}
-            className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:bg-blue-300 hover:text-white hover:border-blue-300 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-600 disabled:hover:border-gray-300 transition-colors bg-transparent"
-          >
-            &raquo;
-          </button>
-        </div>
-      </main>
+            {[...Array(totalPages)].map((_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setPage(i + 1)}
+                aria-label={`Página ${i + 1}`}
+                aria-current={page === i + 1 ? "page" : undefined}
+                className={`pagination-btn ${page === i + 1 ? "pagination-btn-active" : ""}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+
+            <button
+              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={page === totalPages}
+              aria-label="Página siguiente"
+              className="pagination-btn"
+            >
+              <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+            </button>
+          </nav>
+        )}
+      </section>
 
       <Contacto />
     </div>

@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import emailjs from "@emailjs/browser";
 
 const Contacto = () => {
-  // Configuración de react-hook-form
   const {
     register,
     handleSubmit,
@@ -12,7 +11,7 @@ const Contacto = () => {
   } = useForm();
 
   const [enviando, setEnviando] = useState(false);
-  const [estado, setEstado] = useState(null); // "ok" | "error"
+  const [estado, setEstado] = useState(null);
 
   const onSubmit = async (form) => {
     setEnviando(true);
@@ -25,7 +24,7 @@ const Contacto = () => {
         import.meta.env.VITE_PUBLIC_KEY,
       );
       setEstado("ok");
-      reset(); // Limpia el formulario automáticamente si se envía bien
+      reset();
     } catch (error) {
       console.error(error);
       setEstado("error");
@@ -34,102 +33,86 @@ const Contacto = () => {
     }
   };
 
+  const infoCards = [
+    {
+      icon: "call",
+      title: "Teléfono",
+      value: "+54 9 3814 44-7015",
+      sub: "Lunes a Sábados",
+    },
+    {
+      icon: "mail",
+      title: "Email",
+      value: "javiernazar64@gmail.com",
+      sub: "Respuesta rápida",
+    },
+    {
+      icon: "location_on",
+      title: "Ubicación",
+      value: "Av. Ejército del Norte 45",
+      sub: "Tucumán, Argentina",
+    },
+  ];
+
   return (
-    <section
-      id="contacto"
-      className="scroll-mt-28 bg-surface-container py-stack-lg px-gutter my-10"
-    >
-      <div className="max-w-container-max mx-auto">
-        {/* Título */}
-        <div className="text-center mb-stack-lg">
-          <h2 className="font-headline-lg text-headline-lg text-primary mb-2">
-            Contacto
+    <section id="contacto" className="scroll-mt-24 bg-surface-container-low section-padding">
+      <div className="container-app">
+        {/* Header */}
+        <div className="text-center mb-12 md:mb-16">
+          <p className="text-label mb-2">Contacto</p>
+          <h2 className="font-heading text-headline-lg text-on-surface mb-3">
+            Estamos para ayudarte
           </h2>
-          <p className="font-body-lg text-on-surface-variant">
-            Estamos aquí para ayudarte a encontrar tu próximo vehículo.
+          <p className="text-body-md text-on-surface-variant max-w-lg mx-auto">
+            Encontrá tu próximo vehículo con asesoramiento personalizado.
           </p>
         </div>
 
-        {/* Tarjetas de info */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-stack-lg">
-          <div className="bg-surface-container-lowest p-stack-md rounded-xl shadow-[0px_5px_15px_rgba(27,38,59,0.03)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center border border-surface-container-highest">
-            <div className="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-on-primary-container">
-                call
-              </span>
+        {/* Info cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-12 md:mb-16">
+          {infoCards.map((card) => (
+            <div
+              key={card.title}
+              className="card p-6 flex flex-col items-center text-center hover:shadow-elevated transition-shadow duration-300"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center mb-4">
+                <span className="material-symbols-outlined text-secondary text-[22px]">
+                  {card.icon}
+                </span>
+              </div>
+              <h3 className="font-heading text-base font-semibold text-on-surface mb-1">
+                {card.title}
+              </h3>
+              <p className="text-sm text-on-surface-variant">{card.value}</p>
+              <p className="text-label mt-2 !text-[10px]">{card.sub}</p>
             </div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-2">
-              Teléfono
-            </h3>
-            <p className="font-body-md text-on-surface-variant">
-              +54 9 3814 44-7015
-            </p>
-            <p className="font-label-sm text-label-sm text-outline mt-2 uppercase">
-              Lunes a Sábados
-            </p>
-          </div>
-
-          <div className="bg-surface-container-lowest p-stack-md rounded-xl shadow-[0px_5px_15px_rgba(27,38,59,0.03)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center border border-surface-container-highest">
-            <div className="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-on-primary-container">
-                mail
-              </span>
-            </div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-2">
-              Email
-            </h3>
-            <p className="font-body-md text-on-surface-variant">
-              javiernazar64@gmail.com
-            </p>
-            <p className="font-label-sm text-label-sm text-outline mt-2 uppercase">
-              Respuesta Rápida
-            </p>
-          </div>
-
-          <div className="bg-surface-container-lowest p-stack-md rounded-xl shadow-[0px_5px_15px_rgba(27,38,59,0.03)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center border border-surface-container-highest">
-            <div className="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-on-primary-container">
-                location_on
-              </span>
-            </div>
-            <h3 className="font-headline-md text-headline-md text-primary mb-2">
-              Ubicación
-            </h3>
-            <p className="font-body-md text-on-surface-variant">
-              Av. Ejército del Norte 45
-            </p>
-            <p className="font-label-sm text-label-sm text-outline mt-2 uppercase">
-              Tucumán, Argentina
-            </p>
-          </div>
+          ))}
         </div>
 
-        {/* Formulario + Mapa */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter mb-stack-lg">
-          {/* Formulario */}
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="bg-surface-container-lowest rounded-xl p-6 border border-surface-container-highest shadow-[0px_5px_15px_rgba(27,38,59,0.03)] flex flex-col gap-4"
-          >
-            <h3 className="font-headline-md text-headline-md text-primary mb-2">
-              Envianos un mensaje
-            </h3>
+        {/* Form + Map */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="card p-6 md:p-8 flex flex-col gap-5">
+            <div>
+              <h3 className="font-heading text-lg font-semibold text-on-surface mb-1">
+                Enviá un mensaje
+              </h3>
+              <p className="text-sm text-on-surface-variant">
+                Te respondemos a la brevedad.
+              </p>
+            </div>
 
-            {/* Input: Nombre */}
-            <div className="flex flex-col gap-1">
-              <label className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="from_name" className="text-label !normal-case !tracking-normal">
                 Nombre
               </label>
               <input
+                id="from_name"
                 type="text"
                 placeholder="Tu nombre completo"
-                className={`w-full h-12 px-4 rounded-lg border bg-surface text-on-surface outline-none focus:ring-1 transition-colors ${errors.from_name ? "border-error focus:ring-error" : "border-outline-variant focus:border-secondary focus:ring-secondary"}`}
+                className={`input-base ${errors.from_name ? "input-error" : ""}`}
                 {...register("from_name", {
                   required: "El nombre es un dato obligatorio",
-                  minLength: {
-                    value: 3,
-                    message: "Debe tener al menos 3 caracteres",
-                  },
+                  minLength: { value: 3, message: "Debe tener al menos 3 caracteres" },
                   maxLength: { value: 60, message: "Máximo 60 caracteres" },
                   pattern: {
                     value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
@@ -138,21 +121,19 @@ const Contacto = () => {
                 })}
               />
               {errors.from_name && (
-                <span className="text-error font-label-sm text-xs mt-1">
-                  {errors.from_name.message}
-                </span>
+                <span className="text-error text-xs mt-0.5">{errors.from_name.message}</span>
               )}
             </div>
 
-            {/* Input: Email */}
-            <div className="flex flex-col gap-1">
-              <label className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="from_email" className="text-label !normal-case !tracking-normal">
                 Email
               </label>
               <input
+                id="from_email"
                 type="email"
                 placeholder="tu@email.com"
-                className={`w-full h-12 px-4 rounded-lg border bg-surface text-on-surface outline-none focus:ring-1 transition-colors ${errors.from_email ? "border-error focus:ring-error" : "border-outline-variant focus:border-secondary focus:ring-secondary"}`}
+                className={`input-base ${errors.from_email ? "input-error" : ""}`}
                 {...register("from_email", {
                   required: "El email es obligatorio",
                   pattern: {
@@ -162,27 +143,22 @@ const Contacto = () => {
                 })}
               />
               {errors.from_email && (
-                <span className="text-error font-label-sm text-xs mt-1">
-                  {errors.from_email.message}
-                </span>
+                <span className="text-error text-xs mt-0.5">{errors.from_email.message}</span>
               )}
             </div>
 
-            {/* Input: Teléfono */}
-            <div className="flex flex-col gap-1">
-              <label className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="phone" className="text-label !normal-case !tracking-normal">
                 Teléfono
               </label>
               <input
+                id="phone"
                 type="tel"
                 placeholder="Ej: +54 9 381 123-4567"
-                className={`w-full h-12 px-4 rounded-lg border bg-surface text-on-surface outline-none focus:ring-1 transition-colors ${errors.phone ? "border-error focus:ring-error" : "border-outline-variant focus:border-secondary focus:ring-secondary"}`}
+                className={`input-base ${errors.phone ? "input-error" : ""}`}
                 {...register("phone", {
                   required: "El teléfono es obligatorio",
-                  minLength: {
-                    value: 8,
-                    message: "Debe tener al menos 8 caracteres",
-                  },
+                  minLength: { value: 8, message: "Debe tener al menos 8 caracteres" },
                   maxLength: { value: 20, message: "Máximo 20 caracteres" },
                   pattern: {
                     value: /^[0-9+\-\s()]+$/,
@@ -191,71 +167,69 @@ const Contacto = () => {
                 })}
               />
               {errors.phone && (
-                <span className="text-error font-label-sm text-xs mt-1">
-                  {errors.phone.message}
-                </span>
+                <span className="text-error text-xs mt-0.5">{errors.phone.message}</span>
               )}
             </div>
 
-            {/* Textarea: Mensaje */}
-            <div className="flex flex-col gap-1">
-              <label className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="message" className="text-label !normal-case !tracking-normal">
                 Mensaje
               </label>
               <textarea
+                id="message"
                 rows={4}
                 placeholder="¿En qué vehículo estás interesado?"
-                className={`w-full px-4 py-3 rounded-lg border bg-surface text-on-surface outline-none focus:ring-1 transition-colors resize-none ${errors.message ? "border-error focus:ring-error" : "border-outline-variant focus:border-secondary focus:ring-secondary"}`}
+                className={`textarea-base ${errors.message ? "input-error" : ""}`}
                 {...register("message", {
                   required: "El mensaje es obligatorio",
-                  minLength: {
-                    value: 10,
-                    message: "Debe tener al menos 10 caracteres",
-                  },
+                  minLength: { value: 10, message: "Debe tener al menos 10 caracteres" },
                   maxLength: { value: 500, message: "Máximo 500 caracteres" },
                 })}
               />
               {errors.message && (
-                <span className="text-error font-label-sm text-xs mt-1">
-                  {errors.message.message}
-                </span>
+                <span className="text-error text-xs mt-0.5">{errors.message.message}</span>
               )}
             </div>
 
-            {/* Feedback de envío */}
             {estado === "ok" && (
-              <p className="text-success-green font-label-sm text-sm bg-success-green/10 p-3 rounded-lg border border-success-green/20">
-                ✅ Mensaje enviado correctamente. Te contactaremos pronto.
-              </p>
+              <div className="alert-success" role="status">
+                <span className="material-symbols-outlined text-[20px] shrink-0">check_circle</span>
+                <span>Mensaje enviado correctamente. Te contactaremos pronto.</span>
+              </div>
             )}
             {estado === "error" && (
-              <p className="text-error font-label-sm text-sm bg-error/10 p-3 rounded-lg border border-error/20">
-                ❌ Ocurrió un error. Intentá de nuevo o contactanos por
-                WhatsApp.
-              </p>
+              <div className="alert-error" role="alert">
+                <span className="material-symbols-outlined text-[20px] shrink-0">error</span>
+                <span>Ocurrió un error. Intentá de nuevo o contactanos por WhatsApp.</span>
+              </div>
             )}
 
-            <button
-              type="submit"
-              disabled={enviando}
-              className="w-full h-12 mt-2 bg-primary text-white rounded-lg font-label-sm text-label-sm uppercase tracking-wider hover:bg-primary-container transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
-            >
-              {enviando ? "Enviando..." : "Enviar mensaje"}
+            <button type="submit" disabled={enviando} className="btn-primary w-full !mt-1">
+              {enviando ? (
+                <>
+                  <span className="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
+                  Enviando...
+                </>
+              ) : (
+                <>
+                  Enviar mensaje
+                  <span className="material-symbols-outlined text-[18px]">send</span>
+                </>
+              )}
             </button>
           </form>
 
-          {/* Mapa */}
-          <div className="w-full h-full min-h-[400px] rounded-xl overflow-hidden shadow-lg border border-surface-container-highest">
+          <div className="card overflow-hidden min-h-[400px] lg:min-h-0">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.4802989513896!2d-65.2342316253447!3d-26.82467178952945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94225c5ddae62d37%3A0x6678f7eb778713dc!2sLazarte%20Automoviles!5e0!3m2!1ses!2sar!4v1780874070504!5m2!1ses!2sar"
               width="100%"
               height="100%"
-              style={{ border: 0 }}
+              style={{ border: 0, minHeight: "400px" }}
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Mapa de Ubicación"
-            ></iframe>
+            />
           </div>
         </div>
       </div>

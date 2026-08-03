@@ -1,45 +1,423 @@
-/* 1. Primero las importaciones de fuentes */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
-/* 2. Luego las directivas obligatorias de Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* 3. Tus variables CSS originales (útiles si tienes componentes que aún las usan) */
+/* =========================================================
+   DESIGN TOKENS — Light (public)
+   ========================================================= */
 :root {
-  --color-primary: #051125;
-  --color-primary-container: #1b263b;
-  --color-secondary: #0055c9;
-  --color-surface: #fbf8fb;
-  --color-surface-container: #f0edef;
+  /* Brand */
+  --color-primary: #09090b;
+  --color-on-primary: #fafafa;
+  --color-primary-container: #18181b;
+  --color-on-primary-container: #a1a1aa;
+  --color-primary-fixed: #e4e4e7;
+  --color-primary-fixed-dim: #d4d4d8;
+  --color-on-primary-fixed: #09090b;
+  --color-on-primary-fixed-variant: #52525b;
+  --color-inverse-primary: #fafafa;
+  --color-inverse-surface: #18181b;
+  --color-inverse-on-surface: #fafafa;
+
+  /* Accent */
+  --color-secondary: #2563eb;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #2563eb;
+  --color-on-secondary-container: #ffffff;
+  --color-secondary-fixed: #dbeafe;
+  --color-secondary-fixed-dim: #bfdbfe;
+  --color-on-secondary-fixed: #1e3a8a;
+  --color-on-secondary-fixed-variant: #1d4ed8;
+
+  /* Surfaces */
+  --color-background: #fafafa;
+  --color-on-background: #09090b;
+  --color-surface: #fafafa;
+  --color-on-surface: #09090b;
+  --color-surface-dim: #f4f4f5;
+  --color-surface-bright: #ffffff;
+  --color-surface-tint: #71717a;
+  --color-surface-variant: #f4f4f5;
+  --color-on-surface-variant: #71717a;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-highest: #e4e2e4;
-  --color-on-primary: #ffffff;
-  --color-on-primary-container: #828da7;
-  --color-on-surface: #1b1b1d;
-  --color-on-surface-variant: #45474d;
-  --color-outline: #75777d;
-  --color-outline-variant: #c5c6cd;
-  --color-success: #198754;
-  --color-text-main: #212529;
-  --font-heading: 'Montserrat', sans-serif;
+  --color-surface-container-low: #f4f4f5;
+  --color-surface-container: #f4f4f5;
+  --color-surface-container-high: #e4e4e7;
+  --color-surface-container-highest: #d4d4d8;
+  --color-neutral-bg: #fafafa;
+  --color-text-main: #09090b;
+
+  /* Borders & outlines */
+  --color-outline: #a1a1aa;
+  --color-outline-variant: #e4e4e7;
+
+  /* Semantic */
+  --color-success-green: #059669;
+  --color-error: #dc2626;
+  --color-on-error: #ffffff;
+  --color-error-container: #fef2f2;
+  --color-on-error-container: #991b1b;
+
+  /* Tertiary (legacy compat) */
+  --color-tertiary: #09090b;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #f4f4f5;
+  --color-on-tertiary-container: #52525b;
+  --color-tertiary-fixed: #f4f4f5;
+  --color-tertiary-fixed-dim: #e4e4e7;
+  --color-on-tertiary-fixed: #09090b;
+  --color-on-tertiary-fixed-variant: #52525b;
+
+  /* Typography */
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Inter', sans-serif;
+
+  /* Effects */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
 }
 
-/* 4. Tus reglas globales y de estructura base */
-body {
-  font-family: var(--font-body);
-  background-color: var(--color-surface);
-  color: var(--color-on-surface);
+/* =========================================================
+   DESIGN TOKENS — Dark (admin panel only)
+   ========================================================= */
+.dark .panel-admin {
+  --color-background: #09090b;
+  --color-surface: #09090b;
+  --color-neutral-bg: #09090b;
+  --color-surface-dim: #09090b;
+
+  --color-surface-container-lowest: #18181b;
+  --color-surface-container-low: #1c1c1f;
+  --color-surface-container: #27272a;
+  --color-surface-container-high: #3f3f46;
+  --color-surface-container-highest: #52525b;
+
+  --color-surface-variant: #27272a;
+  --color-outline: #3f3f46;
+  --color-outline-variant: #27272a;
+
+  --color-primary: #fafafa;
+  --color-on-surface: #fafafa;
+  --color-text-main: #fafafa;
+  --color-on-background: #fafafa;
+  --color-on-surface-variant: #a1a1aa;
+
+  --color-surface-tint: #71717a;
+  --color-success-green: #10b981;
+  --color-error: #ef4444;
 }
 
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+.dark .panel-admin .bg-primary.text-white,
+.dark .panel-admin .bg-primary.text-on-primary {
+  background-color: var(--color-secondary) !important;
 }
 
-main {
-  flex-grow: 1;
+/* =========================================================
+   BASE
+   ========================================================= */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  main {
+    flex-grow: 1;
+  }
+
+  ::selection {
+    background-color: rgba(37, 99, 235, 0.15);
+    color: var(--color-on-surface);
+  }
+}
+
+/* =========================================================
+   COMPONENT UTILITIES
+   ========================================================= */
+@layer components {
+  /* Layout */
+  .container-app {
+    @apply max-w-container-max mx-auto px-4 md:px-gutter w-full;
+  }
+
+  /* Typography */
+  .text-display {
+    font-family: var(--font-heading);
+    @apply text-display-lg font-bold tracking-tight;
+  }
+
+  .text-heading {
+    font-family: var(--font-heading);
+    @apply font-semibold tracking-tight;
+  }
+
+  .text-label {
+    font-family: var(--font-body);
+    @apply text-xs font-medium uppercase tracking-wider text-on-surface-variant;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 cursor-pointer
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+    --tw-ring-color: rgba(37, 99, 235, 0.4);
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-on-primary rounded-xl px-6 py-3 text-sm
+           hover:bg-primary-container active:scale-[0.98]
+           shadow-sm hover:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary text-on-secondary rounded-xl px-6 py-3 text-sm
+           active:scale-[0.98]
+           shadow-sm hover:shadow-md;
+  }
+
+  .btn-secondary:hover {
+    filter: brightness(0.95);
+  }
+
+  .btn-outline {
+    @apply btn border border-outline-variant bg-transparent text-on-surface rounded-xl px-6 py-3 text-sm
+           hover:bg-surface-container-low active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply btn text-on-surface-variant rounded-lg px-4 py-2 text-sm
+           hover:bg-surface-container-low hover:text-on-surface;
+  }
+
+  .btn-danger {
+    @apply btn bg-error text-on-error rounded-xl px-6 py-3 text-sm
+           active:scale-[0.98];
+  }
+
+  .btn-danger:hover {
+    filter: brightness(0.95);
+  }
+
+  .btn-icon {
+    @apply inline-flex items-center justify-center w-9 h-9 rounded-lg
+           text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface
+           transition-colors duration-200 cursor-pointer
+           focus-visible:outline-none focus-visible:ring-2;
+    --tw-ring-color: rgba(37, 99, 235, 0.4);
+  }
+
+  /* Form controls */
+  .input-base {
+    @apply w-full h-11 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest
+           text-sm text-on-surface outline-none transition-all duration-200
+           focus:border-secondary focus:ring-2;
+    --tw-ring-color: rgba(37, 99, 235, 0.2);
+  }
+
+  .input-base::placeholder {
+    color: var(--color-on-surface-variant);
+    opacity: 0.6;
+  }
+
+  .input-error {
+    @apply border-error focus:border-error focus:ring-2;
+    --tw-ring-color: rgba(220, 38, 38, 0.2);
+  }
+
+  .select-base {
+    @apply input-base cursor-pointer appearance-none;
+  }
+
+  .textarea-base {
+    @apply w-full px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest
+           text-sm text-on-surface outline-none transition-all duration-200 resize-none
+           focus:border-secondary focus:ring-2;
+    --tw-ring-color: rgba(37, 99, 235, 0.2);
+  }
+
+  .textarea-base::placeholder {
+    color: var(--color-on-surface-variant);
+    opacity: 0.6;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-surface-container-lowest rounded-2xl border shadow-sm transition-all duration-300;
+    border-color: rgba(228, 228, 231, 0.8);
+  }
+
+  .card-hover {
+    @apply card hover:shadow-lg cursor-pointer;
+  }
+
+  .card-hover:hover {
+    border-color: var(--color-outline-variant);
+  }
+
+  .card-interactive {
+    @apply card-hover hover:-translate-y-0.5;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge text-success-green border;
+    background-color: rgba(5, 150, 105, 0.1);
+    border-color: rgba(5, 150, 105, 0.2);
+  }
+
+  .badge-error {
+    @apply badge text-error border;
+    background-color: rgba(220, 38, 38, 0.1);
+    border-color: rgba(220, 38, 38, 0.2);
+  }
+
+  .badge-neutral {
+    @apply badge bg-surface-container text-on-surface-variant border border-outline-variant;
+  }
+
+  /* Alerts */
+  .alert {
+    @apply flex items-start gap-3 p-4 rounded-xl text-sm border;
+  }
+
+  .alert-success {
+    @apply alert text-success-green;
+    background-color: rgba(5, 150, 105, 0.05);
+    border-color: rgba(5, 150, 105, 0.2);
+  }
+
+  .alert-error {
+    @apply alert text-error;
+    background-color: rgba(220, 38, 38, 0.05);
+    border-color: rgba(220, 38, 38, 0.2);
+  }
+
+  /* Nav */
+  .nav-link {
+    @apply text-sm font-medium text-on-surface-variant no-underline transition-colors duration-200
+           hover:text-on-surface relative py-1;
+  }
+
+  .nav-link-active {
+    @apply text-on-surface;
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply backdrop-blur-xl border-b;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(228, 228, 231, 0.8);
+  }
+
+  .dark .glass {
+    background-color: rgba(24, 24, 27, 0.8);
+  }
+
+  /* Section */
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  /* Empty state */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-16 px-6 text-center;
+  }
+
+  /* Skeleton */
+  .skeleton {
+    @apply animate-pulse bg-surface-container-high rounded-lg;
+  }
+
+  /* Pagination */
+  .pagination-btn {
+    @apply w-9 h-9 flex items-center justify-center rounded-lg border border-outline-variant
+           text-sm font-medium text-on-surface-variant bg-transparent
+           transition-colors duration-200 cursor-pointer
+           hover:bg-surface-container-low hover:text-on-surface
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent
+           disabled:hover:text-on-surface-variant disabled:hover:border-outline-variant
+           focus-visible:outline-none focus-visible:ring-2;
+    --tw-ring-color: rgba(37, 99, 235, 0.4);
+  }
+
+  .pagination-btn-active {
+    @apply bg-primary text-on-primary border-primary hover:bg-primary-container hover:text-on-primary;
+  }
+
+  /* Admin sidebar link */
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl no-underline text-sm font-medium
+           text-zinc-400 transition-all duration-200;
+  }
+
+  .sidebar-link-active {
+    @apply text-white;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .sidebar-link-inactive {
+    @apply hover:text-zinc-200;
+  }
+
+  .sidebar-link-inactive:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* KPI card */
+  .kpi-card {
+    @apply card p-6 flex items-center gap-4;
+  }
+
+  /* Table */
+  .table-header {
+    @apply bg-surface-container-low border-b border-outline-variant
+           text-xs uppercase tracking-wider font-semibold text-on-surface-variant;
+  }
+
+  .table-row {
+    @apply bg-surface-container-lowest hover:bg-surface-container-low transition-colors duration-150;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

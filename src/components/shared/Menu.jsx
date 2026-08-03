@@ -12,132 +12,123 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
     navegacion("/");
   };
 
-  // Función auxiliar para ir a inicio y forzar el scroll hacia arriba
   const irArriba = () => {
     window.scrollTo(0, 0);
   };
 
+  const linkClass = ({ isActive }) =>
+    `nav-link ${isActive ? "nav-link-active" : ""}`;
+
   return (
-    <header className="fixed top-0 w-full z-50 shadow-[0px_10px_30px_rgba(27,38,59,0.05)] bg-white dark:bg-inverse-surface">
-      <div className="flex justify-between items-center h-20 px-gutter max-w-container-max mx-auto md:px-8 px-4">
+    <header className="fixed top-0 w-full z-50 glass">
+      <div className="container-app flex justify-between items-center h-16 md:h-[72px]">
         {/* Logo */}
         <Link
           to="/"
           onClick={irArriba}
-          className="cursor-pointer transition-transform active:scale-95 flex items-center no-underline"
+          className="flex items-center no-underline shrink-0 transition-opacity hover:opacity-80"
         >
           <img
             src={logo}
             alt="Logo Catálogo de Vehículos"
-            className="w-auto h-12 object-contain"
+            className="h-9 md:h-10 w-auto object-contain"
           />
         </Link>
 
-        {/* Menú Desktop */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <NavLink
-            to="/"
-            onClick={irArriba}
-            className="text-on-surface-variant hover:text-secondary font-label-sm text-label-sm uppercase tracking-wider transition-all no-underline"
-          >
+        {/* Desktop nav */}
+        <nav className="hidden md:flex items-center gap-8">
+          <NavLink to="/" end onClick={irArriba} className={linkClass}>
             Inicio
           </NavLink>
-
-          {/* Enlace de Contacto */}
-          <a
-            href="#contacto"
-            className="text-on-surface-variant hover:text-secondary font-label-sm text-label-sm uppercase tracking-wider transition-all no-underline cursor-pointer"
-          >
+          <a href="#contacto" className="nav-link">
             Contacto
           </a>
-
           {usuarioAdmin.token && (
-            <NavLink
-              to="/administrador"
-              className="text-on-surface-variant hover:text-secondary font-label-sm text-label-sm uppercase tracking-wider transition-all no-underline"
-            >
+            <NavLink to="/administrador" className={linkClass}>
               Administrador
             </NavLink>
           )}
         </nav>
 
-        {/* Botones de acción / Hamburger */}
-        <div className="flex items-center space-x-4">
+        {/* Actions */}
+        <div className="flex items-center gap-3">
           {usuarioAdmin.token ? (
-            <button
-              onClick={logout}
-              className="hidden md:flex items-center justify-center bg-error text-on-error rounded-lg px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-wider hover:opacity-90 transition-colors cursor-pointer transition-transform active:scale-95"
-            >
-              Logout
+            <button onClick={logout} className="btn-danger hidden md:inline-flex !py-2.5 !px-5 !text-xs">
+              Cerrar sesión
             </button>
           ) : (
-            <Link
-              to="/login"
-              className="hidden md:flex items-center justify-center bg-secondary text-on-secondary rounded-lg px-6 py-2.5 font-label-sm text-label-sm uppercase tracking-wider hover:bg-secondary/90 transition-colors cursor-pointer transition-transform active:scale-95 no-underline"
-            >
-              Login
+            <Link to="/login" className="btn-primary hidden md:inline-flex !py-2.5 !px-5 !text-xs no-underline">
+              Ingresar
             </Link>
           )}
 
-          {/* Botón menú móvil */}
           <button
-            className="md:hidden text-primary flex items-center bg-transparent border-0"
+            type="button"
+            aria-label={isMobileOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={isMobileOpen}
+            className="btn-icon md:hidden !w-10 !h-10"
             onClick={() => setIsMobileOpen(!isMobileOpen)}
           >
-            <span className="material-symbols-outlined text-3xl">menu</span>
+            <span className="material-symbols-outlined text-[22px]">
+              {isMobileOpen ? "close" : "menu"}
+            </span>
           </button>
         </div>
       </div>
 
-      {/* Menú Móvil Desplegable */}
+      {/* Mobile menu */}
       {isMobileOpen && (
-        <div className="md:hidden bg-surface dark:bg-inverse-surface border-t border-outline-variant px-4 py-4 flex flex-col space-y-4 shadow-lg">
+        <div className="md:hidden border-t border-outline-variant/60 bg-surface-container-lowest/95 backdrop-blur-xl px-4 py-4 flex flex-col gap-1 animate-fade-in">
           <NavLink
             to="/"
-            onClick={() => {
-              setIsMobileOpen(false);
-              irArriba();
-            }}
-            className="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider no-underline"
+            end
+            onClick={() => { setIsMobileOpen(false); irArriba(); }}
+            className={({ isActive }) =>
+              `block px-4 py-3 rounded-xl text-sm font-medium no-underline transition-colors ${
+                isActive ? "bg-surface-container text-on-surface" : "text-on-surface-variant hover:bg-surface-container-low"
+              }`
+            }
           >
             Inicio
           </NavLink>
-
-          {/* Enlace de Contacto en Móvil */}
           <a
             href="#contacto"
             onClick={() => setIsMobileOpen(false)}
-            className="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider no-underline"
+            className="block px-4 py-3 rounded-xl text-sm font-medium text-on-surface-variant hover:bg-surface-container-low no-underline transition-colors"
           >
             Contacto
           </a>
-
           {usuarioAdmin.token && (
             <NavLink
               to="/administrador"
               onClick={() => setIsMobileOpen(false)}
-              className="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider no-underline"
+              className={({ isActive }) =>
+                `block px-4 py-3 rounded-xl text-sm font-medium no-underline transition-colors ${
+                  isActive ? "bg-surface-container text-on-surface" : "text-on-surface-variant hover:bg-surface-container-low"
+                }`
+              }
             >
               Administrador
             </NavLink>
           )}
-
-          {usuarioAdmin.token ? (
-            <button
-              onClick={logout}
-              className="text-left text-error font-label-sm text-label-sm uppercase tracking-wider bg-transparent border-0 p-0"
-            >
-              Logout
-            </button>
-          ) : (
-            <Link
-              to="/login"
-              onClick={() => setIsMobileOpen(false)}
-              className="text-left text-secondary font-label-sm text-label-sm uppercase tracking-wider no-underline"
-            >
-              Login
-            </Link>
-          )}
+          <div className="pt-2 mt-2 border-t border-outline-variant/60">
+            {usuarioAdmin.token ? (
+              <button
+                onClick={logout}
+                className="w-full btn-danger !text-xs"
+              >
+                Cerrar sesión
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setIsMobileOpen(false)}
+                className="w-full btn-primary !text-xs no-underline"
+              >
+                Ingresar
+              </Link>
+            )}
+          </div>
         </div>
       )}
     </header>
