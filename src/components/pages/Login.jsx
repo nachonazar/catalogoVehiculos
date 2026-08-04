@@ -40,13 +40,14 @@ const Login = ({ setUsuarioAdmin }) => {
   };
 
   return (
-    <main className="flex w-full min-h-screen pt-[72px] bg-surface">
+    /* Quitamos el pt-[72px] para que ocupe desde el borde superior exacto */
+    <main className="flex w-full min-h-screen bg-surface overflow-x-hidden">
       {/* Form side */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-4 sm:px-gutter py-12 lg:py-16">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 sm:px-12 py-12 lg:py-16">
         <div className="w-full max-w-sm">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-on-surface-variant hover:text-on-surface transition-colors no-underline mb-8 group"
+            className="inline-flex items-center gap-2 text-sm text-on-surface-variant hover:text-on-surface transition-colors no-underline mb-6 group"
           >
             <span className="material-symbols-outlined text-[18px] transition-transform group-hover:-translate-x-0.5">
               arrow_back
@@ -54,13 +55,13 @@ const Login = ({ setUsuarioAdmin }) => {
             Volver al inicio
           </Link>
 
-          <div className="mb-8">
+          <div className="mb-6">
             <img
               src={logo}
-              alt="Logo Catalogo de Vehiculos"
-              className="h-10 w-auto object-contain mb-6"
+              alt="Logo Automotores Tucumán"
+              className="h-10 w-auto object-contain mb-4"
             />
-            <h1 className="font-heading text-2xl font-bold text-on-surface mb-2">
+            <h1 className="font-heading text-2xl font-bold text-on-surface mb-1">
               Iniciar sesión
             </h1>
             <p className="text-sm text-on-surface-variant">
@@ -70,7 +71,7 @@ const Login = ({ setUsuarioAdmin }) => {
 
           <form
             onSubmit={handleSubmit(iniciarSesion)}
-            className="flex flex-col gap-5"
+            className="flex flex-col gap-4"
           >
             <div className="flex flex-col gap-1.5">
               <label
@@ -95,8 +96,7 @@ const Login = ({ setUsuarioAdmin }) => {
                     pattern: {
                       value:
                         /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
-                      message:
-                        "El email debe tener un formato válido (ej: juan@gmail.com)",
+                      message: "El email debe tener un formato válido",
                     },
                   })}
                 />
@@ -130,7 +130,7 @@ const Login = ({ setUsuarioAdmin }) => {
                       value:
                         /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/,
                       message:
-                        "Debe tener 8-16 caracteres, mayúsculas, minúsculas, un número y un símbolo especial.",
+                        "8-16 caracteres: mayúscula, minúscula, número y símbolo.",
                     },
                   })}
                 />
@@ -152,7 +152,10 @@ const Login = ({ setUsuarioAdmin }) => {
               )}
             </div>
 
-            <button type="submit" className="btn-primary w-full !mt-2 group">
+            <button
+              type="submit"
+              className="btn-primary w-full !mt-2 cursor-pointer group flex items-center justify-center gap-2"
+            >
               Iniciar sesión
               <span className="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-0.5">
                 arrow_forward
@@ -160,7 +163,7 @@ const Login = ({ setUsuarioAdmin }) => {
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-outline-variant hidden lg:block">
+          <div className="mt-6 pt-4 border-t border-outline-variant hidden lg:block">
             <p className="text-xs text-on-surface-variant text-center">
               Acceso restringido al panel de administración
             </p>
@@ -168,26 +171,14 @@ const Login = ({ setUsuarioAdmin }) => {
         </div>
       </div>
 
-      {/* Visual side */}
-      <div className="hidden lg:block lg:w-1/2 relative bg-primary overflow-hidden">
+      {/* Visual side limpio sin textos encimados */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-primary overflow-hidden">
         <img
           src={imgLogin}
-          alt="Autos Luxury"
+          alt="Automotores Tucumán Login"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-primary/20" />
-        <div className="absolute bottom-12 left-12 right-12">
-          <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/80 text-xs font-medium mb-4">
-            Panel de administración
-          </p>
-          <p className="font-heading text-3xl font-bold text-white mb-3 leading-tight">
-            Diseñado para la excelencia
-          </p>
-          <p className="text-sm text-white/70 max-w-md leading-relaxed">
-            Administra tu inventario, gestiona los vehículos y ofrece una
-            experiencia premium a tus clientes.
-          </p>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent" />
       </div>
     </main>
   );
