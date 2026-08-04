@@ -8,12 +8,8 @@ export const ThemeProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    const raiz = document.documentElement;
-    if (tema === "oscuro") {
-      raiz.classList.add("dark");
-    } else {
-      raiz.classList.remove("dark");
-    }
+    // Eliminamos la inyección de clase en document.documentElement
+    // para evitar que el modo oscuro se filtre a las vistas públicas.
     localStorage.setItem("tema", tema);
   }, [tema]);
 

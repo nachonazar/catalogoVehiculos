@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/logo-transparente.png";
 import { useTheme } from "../../context/ThemeContext";
@@ -6,6 +6,7 @@ import { useTheme } from "../../context/ThemeContext";
 const LayoutAdmin = ({ titulo, headerExtra, children }) => {
   const location = useLocation();
   const { tema, cambiarTema } = useTheme();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const usuarioLogueado = JSON.parse(sessionStorage.getItem("userKey")) || {};
 
@@ -36,23 +37,46 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
   ];
 
   return (
-    <div className="bg-neutral-bg text-on-surface font-body-md min-h-screen flex panel-admin">
-      {/* Sidebar — desktop */}
-      <nav className="hidden lg:flex flex-col h-screen w-[260px] fixed left-0 top-0 z-50 border-r border-white/5 bg-[#09090b]">
-        <div className="p-5 border-b border-white/5">
-          <Link to="/" className="block no-underline">
-            <img
-              src={logo}
-              alt="Logo Catalogo de Vehiculos"
-              className="w-[130px] h-auto invert opacity-90 hover:opacity-100 transition-opacity object-contain"
-            />
-          </Link>
-          <p className="text-zinc-500 text-xs mt-3 font-medium">
-            Panel de administración
-          </p>
+    /* Aplicamos la clase "dark" directamente al wrapper para aislar el tema */
+    <div className={`bg-neutral-bg text-on-surface font-body-md min-h-screen flex panel-admin ${tema === "oscuro" ? "dark" : ""}`}>
+      
+      {/* Overlay fondo oscuro móvil */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar — desktop y móvil */}
+      <nav className={`
+        fixed inset-y-0 left-0 z-50 w-[260px] flex flex-col bg-[#09090b] border-r border-white/5
+        transform transition-transform duration-300 ease-in-out
+        lg:translate-x-0 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
+      `}>
+        <div className="p-5 border-b border-white/5 flex items-start justify-between">
+          <div>
+            <Link to="/" className="block no-underline" onClick={() => setMobileMenuOpen(false)}>
+              <img
+                src={logo}
+                alt="Logo Catalogo de Vehiculos"
+                className="w-[130px] h-auto invert opacity-90 hover:opacity-100 transition-opacity object-contain mix-blend-screen"
+              />
+            </Link>
+            <p className="text-zinc-500 text-xs mt-3 font-medium">
+              Panel de administración
+            </p>
+          </div>
+          {/* Botón cerrar en móvil */}
+          <button 
+            className="lg:hidden text-zinc-500 hover:text-white flex items-center justify-center p-1 cursor-pointer"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <span className="material-symbols-outlined text-[24px]">close</span>
+          </button>
         </div>
 
-        <ul className="flex flex-col gap-1 p-3 flex-grow list-none m-0">
+        <ul className="flex flex-col gap-1 p-3 flex-grow list-none m-0 overflow-y-auto">
           {navItems.map((item) => {
             const activo = item.exact
               ? location.pathname === item.to
@@ -61,6 +85,7 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
               <li key={item.to}>
                 <Link
                   to={item.to}
+                  onClick={() => setMobileMenuOpen(false)}
                   className={`sidebar-link ${activo ? "sidebar-link-active" : "sidebar-link-inactive"}`}
                 >
                   <span
@@ -79,6 +104,7 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
         <div className="p-3 border-t border-white/5">
           <Link
             to="/administrador/crear"
+            onClick={() => setMobileMenuOpen(false)}
             className="w-full btn-secondary !text-xs !py-2.5 no-underline mb-2"
           >
             <span className="material-symbols-outlined text-[16px]">add</span>
@@ -98,12 +124,21 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
       </nav>
 
       {/* Main area */}
-      <div className="flex-1 lg:ml-[260px] flex flex-col min-h-screen">
+      <div className="flex-1 lg:ml-[260px] flex flex-col min-h-screen w-full">
         {/* Top bar */}
-        <header className="sticky top-0 z-40 h-16 bg-surface-container-lowest/80 backdrop-blur-xl border-b border-outline-variant flex justify-between items-center px-4 md:px-6">
-          <h2 className="font-heading text-base font-semibold text-on-surface tracking-tight truncate">
-            {titulo}
-          </h2>
+        <header className="sticky top-0 z-30 h-16 bg-surface-container-lowest/80 backdrop-blur-xl border-b border-outline-variant flex justify-between items-center px-4 md:px-6">
+          <div className="flex items-center gap-3">
+            {/* Hamburger para móvil */}
+            <button
+              className="lg:hidden flex items-center justify-center text-on-surface-variant hover:text-on-surface cursor-pointer bg-transparent border-0"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <span className="material-symbols-outlined text-[24px]">menu</span>
+            </button>
+            <h2 className="font-heading text-base font-semibold text-on-surface tracking-tight truncate">
+              {titulo}
+            </h2>
+          </div>
 
           <div className="flex items-center gap-3 md:gap-4">
             {headerExtra}
@@ -112,6 +147,7 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
             <div className="flex items-center bg-surface-container-low rounded-xl p-1 border border-outline-variant">
               <button
                 type="button"
+                aria-pressed={tema === "claro"}
                 onClick={() => cambiarTema("claro")}
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer border-0 ${
                   tema === "claro"
@@ -123,6 +159,7 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
               </button>
               <button
                 type="button"
+                aria-pressed={tema === "oscuro"}
                 onClick={() => cambiarTema("oscuro")}
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer border-0 ${
                   tema === "oscuro"

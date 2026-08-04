@@ -89,7 +89,7 @@
 /* =========================================================
    DESIGN TOKENS — Dark (admin panel only)
    ========================================================= */
-.dark .panel-admin {
+.dark.panel-admin {
   --color-background: #09090b;
   --color-surface: #09090b;
   --color-neutral-bg: #09090b;
@@ -116,8 +116,8 @@
   --color-error: #ef4444;
 }
 
-.dark .panel-admin .bg-primary.text-white,
-.dark .panel-admin .bg-primary.text-on-primary {
+.dark.panel-admin .bg-primary.text-white,
+.dark.panel-admin .bg-primary.text-on-primary {
   background-color: var(--color-secondary) !important;
 }
 
@@ -158,6 +158,7 @@
    COMPONENT UTILITIES
    ========================================================= */
 @layer components {
+
   /* Layout */
   .container-app {
     @apply max-w-container-max mx-auto px-4 md:px-gutter w-full;
@@ -181,22 +182,16 @@
 
   /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 cursor-pointer
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-           disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
     --tw-ring-color: rgba(37, 99, 235, 0.4);
   }
 
   .btn-primary {
-    @apply btn bg-primary text-on-primary rounded-xl px-6 py-3 text-sm
-           hover:bg-primary-container active:scale-[0.98]
-           shadow-sm hover:shadow-md;
+    @apply btn bg-primary text-on-primary rounded-xl px-6 py-3 text-sm hover:bg-primary-container active:scale-[0.98] shadow-sm hover:shadow-md;
   }
 
   .btn-secondary {
-    @apply btn bg-secondary text-on-secondary rounded-xl px-6 py-3 text-sm
-           active:scale-[0.98]
-           shadow-sm hover:shadow-md;
+    @apply btn bg-secondary text-on-secondary rounded-xl px-6 py-3 text-sm active:scale-[0.98] shadow-sm hover:shadow-md;
   }
 
   .btn-secondary:hover {
@@ -204,18 +199,15 @@
   }
 
   .btn-outline {
-    @apply btn border border-outline-variant bg-transparent text-on-surface rounded-xl px-6 py-3 text-sm
-           hover:bg-surface-container-low active:scale-[0.98];
+    @apply btn border border-outline-variant bg-transparent text-on-surface rounded-xl px-6 py-3 text-sm hover:bg-surface-container-low active:scale-[0.98];
   }
 
   .btn-ghost {
-    @apply btn text-on-surface-variant rounded-lg px-4 py-2 text-sm
-           hover:bg-surface-container-low hover:text-on-surface;
+    @apply btn text-on-surface-variant rounded-lg px-4 py-2 text-sm hover:bg-surface-container-low hover:text-on-surface;
   }
 
   .btn-danger {
-    @apply btn bg-error text-on-error rounded-xl px-6 py-3 text-sm
-           active:scale-[0.98];
+    @apply btn bg-error text-on-error rounded-xl px-6 py-3 text-sm active:scale-[0.98];
   }
 
   .btn-danger:hover {
@@ -223,18 +215,13 @@
   }
 
   .btn-icon {
-    @apply inline-flex items-center justify-center w-9 h-9 rounded-lg
-           text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface
-           transition-colors duration-200 cursor-pointer
-           focus-visible:outline-none focus-visible:ring-2;
+    @apply inline-flex items-center justify-center w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2;
     --tw-ring-color: rgba(37, 99, 235, 0.4);
   }
 
   /* Form controls */
   .input-base {
-    @apply w-full h-11 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest
-           text-sm text-on-surface outline-none transition-all duration-200
-           focus:border-secondary focus:ring-2;
+    @apply w-full h-11 px-4 rounded-xl border border-outline-variant bg-surface-container-lowest text-sm text-on-surface outline-none transition-all duration-200 focus:border-secondary focus:ring-2;
     --tw-ring-color: rgba(37, 99, 235, 0.2);
   }
 
@@ -253,9 +240,7 @@
   }
 
   .textarea-base {
-    @apply w-full px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest
-           text-sm text-on-surface outline-none transition-all duration-200 resize-none
-           focus:border-secondary focus:ring-2;
+    @apply w-full px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-lowest text-sm text-on-surface outline-none transition-all duration-200 resize-none focus:border-secondary focus:ring-2;
     --tw-ring-color: rgba(37, 99, 235, 0.2);
   }
 
@@ -322,8 +307,7 @@
 
   /* Nav */
   .nav-link {
-    @apply text-sm font-medium text-on-surface-variant no-underline transition-colors duration-200
-           hover:text-on-surface relative py-1;
+    @apply text-sm font-medium text-on-surface-variant no-underline transition-colors duration-200 hover:text-on-surface relative py-1;
   }
 
   .nav-link-active {
@@ -358,13 +342,7 @@
 
   /* Pagination */
   .pagination-btn {
-    @apply w-9 h-9 flex items-center justify-center rounded-lg border border-outline-variant
-           text-sm font-medium text-on-surface-variant bg-transparent
-           transition-colors duration-200 cursor-pointer
-           hover:bg-surface-container-low hover:text-on-surface
-           disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent
-           disabled:hover:text-on-surface-variant disabled:hover:border-outline-variant
-           focus-visible:outline-none focus-visible:ring-2;
+    @apply w-9 h-9 flex items-center justify-center rounded-lg border border-outline-variant text-sm font-medium text-on-surface-variant bg-transparent transition-colors duration-200 cursor-pointer hover:bg-surface-container-low hover:text-on-surface disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-on-surface-variant disabled:hover:border-outline-variant focus-visible:outline-none focus-visible:ring-2;
     --tw-ring-color: rgba(37, 99, 235, 0.4);
   }
 
@@ -374,8 +352,7 @@
 
   /* Admin sidebar link */
   .sidebar-link {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl no-underline text-sm font-medium
-           text-zinc-400 transition-all duration-200;
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl no-underline text-sm font-medium text-zinc-400 transition-all duration-200;
   }
 
   .sidebar-link-active {
@@ -398,8 +375,7 @@
 
   /* Table */
   .table-header {
-    @apply bg-surface-container-low border-b border-outline-variant
-           text-xs uppercase tracking-wider font-semibold text-on-surface-variant;
+    @apply bg-surface-container-low border-b border-outline-variant text-xs uppercase tracking-wider font-semibold text-on-surface-variant;
   }
 
   .table-row {
