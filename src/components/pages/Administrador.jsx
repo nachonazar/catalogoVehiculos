@@ -50,7 +50,9 @@ const Administrador = () => {
   });
 
   const totalFlota = vehiculosTotales.length;
-  const vehiculosDisponibles = vehiculosTotales.filter((v) => v.disponible).length;
+  const vehiculosDisponibles = vehiculosTotales.filter(
+    (v) => v.disponible,
+  ).length;
   const vehiculosVendidos = totalFlota - vehiculosDisponibles;
   const capitalTotalInvertido = vehiculosTotales.reduce(
     (acc, v) => acc + (Number(v.precio) || 0),
@@ -66,10 +68,31 @@ const Administrador = () => {
   };
 
   const kpis = [
-    { icon: "directions_car", label: "Totales", value: totalFlota, accent: "text-on-surface" },
-    { icon: "check_circle", label: "Disponibles", value: vehiculosDisponibles, accent: "text-success-green" },
-    { icon: "sell", label: "Vendidos", value: vehiculosVendidos, accent: "text-on-surface-variant" },
-    { icon: "payments", label: "Capital", value: formatearMoneda(capitalTotalInvertido), accent: "text-secondary", small: true },
+    {
+      icon: "directions_car",
+      label: "Totales",
+      value: totalFlota,
+      accent: "text-on-surface",
+    },
+    {
+      icon: "check_circle",
+      label: "Disponibles",
+      value: vehiculosDisponibles,
+      accent: "text-success-green",
+    },
+    {
+      icon: "sell",
+      label: "Vendidos",
+      value: vehiculosVendidos,
+      accent: "text-on-surface-variant",
+    },
+    {
+      icon: "payments",
+      label: "Capital",
+      value: formatearMoneda(capitalTotalInvertido),
+      accent: "text-secondary",
+      small: true,
+    },
   ];
 
   const headerExtra = (
@@ -99,10 +122,6 @@ const Administrador = () => {
             Gestiona, actualiza y monitorea tu flota actual.
           </p>
         </div>
-        <Link to="/administrador/crear" className="btn-primary lg:hidden !text-xs no-underline">
-          <span className="material-symbols-outlined text-[16px]">add</span>
-          Agregar
-        </Link>
       </div>
 
       {/* KPI cards */}
@@ -119,7 +138,9 @@ const Administrador = () => {
             </div>
             <div className="min-w-0">
               <p className="text-label !text-[10px]">{kpi.label}</p>
-              <p className={`font-heading font-bold text-on-surface mt-0.5 truncate ${kpi.small ? "text-base" : "text-2xl"}`}>
+              <p
+                className={`font-heading font-bold text-on-surface mt-0.5 truncate ${kpi.small ? "text-base" : "text-2xl"}`}
+              >
                 {kpi.value}
               </p>
             </div>
@@ -146,9 +167,12 @@ const Administrador = () => {
                 <tr>
                   <td colSpan="6" className="p-12 text-center">
                     <div className="empty-state !py-8">
-                      <span className="material-symbols-outlined text-[32px] text-on-surface-variant mb-2">search_off</span>
+                      <span className="material-symbols-outlined text-[32px] text-on-surface-variant mb-2">
+                        search_off
+                      </span>
                       <p className="text-sm text-on-surface-variant">
-                        No se encontraron vehículos que coincidan con &ldquo;{terminoBusqueda}&rdquo;.
+                        No se encontraron vehículos que coincidan con &ldquo;
+                        {terminoBusqueda}&rdquo;.
                       </p>
                     </div>
                   </td>
@@ -174,14 +198,19 @@ const Administrador = () => {
           <span className="text-xs text-on-surface-variant hidden md:block">
             Página {page} de {totalPages}
           </span>
-          <nav aria-label="Paginación" className="flex items-center gap-1 mx-auto md:mx-0">
+          <nav
+            aria-label="Paginación"
+            className="flex items-center gap-1 mx-auto md:mx-0"
+          >
             <button
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
               disabled={page === 1}
               aria-label="Página anterior"
               className="pagination-btn !w-8 !h-8"
             >
-              <span className="material-symbols-outlined text-[16px]">chevron_left</span>
+              <span className="material-symbols-outlined text-[16px]">
+                chevron_left
+              </span>
             </button>
             {[...Array(totalPages)].map((_, i) => (
               <button
@@ -189,7 +218,11 @@ const Administrador = () => {
                 onClick={() => setPage(i + 1)}
                 aria-label={`Página ${i + 1}`}
                 aria-current={page === i + 1 ? "page" : undefined}
-                className={`pagination-btn !w-8 !h-8 ${page === i + 1 ? "pagination-btn-active" : ""}`}
+                className={`pagination-btn !w-8 !h-8 ${
+                  page === i + 1
+                    ? "pagination-btn-active dark:!bg-secondary dark:!text-white dark:!border-secondary"
+                    : ""
+                }`}
               >
                 {i + 1}
               </button>
@@ -200,7 +233,9 @@ const Administrador = () => {
               aria-label="Página siguiente"
               className="pagination-btn !w-8 !h-8"
             >
-              <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+              <span className="material-symbols-outlined text-[16px]">
+                chevron_right
+              </span>
             </button>
           </nav>
         </div>
