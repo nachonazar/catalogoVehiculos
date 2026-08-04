@@ -222,7 +222,6 @@ const EstadisticasVehiculos = () => {
   return (
     <LayoutAdmin titulo="Panel de Estadísticas">
       {cargando ? (
-        // Estado de carga adaptado al Design System (Skeleton)
         <div className="flex flex-col gap-6 pb-12 w-full animate-pulse">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {[...Array(4)].map((_, i) => (
@@ -243,7 +242,7 @@ const EstadisticasVehiculos = () => {
         </div>
       ) : (
         <div className="flex flex-col gap-6 pb-12">
-          {/* Tarjetas de Resumen Superior (Mapeadas idéntico a Administrador.jsx) */}
+          {/* Tarjetas de Resumen Superior */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {kpis.map((kpi) => (
               <div key={kpi.label} className="kpi-card">
@@ -319,7 +318,7 @@ const EstadisticasVehiculos = () => {
               </div>
             </div>
 
-            {/* 2. Bar Chart - Precios */}
+            {/* 2. Bar Chart - Precios (Optimizado con YAxis y márgenes holgados) */}
             <div className="card p-6 h-full">
               <h3 className="font-heading text-lg font-bold text-on-surface mb-1">
                 Rango de Precios
@@ -328,17 +327,28 @@ const EstadisticasVehiculos = () => {
                 Cantidad de vehículos por franja de precio
               </p>
               <div className="w-full">
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={datosPorRangoPrecio} barSize={30}>
+                <ResponsiveContainer width="100%" height={320}>
+                  <BarChart
+                    data={datosPorRangoPrecio}
+                    barSize={28}
+                    margin={{ bottom: 40, top: 10, right: 15, left: -20 }}
+                  >
                     <XAxis
                       dataKey="rango"
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fill: COLOR_TEXTO, fontSize: 11 }}
-                      dy={10}
-                      angle={-35} // Inclinación para móviles
+                      tick={{ fill: COLOR_TEXTO, fontSize: 9.5 }}
+                      dy={12}
+                      angle={-25}
                       textAnchor="end"
-                      height={60} // Espacio extra para la inclinación
+                      interval={0}
+                    />
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: COLOR_TEXTO, fontSize: 10 }}
+                      allowDecimals={false}
+                      dx={-5}
                     />
                     <Tooltip
                       cursor={{
