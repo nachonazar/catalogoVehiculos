@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import CardVehiculo from "./vehiculo/CardVehiculo";
 import Contacto from "../shared/Contacto";
 import { leerVehiculosPaginados } from "../../../helpers/queries.js";
@@ -13,6 +13,7 @@ const Inicio = () => {
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     obtenerVehiculos();
   }, [page]);
 
@@ -38,9 +39,43 @@ const Inicio = () => {
         (v.modelo || "").toLowerCase().includes(terminoBusqueda.toLowerCase()),
     );
 
+  // Generador de páginas inteligentes con ellipsis para evitar desborde en móvil
+  const paginasVisibles = useMemo(() => {
+    const delta = 1;
+    const range = [];
+    const rangeWithDots = [];
+    let l;
+
+    range.push(1);
+
+    for (let i = page - delta; i <= page + delta; i++) {
+      if (i < totalPages && i > 1) {
+        range.push(i);
+      }
+    }
+
+    if (totalPages > 1) {
+      range.push(totalPages);
+    }
+
+    for (let i of range) {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push("...");
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
+    }
+
+    return rangeWithDots;
+  }, [page, totalPages]);
+
   return (
-    <div className="bg-surface">
-      {/* HERO */}
+    <div className="bg-surface overflow-x-hidden">
+      {/* HERO con overflow asegurado */}
       <section className="relative w-full min-h-[520px] md:min-h-[600px] flex items-center justify-center overflow-hidden pt-[72px]">
         <div
           className="absolute inset-0 bg-cover bg-center scale-105"
@@ -62,9 +97,14 @@ const Inicio = () => {
           <p className="font-body-lg text-body-lg text-white/70 mb-10 max-w-xl mx-auto">
             El catálogo más completo de vehículos seleccionados para vos.
           </p>
-          <a href="#vehiculos" className="btn-secondary !px-8 !py-3.5 no-underline shadow-float">
+          <a
+            href="#vehiculos"
+            className="btn-secondary !px-8 !py-3.5 no-underline shadow-float"
+          >
             Ver inventario
-            <span className="material-symbols-outlined text-[18px]">arrow_downward</span>
+            <span className="material-symbols-outlined text-[18px]">
+              arrow_downward
+            </span>
           </a>
         </div>
       </section>
@@ -157,29 +197,43 @@ const Inicio = () => {
           </div>
         )}
 
-        {/* PAGINATION */}
+        {/* PAGINATION CON ELLIPSIS INTELIGENTE */}
         {totalPages > 1 && (
-          <nav aria-label="Paginación" className="flex justify-center items-center mt-12 gap-1.5">
+          <nav
+            aria-label="Paginación"
+            className="flex justify-center items-center mt-12 gap-1.5 flex-wrap"
+          >
             <button
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
               disabled={page === 1}
               aria-label="Página anterior"
               className="pagination-btn"
             >
-              <span className="material-symbols-outlined text-[18px]">chevron_left</span>
+              <span className="material-symbols-outlined text-[18px]">
+                chevron_left
+              </span>
             </button>
 
-            {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => setPage(i + 1)}
-                aria-label={`Página ${i + 1}`}
-                aria-current={page === i + 1 ? "page" : undefined}
-                className={`pagination-btn ${page === i + 1 ? "pagination-btn-active" : ""}`}
-              >
-                {i + 1}
-              </button>
-            ))}
+            {paginasVisibles.map((item, index) =>
+              item === "..." ? (
+                <span
+                  key={`dots-${index}`}
+                  className="px-2 text-on-surface-variant font-medium"
+                >
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={item}
+                  onClick={() => setPage(item)}
+                  aria-label={`Página ${item}`}
+                  aria-current={page === item ? "page" : undefined}
+                  className={`pagination-btn ${page === item ? "pagination-btn-active" : ""}`}
+                >
+                  {item}
+                </button>
+              ),
+            )}
 
             <button
               onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
@@ -187,7 +241,9 @@ const Inicio = () => {
               aria-label="Página siguiente"
               className="pagination-btn"
             >
-              <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+              <span className="material-symbols-outlined text-[18px]">
+                chevron_right
+              </span>
             </button>
           </nav>
         )}
