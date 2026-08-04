@@ -17,16 +17,21 @@ import {
 import { leerVehiculos } from "../../../helpers/queries.js";
 import LayoutAdmin from "./LayoutAdmin";
 
-const AZUL_OSCURO = "#051125";
+// Reemplazamos los colores fijos por las variables CSS del Design System
 const COLORES_CATEGORIA = [
-  "#051125",
-  "#1e3a5f",
-  "#3b82f6",
-  "#93c5fd",
-  "#94a3b8",
+  "var(--color-secondary)",
+  "var(--color-primary)",
+  "var(--color-surface-tint)",
+  "var(--color-outline)",
+  "var(--color-on-surface-variant)",
 ];
-const COLOR_DISPONIBLE = "#16a34a";
-const COLOR_VENDIDO = "#051125";
+const COLOR_DISPONIBLE = "var(--color-success-green)";
+const COLOR_VENDIDO = "var(--color-on-surface-variant)";
+const COLOR_BARRAS = "var(--color-secondary)";
+
+const COLOR_TEXTO = "var(--color-on-surface-variant)";
+const COLOR_GRILLA = "var(--color-outline-variant)";
+const COLOR_FONDO_TOOLTIP = "var(--color-surface-container-lowest)";
 
 const MESES = [
   "Ene",
@@ -85,6 +90,34 @@ const EstadisticasVehiculos = () => {
       maximumFractionDigits: 0,
     }).format(valor);
   };
+
+  const kpis = [
+    {
+      icon: "directions_car",
+      label: "Totales",
+      value: totalVehiculos,
+      accent: "text-on-surface",
+    },
+    {
+      icon: "check_circle",
+      label: "Disponibles",
+      value: vehiculosDisponibles,
+      accent: "text-success-green",
+    },
+    {
+      icon: "sell",
+      label: "Vendidos",
+      value: vehiculosVendidos,
+      accent: "text-on-surface-variant",
+    },
+    {
+      icon: "payments",
+      label: "Capital",
+      value: formatearMoneda(capitalTotalInvertido),
+      accent: "text-secondary",
+      small: true,
+    },
+  ];
 
   // 1. Vehículos por categoría
   const datosPorCategoria = useMemo(() => {
@@ -176,97 +209,69 @@ const EstadisticasVehiculos = () => {
     return meses;
   }, [vehiculos]);
 
+  // Estilo reutilizable para los Tooltips de Recharts
+  const tooltipStyle = {
+    backgroundColor: COLOR_FONDO_TOOLTIP,
+    borderColor: COLOR_GRILLA,
+    color: "var(--color-on-surface)",
+    borderRadius: "12px",
+    boxShadow: "var(--shadow-elevated)",
+    padding: "8px 12px",
+  };
+
   return (
     <LayoutAdmin titulo="Panel de Estadísticas">
       {cargando ? (
-        <div className="flex items-center justify-center py-20 text-on-surface-variant">
-          Cargando estadísticas...
+        // Estado de carga adaptado al Design System (Skeleton)
+        <div className="flex flex-col gap-6 pb-12 w-full animate-pulse">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {[...Array(4)].map((_, i) => (
+              <div
+                key={i}
+                className="kpi-card !bg-surface-container-high h-[92px] border-transparent"
+              />
+            ))}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="h-[380px] rounded-xl bg-surface-container-high border-transparent"
+              />
+            ))}
+          </div>
         </div>
       ) : (
         <div className="flex flex-col gap-6 pb-12">
-          {/* Tarjetas de Resumen Superior (4 KPIs idénticos a Admin) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-surface-container-lowest border border-surface-variant p-6 rounded-xl flex items-center gap-4 shadow-sm">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                <span
-                  className="material-symbols-outlined text-[28px]"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  directions_car
-                </span>
+          {/* Tarjetas de Resumen Superior (Mapeadas idéntico a Administrador.jsx) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {kpis.map((kpi) => (
+              <div key={kpi.label} className="kpi-card">
+                <div className="w-11 h-11 rounded-xl bg-surface-container flex items-center justify-center shrink-0">
+                  <span
+                    className={`material-symbols-outlined text-[22px] ${kpi.accent}`}
+                    style={{ fontVariationSettings: "'FILL' 1" }}
+                  >
+                    {kpi.icon}
+                  </span>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-label !text-[10px]">{kpi.label}</p>
+                  <p
+                    className={`font-heading font-bold text-on-surface mt-0.5 truncate ${kpi.small ? "text-base" : "text-2xl"}`}
+                  >
+                    {kpi.value}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">
-                  Flota Total
-                </p>
-                <p className="font-headline-lg text-headline-lg text-primary mt-1">
-                  {totalVehiculos}
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-surface-container-lowest border border-surface-variant p-6 rounded-xl flex items-center gap-4 border-l-4 border-l-success-green shadow-sm">
-              <div className="w-12 h-12 rounded-full bg-success-green/10 flex items-center justify-center text-success-green">
-                <span
-                  className="material-symbols-outlined text-[28px]"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  check_circle
-                </span>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">
-                  Disponibles
-                </p>
-                <p className="font-headline-lg text-headline-lg text-primary mt-1">
-                  {vehiculosDisponibles}
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-surface-container-lowest border border-surface-variant p-6 rounded-xl flex items-center gap-4 border-l-4 border-l-surface-tint shadow-sm">
-              <div className="w-12 h-12 rounded-full bg-surface-tint/10 flex items-center justify-center text-surface-tint">
-                <span
-                  className="material-symbols-outlined text-[28px]"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  sell
-                </span>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">
-                  Vendidos
-                </p>
-                <p className="font-headline-lg text-headline-lg text-primary mt-1">
-                  {vehiculosVendidos}
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-surface-container-lowest border border-surface-variant p-6 rounded-xl flex items-center gap-4 border-l-4 border-l-secondary shadow-sm">
-              <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
-                <span
-                  className="material-symbols-outlined text-[28px]"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  payments
-                </span>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">
-                  Capital
-                </p>
-                <p className="font-headline-md text-[16px] text-primary mt-1">
-                  {formatearMoneda(capitalTotalInvertido)}
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Grillas de Gráficos */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-surface-variant h-full">
-              <h3 className="text-lg font-bold text-primary mb-1">
+            {/* 1. Pie Chart - Categorías */}
+            <div className="card p-6 h-full">
+              <h3 className="font-heading text-lg font-bold text-on-surface mb-1">
                 Vehículos por Categoría
               </h3>
               <p className="text-xs text-on-surface-variant mb-6">
@@ -282,6 +287,8 @@ const EstadisticasVehiculos = () => {
                       cx="50%"
                       cy="50%"
                       outerRadius={90}
+                      stroke={COLOR_FONDO_TOOLTIP}
+                      strokeWidth={2}
                     >
                       {datosPorCategoria.map((entry, index) => (
                         <Cell
@@ -293,22 +300,28 @@ const EstadisticasVehiculos = () => {
                       ))}
                     </Pie>
                     <Tooltip
-                      contentStyle={{
-                        borderRadius: "8px",
-                        border: "none",
-                        boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
+                      contentStyle={tooltipStyle}
+                      itemStyle={{
+                        color: "var(--color-on-surface)",
+                        fontSize: "14px",
+                        fontWeight: "500",
                       }}
                     />
                     <Legend
-                      wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }}
+                      wrapperStyle={{
+                        fontSize: "12px",
+                        paddingTop: "10px",
+                        color: COLOR_TEXTO,
+                      }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-surface-variant h-full">
-              <h3 className="text-lg font-bold text-primary mb-1">
+            {/* 2. Bar Chart - Precios */}
+            <div className="card p-6 h-full">
+              <h3 className="font-heading text-lg font-bold text-on-surface mb-1">
                 Rango de Precios
               </h3>
               <p className="text-xs text-on-surface-variant mb-6">
@@ -321,30 +334,39 @@ const EstadisticasVehiculos = () => {
                       dataKey="rango"
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fill: "#9ca3af", fontSize: 11 }}
+                      tick={{ fill: COLOR_TEXTO, fontSize: 11 }}
                       dy={10}
+                      angle={-35} // Inclinación para móviles
+                      textAnchor="end"
+                      height={60} // Espacio extra para la inclinación
                     />
                     <Tooltip
-                      cursor={{ fill: "transparent" }}
-                      contentStyle={{
-                        borderRadius: "8px",
-                        border: "none",
-                        boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
+                      cursor={{
+                        fill: "var(--color-surface-container-high)",
+                        opacity: 0.4,
+                      }}
+                      contentStyle={tooltipStyle}
+                      itemStyle={{ color: "var(--color-on-surface)" }}
+                      labelStyle={{
+                        color: COLOR_TEXTO,
+                        fontWeight: 600,
+                        marginBottom: "4px",
                       }}
                     />
                     <Bar
                       dataKey="total"
                       name="Vehículos"
                       radius={[6, 6, 0, 0]}
-                      fill={AZUL_OSCURO}
+                      fill={COLOR_BARRAS}
                     />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-surface-variant h-full">
-              <h3 className="text-lg font-bold text-primary mb-1">
+            {/* 3. Pie Chart - Disponibilidad */}
+            <div className="card p-6 h-full">
+              <h3 className="font-heading text-lg font-bold text-on-surface mb-1">
                 Disponibles vs Vendidos
               </h3>
               <p className="text-xs text-on-surface-variant mb-6">
@@ -361,7 +383,8 @@ const EstadisticasVehiculos = () => {
                       cy="50%"
                       innerRadius={65}
                       outerRadius={95}
-                      paddingAngle={2}
+                      paddingAngle={4}
+                      stroke="none"
                     >
                       {datosDisponibilidad.map((entry, index) => (
                         <Cell
@@ -375,22 +398,28 @@ const EstadisticasVehiculos = () => {
                       ))}
                     </Pie>
                     <Tooltip
-                      contentStyle={{
-                        borderRadius: "8px",
-                        border: "none",
-                        boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
+                      contentStyle={tooltipStyle}
+                      itemStyle={{
+                        color: "var(--color-on-surface)",
+                        fontSize: "14px",
+                        fontWeight: "500",
                       }}
                     />
                     <Legend
-                      wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }}
+                      wrapperStyle={{
+                        fontSize: "12px",
+                        paddingTop: "10px",
+                        color: COLOR_TEXTO,
+                      }}
                     />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-surface-variant h-full">
-              <h3 className="text-lg font-bold text-primary mb-1">
+            {/* 4. Line Chart - Evolución */}
+            <div className="card p-6 h-full">
+              <h3 className="font-heading text-lg font-bold text-on-surface mb-1">
                 Evolución del Inventario
               </h3>
               <p className="text-xs text-on-surface-variant mb-6">
@@ -402,36 +431,51 @@ const EstadisticasVehiculos = () => {
                     <CartesianGrid
                       strokeDasharray="3 3"
                       vertical={false}
-                      stroke="#f3f4f6"
+                      stroke={COLOR_GRILLA}
                     />
                     <XAxis
                       dataKey="mes"
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fill: "#9ca3af", fontSize: 11 }}
+                      tick={{ fill: COLOR_TEXTO, fontSize: 11 }}
                       dy={10}
                     />
                     <YAxis
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fill: "#9ca3af", fontSize: 11 }}
+                      tick={{ fill: COLOR_TEXTO, fontSize: 11 }}
                       allowDecimals={false}
+                      dx={-10}
                     />
                     <Tooltip
-                      contentStyle={{
-                        borderRadius: "8px",
-                        border: "none",
-                        boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
+                      contentStyle={tooltipStyle}
+                      itemStyle={{
+                        color: "var(--color-on-surface)",
+                        fontWeight: "500",
+                      }}
+                      labelStyle={{
+                        color: COLOR_TEXTO,
+                        fontWeight: 600,
+                        marginBottom: "4px",
                       }}
                     />
                     <Line
                       type="monotone"
                       dataKey="total"
                       name="Vehículos agregados"
-                      stroke={AZUL_OSCURO}
+                      stroke={COLOR_BARRAS}
                       strokeWidth={3}
-                      dot={{ r: 4, fill: AZUL_OSCURO }}
-                      activeDot={{ r: 6 }}
+                      dot={{
+                        r: 4,
+                        fill: COLOR_FONDO_TOOLTIP,
+                        stroke: COLOR_BARRAS,
+                        strokeWidth: 2,
+                      }}
+                      activeDot={{
+                        r: 6,
+                        fill: COLOR_BARRAS,
+                        stroke: COLOR_FONDO_TOOLTIP,
+                      }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
