@@ -1,12 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import {
-  borrarVehiculosPorId,
-  leerVehiculosPaginados,
-} from "../../../../helpers/queries.js";
+import { borrarVehiculosPorId } from "../../../../helpers/queries.js";
 
-const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
+const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila }) => {
   const eliminarVehiculo = () => {
     Swal.fire({
       title: "Eliminar Vehículo",
@@ -27,9 +24,10 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
             icon: "success",
             confirmButtonColor: "#09090b",
           });
-          const respuestaVehiculos = await leerVehiculosPaginados(page, limit);
-          const vehiculosActualizados = await respuestaVehiculos.json();
-          setListaVehiculos(vehiculosActualizados.vehiculos);
+
+          // ACÁ EL CAMBIO: Simplemente ejecutamos la función que nos pasó el padre
+          // Esto va a disparar obtenerTodosLosVehiculos() en Administrador.jsx
+          setListaVehiculos();
         } else {
           Swal.fire({
             title: "Ocurrió un error",
@@ -66,9 +64,7 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
         {vehiculo.categoria}
       </td>
 
-      <td className="p-4 text-sm text-on-surface-variant">
-        {vehiculo.anio}
-      </td>
+      <td className="p-4 text-sm text-on-surface-variant">{vehiculo.anio}</td>
 
       <td className="p-4 text-sm font-semibold text-on-surface">
         ${vehiculo.precio.toLocaleString("es-AR")}
@@ -99,7 +95,9 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila, page, limit }) => {
             aria-label={`Eliminar ${vehiculo.marca} ${vehiculo.modelo}`}
             className="btn-icon hover:!bg-error hover:!text-white"
           >
-            <span className="material-symbols-outlined text-[16px]">delete</span>
+            <span className="material-symbols-outlined text-[16px]">
+              delete
+            </span>
           </button>
         </div>
       </td>

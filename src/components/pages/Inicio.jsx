@@ -1,36 +1,47 @@
 import React, { useEffect, useState, useMemo } from "react";
 import CardVehiculo from "./vehiculo/CardVehiculo";
 import Contacto from "../shared/Contacto";
-import { leerVehiculosPaginados } from "../../../helpers/queries.js";
+import { leerVehiculos } from "../../../helpers/queries.js";
 
 const Inicio = () => {
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
-  const [vehiculos, setVehiculos] = useState([]);
+  const [todosLosVehiculos, setTodosLosVehiculos] = useState([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(6);
-  const [totalPages, setTotalPages] = useState(1);
   const [categoriaElegida, setCategoriaElegida] = useState("");
   const [cargando, setCargando] = useState(true);
 
+  // Efecto 1: Trae los autos solo la primera vez que carga el componente
   useEffect(() => {
-    window.scrollTo(0, 0);
-    obtenerVehiculos();
-  }, [page]);
+    obtenerTodosLosVehiculos();
+  }, []);
 
-  const obtenerVehiculos = async () => {
+  const obtenerTodosLosVehiculos = async () => {
     setCargando(true);
-    const respuesta = await leerVehiculosPaginados(page, limit);
-    if (respuesta.status === 200) {
+    const respuesta = await leerVehiculos();
+    if (respuesta && respuesta.status === 200) {
       const datos = await respuesta.json();
-      setVehiculos(datos.vehiculos);
-      setTotalPages(datos.totalPages);
+      setTodosLosVehiculos(
+        Array.isArray(datos) ? datos : datos.vehiculos || [],
+      );
     } else {
       console.info("Ocurrio un error al buscar los vehiculos");
     }
     setCargando(false);
   };
 
-  const vehiculosFiltrados = vehiculos
+  // Función para cambiar de página con Scroll Suave hacia el catálogo
+  const cambiarPagina = (nuevaPagina) => {
+    setPage(nuevaPagina);
+    const seccion = document.getElementById("vehiculos");
+    if (seccion) {
+      // Calculamos la posición restando 100px para que el navbar fijo no tape el título
+      const y = seccion.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
+  const vehiculosFiltrados = todosLosVehiculos
     .filter((v) => v.disponible)
     .filter((v) => (categoriaElegida ? v.categoria === categoriaElegida : true))
     .filter(
@@ -39,7 +50,15 @@ const Inicio = () => {
         (v.modelo || "").toLowerCase().includes(terminoBusqueda.toLowerCase()),
     );
 
-  // Generador de páginas inteligentes con ellipsis para evitar desborde en móvil
+  const totalPages = Math.ceil(vehiculosFiltrados.length / limit) || 1;
+
+  const indiceUltimo = page * limit;
+  const indicePrimer = indiceUltimo - limit;
+  const vehiculosParaMostrar = vehiculosFiltrados.slice(
+    indicePrimer,
+    indiceUltimo,
+  );
+
   const paginasVisibles = useMemo(() => {
     const delta = 1;
     const range = [];
@@ -146,16 +165,24 @@ const Inicio = () => {
         </div>
       </section>
 
-      {/* CATALOG */}
-      <section className="container-app section-padding !pb-12" id="vehiculos">
-        <div className="mb-10 md:mb-12">
-          <p className="text-label mb-2">Inventario</p>
-          <h2 className="font-heading text-headline-lg text-on-surface mb-2">
-            Vehículos disponibles
-          </h2>
-          <p className="text-body-md text-on-surface-variant">
-            Explorá nuestro catálogo de vehículos seleccionados
-          </p>
+      {/* CATALOG - Espacios reducidos */}
+      <section className="container-app pt-8 pb-12" id="vehiculos">
+        <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <p className="text-label mb-1 uppercase tracking-wider text-on-surface-variant">
+              Inventario
+            </p>
+            <h2 className="font-heading text-3xl font-bold text-on-surface mb-1">
+              Vehículos disponibles
+            </h2>
+            <p className="text-sm text-on-surface-variant">
+              Explorá nuestro catálogo de vehículos seleccionados
+            </p>
+          </div>
+
+          <div className="text-sm font-semibold text-secondary bg-secondary/10 px-3 py-1.5 rounded-lg h-fit">
+            {vehiculosFiltrados.length} resultados
+          </div>
         </div>
 
         {cargando ? (
@@ -163,33 +190,34 @@ const Inicio = () => {
             {[...Array(6)].map((_, i) => (
               <div key={i} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-6">
                 <div className="card overflow-hidden">
-                  <div className="skeleton aspect-[4/3] w-full !rounded-none" />
+                  {/* SKELETON ACTUALIZADO A 16:9 */}
+                  <div className="skeleton aspect-[16/9] w-full !rounded-none" />
                   <div className="p-5 space-y-3">
                     <div className="skeleton h-4 w-1/3" />
                     <div className="skeleton h-6 w-2/3" />
-                    <div className="skeleton h-4 w-full" />
+                    <div className="skeleton h-4 w-full mt-4" />
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        ) : vehiculosFiltrados.length > 0 ? (
+        ) : vehiculosParaMostrar.length > 0 ? (
           <div className="flex flex-wrap -mx-2">
-            {vehiculosFiltrados.map((vehiculo) => (
+            {vehiculosParaMostrar.map((vehiculo) => (
               <CardVehiculo key={vehiculo._id} vehiculo={vehiculo} />
             ))}
           </div>
         ) : (
-          <div className="empty-state card">
-            <div className="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center mb-4">
+          <div className="empty-state card py-12">
+            <div className="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center mb-4 mx-auto">
               <span className="material-symbols-outlined text-[32px] text-on-surface-variant">
                 directions_car
               </span>
             </div>
-            <h3 className="font-heading text-lg font-semibold text-on-surface mb-2">
+            <h3 className="font-heading text-lg font-semibold text-on-surface mb-2 text-center">
               Sin resultados
             </h3>
-            <p className="text-sm text-on-surface-variant max-w-sm">
+            <p className="text-sm text-on-surface-variant max-w-sm mx-auto text-center">
               {terminoBusqueda || categoriaElegida
                 ? "No encontramos vehículos con esos filtros. Probá con otra búsqueda."
                 : "No hay vehículos disponibles en este momento."}
@@ -197,14 +225,14 @@ const Inicio = () => {
           </div>
         )}
 
-        {/* PAGINATION CON ELLIPSIS INTELIGENTE */}
+        {/* PAGINATION CON SCROLL SUAVE */}
         {totalPages > 1 && (
           <nav
             aria-label="Paginación"
-            className="flex justify-center items-center mt-12 gap-1.5 flex-wrap"
+            className="flex justify-center items-center mt-8 gap-1.5 flex-wrap"
           >
             <button
-              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              onClick={() => cambiarPagina(Math.max(page - 1, 1))}
               disabled={page === 1}
               aria-label="Página anterior"
               className="pagination-btn"
@@ -225,7 +253,7 @@ const Inicio = () => {
               ) : (
                 <button
                   key={item}
-                  onClick={() => setPage(item)}
+                  onClick={() => cambiarPagina(item)}
                   aria-label={`Página ${item}`}
                   aria-current={page === item ? "page" : undefined}
                   className={`pagination-btn ${page === item ? "pagination-btn-active" : ""}`}
@@ -236,7 +264,7 @@ const Inicio = () => {
             )}
 
             <button
-              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={() => cambiarPagina(Math.min(page + 1, totalPages))}
               disabled={page === totalPages}
               aria-label="Página siguiente"
               className="pagination-btn"

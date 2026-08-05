@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Footer from "./components/shared/Footer";
 import Menu from "./components/shared/Menu";
 import Contacto from "./components/shared/Contacto";
 import Inicio from "./components/pages/Inicio";
-import Administrador from "./components/pages/Administrador";
 import DetalleVehiculo from "./components/pages/DetalleVehiculo";
-import Formulario from "./components/pages/Formulario";
 import Error404 from "./components/pages/Error404";
 import Login from "./components/pages/Login";
 import ProtectorAdmin from "./components/routes/ProtectorAdmin";
-import EstadisticasVehiculos from "./components/pages/EstadisticasVehiculos";
+
+// Implementación de Code-Splitting con React.lazy para el panel de administración
+const Administrador = lazy(() => import("./components/pages/Administrador"));
+const EstadisticasVehiculos = lazy(
+  () => import("./components/pages/EstadisticasVehiculos"),
+);
+const Formulario = lazy(() => import("./components/pages/Formulario"));
 
 const ElementosPublicos = ({ children }) => {
   const location = useLocation();
@@ -37,32 +41,41 @@ function App() {
       </ElementosPublicos>
 
       <main>
-        <Routes>
-          <Route path="/" element={<Inicio />} />
-          <Route path="/detalle/:id" element={<DetalleVehiculo />} />
-          <Route
-            path="/login"
-            element={<Login setUsuarioAdmin={setUsuarioAdmin} />}
-          />
-
-          <Route
-            path="/administrador"
-            element={<ProtectorAdmin isAdmin={usuarioAdmin} />}
-          >
-            <Route index element={<Administrador />} />
-            <Route path="estadisticas" element={<EstadisticasVehiculos />} />
+        {/* Envolvemos las rutas con Suspense para manejar el estado de carga de los componentes lazy */}
+        <Suspense
+          fallback={
+            <div className="flex justify-center py-20 text-on-surface-variant">
+              Cargando módulo...
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<Inicio />} />
+            <Route path="/detalle/:id" element={<DetalleVehiculo />} />
             <Route
-              path="crear"
-              element={<Formulario titulo="Crear Vehiculo" />}
+              path="/login"
+              element={<Login setUsuarioAdmin={setUsuarioAdmin} />}
             />
-            <Route
-              path="editar/:id"
-              element={<Formulario titulo="Editar Vehiculo" />}
-            />
-          </Route>
 
-          <Route path="*" element={<Error404 />} />
-        </Routes>
+            <Route
+              path="/administrador"
+              element={<ProtectorAdmin isAdmin={usuarioAdmin} />}
+            >
+              <Route index element={<Administrador />} />
+              <Route path="estadisticas" element={<EstadisticasVehiculos />} />
+              <Route
+                path="crear"
+                element={<Formulario titulo="Crear Vehiculo" />}
+              />
+              <Route
+                path="editar/:id"
+                element={<Formulario titulo="Editar Vehiculo" />}
+              />
+            </Route>
+
+            <Route path="*" element={<Error404 />} />
+          </Routes>
+        </Suspense>
       </main>
 
       <ElementosPublicos>

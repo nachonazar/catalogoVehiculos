@@ -107,7 +107,7 @@ const Footer = () => {
 
         <div className="mt-12 pt-8 border-t border-white/10">
           <p className="text-xs text-on-primary-container text-center">
-            © {new Date().getFullYear()} Luxe Auto Group. Todos los derechos
+            © {new Date().getFullYear()} Automotores Tucumán. Todos los derechos
             reservados.
           </p>
         </div>

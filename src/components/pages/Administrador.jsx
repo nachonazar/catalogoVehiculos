@@ -2,34 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ItemVehiculo from "./vehiculo/ItemVehiculo";
 import LayoutAdmin from "./LayoutAdmin";
-import {
-  leerVehiculosPaginados,
-  leerVehiculos,
-} from "../../../helpers/queries.js";
+import { leerVehiculos } from "../../../helpers/queries.js";
 
 const Administrador = () => {
-  const [listaVehiculos, setListaVehiculos] = useState([]);
   const [vehiculosTotales, setVehiculosTotales] = useState([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(4);
-  const [totalPages, setTotalPages] = useState(1);
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
 
+  // Efecto inicial: Traemos TODOS los vehículos una sola vez
   useEffect(() => {
-    obtenerVehiculosPaginados();
     obtenerTodosLosVehiculos();
-  }, [page]);
-
-  const obtenerVehiculosPaginados = async () => {
-    const respuesta = await leerVehiculosPaginados(page, limit);
-    if (respuesta.status === 200) {
-      const datos = await respuesta.json();
-      setListaVehiculos(datos.vehiculos);
-      setTotalPages(datos.totalPages);
-    } else {
-      console.info("Ocurrió un error al buscar los vehículos paginados");
-    }
-  };
+  }, []);
 
   const obtenerTodosLosVehiculos = async () => {
     const respuesta = await leerVehiculos();
@@ -37,18 +21,33 @@ const Administrador = () => {
       const datos = await respuesta.json();
       const lista = Array.isArray(datos) ? datos : datos.vehiculos || [];
       setVehiculosTotales(lista);
+    } else {
+      console.info("Ocurrió un error al buscar los vehículos");
     }
   };
 
-  const vehiculosFiltrados = listaVehiculos.filter((vehiculo) => {
+  // 1. Filtramos sobre EL TOTAL de la flota
+  const vehiculosFiltrados = vehiculosTotales.filter((vehiculo) => {
     const termino = terminoBusqueda.toLowerCase();
     return (
-      vehiculo.marca.toLowerCase().includes(termino) ||
-      vehiculo.modelo.toLowerCase().includes(termino) ||
-      vehiculo.categoria.toLowerCase().includes(termino)
+      (vehiculo.marca || "").toLowerCase().includes(termino) ||
+      (vehiculo.modelo || "").toLowerCase().includes(termino) ||
+      (vehiculo.categoria || "").toLowerCase().includes(termino)
     );
   });
 
+  // 2. Calculamos las páginas dinámicas basadas en los resultados del filtro
+  const totalPages = Math.ceil(vehiculosFiltrados.length / limit) || 1;
+
+  // 3. Recortamos el array para mostrar solo los de la página actual
+  const indiceUltimo = page * limit;
+  const indicePrimer = indiceUltimo - limit;
+  const vehiculosParaMostrar = vehiculosFiltrados.slice(
+    indicePrimer,
+    indiceUltimo,
+  );
+
+  // KPIs
   const totalFlota = vehiculosTotales.length;
   const vehiculosDisponibles = vehiculosTotales.filter(
     (v) => v.disponible,
@@ -104,7 +103,10 @@ const Administrador = () => {
         type="text"
         placeholder="Buscar..."
         value={terminoBusqueda}
-        onChange={(e) => setTerminoBusqueda(e.target.value)}
+        onChange={(e) => {
+          setTerminoBusqueda(e.target.value);
+          setPage(1); // CLAVE: Volver a página 1 al buscar
+        }}
         aria-label="Buscar vehículos"
         className="input-base !h-9 !pl-9 !text-xs !rounded-xl"
       />
@@ -163,7 +165,7 @@ const Administrador = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant">
-              {vehiculosFiltrados.length === 0 ? (
+              {vehiculosParaMostrar.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="p-12 text-center">
                     <div className="empty-state !py-8">
@@ -178,12 +180,13 @@ const Administrador = () => {
                   </td>
                 </tr>
               ) : (
-                vehiculosFiltrados.map((vehiculo, indice) => (
+                vehiculosParaMostrar.map((vehiculo, indice) => (
                   <ItemVehiculo
                     key={vehiculo._id}
                     vehiculo={vehiculo}
                     fila={(page - 1) * limit + indice + 1}
-                    setListaVehiculos={setListaVehiculos}
+                    /* Le pasamos la funcion para que ItemVehiculo actualice la BD y vuelva a traer todo */
+                    setListaVehiculos={obtenerTodosLosVehiculos}
                     page={page}
                     limit={limit}
                   />
@@ -194,51 +197,55 @@ const Administrador = () => {
         </div>
 
         {/* Pagination */}
-        <div className="p-4 border-t border-outline-variant flex justify-between items-center bg-surface-container-low/50">
-          <span className="text-xs text-on-surface-variant hidden md:block">
-            Página {page} de {totalPages}
-          </span>
-          <nav
-            aria-label="Paginación"
-            className="flex items-center gap-1 mx-auto md:mx-0"
-          >
-            <button
-              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-              disabled={page === 1}
-              aria-label="Página anterior"
-              className="pagination-btn !w-8 !h-8"
+        {totalPages > 1 && (
+          <div className="p-4 border-t border-outline-variant flex justify-between items-center bg-surface-container-low/50">
+            <span className="text-xs text-on-surface-variant hidden md:block">
+              Página {page} de {totalPages}
+            </span>
+            <nav
+              aria-label="Paginación"
+              className="flex items-center gap-1 mx-auto md:mx-0"
             >
-              <span className="material-symbols-outlined text-[16px]">
-                chevron_left
-              </span>
-            </button>
-            {[...Array(totalPages)].map((_, i) => (
               <button
-                key={i + 1}
-                onClick={() => setPage(i + 1)}
-                aria-label={`Página ${i + 1}`}
-                aria-current={page === i + 1 ? "page" : undefined}
-                className={`pagination-btn !w-8 !h-8 ${
-                  page === i + 1
-                    ? "pagination-btn-active dark:!bg-secondary dark:!text-white dark:!border-secondary"
-                    : ""
-                }`}
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                disabled={page === 1}
+                aria-label="Página anterior"
+                className="pagination-btn !w-8 !h-8"
               >
-                {i + 1}
+                <span className="material-symbols-outlined text-[16px]">
+                  chevron_left
+                </span>
               </button>
-            ))}
-            <button
-              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-              disabled={page === totalPages}
-              aria-label="Página siguiente"
-              className="pagination-btn !w-8 !h-8"
-            >
-              <span className="material-symbols-outlined text-[16px]">
-                chevron_right
-              </span>
-            </button>
-          </nav>
-        </div>
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setPage(i + 1)}
+                  aria-label={`Página ${i + 1}`}
+                  aria-current={page === i + 1 ? "page" : undefined}
+                  className={`pagination-btn !w-8 !h-8 ${
+                    page === i + 1
+                      ? "pagination-btn-active dark:!bg-secondary dark:!text-white dark:!border-secondary"
+                      : ""
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() =>
+                  setPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={page === totalPages}
+                aria-label="Página siguiente"
+                className="pagination-btn !w-8 !h-8"
+              >
+                <span className="material-symbols-outlined text-[16px]">
+                  chevron_right
+                </span>
+              </button>
+            </nav>
+          </div>
+        )}
       </div>
     </LayoutAdmin>
   );

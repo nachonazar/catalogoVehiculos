@@ -10,18 +10,27 @@ const CardVehiculo = ({ vehiculo }) => {
         className="card-interactive overflow-hidden flex flex-col h-full group no-underline block text-inherit"
       >
         <article className="flex flex-col h-full">
-          {/* Image */}
-          <div className="relative w-full aspect-[4/3] overflow-hidden bg-surface-container">
+          {/* Image - Cambiado de aspect-[4/3] a aspect-[16/9] para reducir altura vertical */}
+          <div className="relative w-full aspect-[16/9] overflow-hidden bg-surface-container">
             <img
               src={vehiculo.imagenes[0]}
               alt={`${vehiculo.marca} ${vehiculo.modelo}`}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <span className="absolute top-3 left-3 badge-success backdrop-blur-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-success-green" />
-              Disponible
-            </span>
+
+            {/* Badge de disponibilidad condicional según los datos del vehículo */}
+            {vehiculo.disponible ? (
+              <span className="absolute top-3 left-3 badge-success backdrop-blur-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-success-green" />
+                Disponible
+              </span>
+            ) : (
+              <span className="absolute top-3 left-3 badge-error backdrop-blur-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-error" />
+                Vendido
+              </span>
+            )}
           </div>
 
           {/* Body */}
