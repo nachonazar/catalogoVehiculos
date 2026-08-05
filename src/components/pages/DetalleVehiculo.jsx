@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { leerVehiculoPorId } from "../../../helpers/queries";
 
@@ -8,22 +8,61 @@ const DetalleVehiculo = () => {
   const [showModal, setShowModal] = useState(false);
   const [indexFoto, setIndexFoto] = useState(0);
 
+  // Referencia para el contenedor del modal
+  const modalRef = useRef(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     obtenerVehiculo();
   }, []);
 
-  // Controlar el Lightbox (bloquear scroll y escuchar tecla Escape)
+  // Controlar el Lightbox (bloquear scroll, escuchar tecla Escape y atrapar foco)
   useEffect(() => {
     const handleKeyDown = (e) => {
+      // Cerrar con Escape
       if (e.key === "Escape" && showModal) {
         setShowModal(false);
+        return;
+      }
+
+      // Lógica de Focus Trap (Trampa de foco)
+      if (e.key === "Tab" && showModal && modalRef.current) {
+        const focusableElements = modalRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
+
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          // Si aprieta Shift + Tab y está en el primer elemento, salta al último
+          if (document.activeElement === firstElement) {
+            lastElement.focus();
+            e.preventDefault();
+          }
+        } else {
+          // Si aprieta Tab normal y está en el último elemento, salta al primero
+          if (document.activeElement === lastElement) {
+            firstElement.focus();
+            e.preventDefault();
+          }
+        }
       }
     };
 
     if (showModal) {
       document.body.style.overflow = "hidden";
       document.addEventListener("keydown", handleKeyDown);
+
+      // Al abrir el modal, hacer foco automáticamente en el primer elemento interactivo (ej. botón cerrar)
+      setTimeout(() => {
+        if (modalRef.current) {
+          const focusable = modalRef.current.querySelectorAll("button");
+          if (focusable.length > 0) focusable[0].focus();
+        }
+      }, 10);
     } else {
       document.body.style.overflow = "auto";
     }
@@ -300,9 +339,10 @@ const DetalleVehiculo = () => {
         </div>
       </div>
 
-      {/* Lightbox modal */}
+      {/* Lightbox modal (Con Ref para el manejo de foco) */}
       {showModal && (
         <div
+          ref={modalRef}
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md"
           onClick={() => setShowModal(false)}
           role="dialog"
