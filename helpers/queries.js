@@ -15,6 +15,17 @@ const respuestaSinSesion = () => ({
   json: async () => ({ mensaje: "No hay una sesión activa" }),
 });
 
+const respuestaErrorRed = (error) => {
+  console.error("Error de red o servidor caído:", error);
+  return {
+    status: 503,
+    json: async () => ({
+      mensaje:
+        "Error de conexión con el servidor. Revisá tu conexión a internet o intentá nuevamente.",
+    }),
+  };
+};
+
 export const leerVehiculos = async (parametros = {}) => {
   try {
     const queryParams = new URLSearchParams();
@@ -32,8 +43,7 @@ export const leerVehiculos = async (parametros = {}) => {
     const respuesta = await fetch(`${urlvehiculos}?${queryParams.toString()}`);
     return respuesta;
   } catch (error) {
-    console.error(error);
-    return null;
+    return respuestaErrorRed(error);
   }
 };
 
@@ -64,8 +74,7 @@ export const crearVehiculo = async (vehiculoNuevo) => {
     });
     return respuesta;
   } catch (error) {
-    console.error(error);
-    return false;
+    return respuestaErrorRed(error);
   }
 };
 
@@ -74,8 +83,7 @@ export const leerVehiculoPorId = async (id) => {
     const respuesta = await fetch(urlvehiculos + `/${id}`);
     return respuesta;
   } catch (error) {
-    console.error(error);
-    return null;
+    return respuestaErrorRed(error);
   }
 };
 
@@ -124,8 +132,7 @@ export const editarVehiculosPorId = async (vehiculoEditado, id) => {
     });
     return respuesta;
   } catch (error) {
-    console.error(error);
-    return false;
+    return respuestaErrorRed(error);
   }
 };
 
@@ -142,8 +149,7 @@ export const borrarVehiculosPorId = async (id) => {
     });
     return respuesta;
   } catch (error) {
-    console.error(error);
-    return null;
+    return respuestaErrorRed(error);
   }
 };
 
@@ -158,8 +164,7 @@ export const login = async (datosAdmin) => {
     });
     return respuesta;
   } catch (error) {
-    console.error(error);
-    return null;
+    return respuestaErrorRed(error);
   }
 };
 
@@ -170,7 +175,6 @@ export const leerVehiculosPaginados = async (page, limit) => {
     );
     return respuesta;
   } catch (error) {
-    console.error(error);
-    return null;
+    return respuestaErrorRed(error);
   }
 };
