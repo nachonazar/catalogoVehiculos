@@ -5,59 +5,60 @@ import { leerVehiculos } from "../../../helpers/queries.js";
 
 const Inicio = () => {
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
-  const [todosLosVehiculos, setTodosLosVehiculos] = useState([]);
+  const [terminoDebounced, setTerminoDebounced] = useState("");
+  const [vehiculosParaMostrar, setVehiculosParaMostrar] = useState([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(6);
   const [categoriaElegida, setCategoriaElegida] = useState("");
   const [cargando, setCargando] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalResultados, setTotalResultados] = useState(0);
 
-  // Efecto 1: Trae los autos solo la primera vez que carga el componente
+  // Efecto para el debouncer (espera 500ms después de que el usuario deja de escribir)
   useEffect(() => {
-    obtenerTodosLosVehiculos();
-  }, []);
+    const handler = setTimeout(() => {
+      setTerminoDebounced(terminoBusqueda);
+      if (terminoBusqueda !== terminoDebounced) setPage(1); // Reiniciar a pag 1 si cambia la búsqueda
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [terminoBusqueda, terminoDebounced]);
 
-  const obtenerTodosLosVehiculos = async () => {
+  // Efecto principal: Pide al backend cada vez que cambian los filtros o la página
+  useEffect(() => {
+    obtenerVehiculosFiltrados();
+  }, [page, categoriaElegida, terminoDebounced]);
+
+  const obtenerVehiculosFiltrados = async () => {
     setCargando(true);
-    const respuesta = await leerVehiculos();
+    const parametros = {
+      page,
+      limit,
+      categoria: categoriaElegida,
+      termino: terminoDebounced,
+      disponible: true, // Solo mostramos los disponibles en el inicio
+    };
+
+    const respuesta = await leerVehiculos(parametros);
     if (respuesta && respuesta.status === 200) {
       const datos = await respuesta.json();
-      setTodosLosVehiculos(
-        Array.isArray(datos) ? datos : datos.vehiculos || [],
-      );
+      setVehiculosParaMostrar(datos.vehiculos || []);
+      setTotalPages(datos.totalPages || 1);
+      setTotalResultados(datos.total || 0);
     } else {
-      console.info("Ocurrio un error al buscar los vehiculos");
+      console.info("Ocurrió un error al buscar los vehículos");
+      setVehiculosParaMostrar([]);
     }
     setCargando(false);
   };
 
-  // Función para cambiar de página con Scroll Suave hacia el catálogo
   const cambiarPagina = (nuevaPagina) => {
     setPage(nuevaPagina);
     const seccion = document.getElementById("vehiculos");
     if (seccion) {
-      // Calculamos la posición restando 100px para que el navbar fijo no tape el título
       const y = seccion.getBoundingClientRect().top + window.scrollY - 100;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
-
-  const vehiculosFiltrados = todosLosVehiculos
-    .filter((v) => v.disponible)
-    .filter((v) => (categoriaElegida ? v.categoria === categoriaElegida : true))
-    .filter(
-      (v) =>
-        (v.marca || "").toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
-        (v.modelo || "").toLowerCase().includes(terminoBusqueda.toLowerCase()),
-    );
-
-  const totalPages = Math.ceil(vehiculosFiltrados.length / limit) || 1;
-
-  const indiceUltimo = page * limit;
-  const indicePrimer = indiceUltimo - limit;
-  const vehiculosParaMostrar = vehiculosFiltrados.slice(
-    indicePrimer,
-    indiceUltimo,
-  );
 
   const paginasVisibles = useMemo(() => {
     const delta = 1;
@@ -73,7 +74,7 @@ const Inicio = () => {
       }
     }
 
-    if (totalPages > 1) {
+    if (totalPages > 1 && !range.includes(totalPages)) {
       range.push(totalPages);
     }
 
@@ -181,7 +182,7 @@ const Inicio = () => {
           </div>
 
           <div className="text-sm font-semibold text-secondary bg-secondary/10 px-3 py-1.5 rounded-lg h-fit">
-            {vehiculosFiltrados.length} resultados
+            {totalResultados} resultados
           </div>
         </div>
 

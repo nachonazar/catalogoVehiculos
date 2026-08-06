@@ -15,9 +15,21 @@ const respuestaSinSesion = () => ({
   json: async () => ({ mensaje: "No hay una sesión activa" }),
 });
 
-export const leerVehiculos = async () => {
+export const leerVehiculos = async (parametros = {}) => {
   try {
-    const respuesta = await fetch(urlvehiculos);
+    const queryParams = new URLSearchParams();
+
+    if (parametros.page) queryParams.append("page", parametros.page);
+    if (parametros.limit) queryParams.append("limit", parametros.limit);
+    if (parametros.categoria)
+      queryParams.append("categoria", parametros.categoria);
+    if (parametros.termino) queryParams.append("termino", parametros.termino);
+    if (parametros.disponible !== undefined)
+      queryParams.append("disponible", parametros.disponible);
+
+    if (parametros.paginar === false) queryParams.append("paginar", "false");
+
+    const respuesta = await fetch(`${urlvehiculos}?${queryParams.toString()}`);
     return respuesta;
   } catch (error) {
     console.error(error);

@@ -16,7 +16,7 @@ const Administrador = () => {
   }, []);
 
   const obtenerTodosLosVehiculos = async () => {
-    const respuesta = await leerVehiculos();
+    const respuesta = await leerVehiculos({ paginar: false });
     if (respuesta && respuesta.status === 200) {
       const datos = await respuesta.json();
       const lista = Array.isArray(datos) ? datos : datos.vehiculos || [];
