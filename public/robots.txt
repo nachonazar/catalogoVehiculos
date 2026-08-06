@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /administrador
+
+Sitemap: https://catalogos-vehiculos.netlify.app/sitemap.xml
