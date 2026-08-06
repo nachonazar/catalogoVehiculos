@@ -1,7 +1,19 @@
 const urlvehiculos = import.meta.env.VITE_API_VEHICULOS;
 const urlUsuarios = import.meta.env.VITE_API_USUARIOS;
 
-//get, post, put, delete
+const obtenerToken = () => {
+  try {
+    const sesion = JSON.parse(sessionStorage.getItem("userKey"));
+    return sesion?.token || null;
+  } catch {
+    return null;
+  }
+};
+
+const respuestaSinSesion = () => ({
+  status: 401,
+  json: async () => ({ mensaje: "No hay una sesión activa" }),
+});
 
 export const leerVehiculos = async () => {
   try {
@@ -14,6 +26,9 @@ export const leerVehiculos = async () => {
 };
 
 export const crearVehiculo = async (vehiculoNuevo) => {
+  const token = obtenerToken();
+  if (!token) return respuestaSinSesion();
+
   try {
     const formData = new FormData();
     formData.append("marca", vehiculoNuevo.marca);
@@ -31,7 +46,7 @@ export const crearVehiculo = async (vehiculoNuevo) => {
     const respuesta = await fetch(urlvehiculos, {
       method: "POST",
       headers: {
-        "x-token": JSON.parse(sessionStorage.getItem("userKey")).token,
+        "x-token": token,
       },
       body: formData,
     });
@@ -53,6 +68,9 @@ export const leerVehiculoPorId = async (id) => {
 };
 
 export const editarVehiculosPorId = async (vehiculoEditado, id) => {
+  const token = obtenerToken();
+  if (!token) return respuestaSinSesion();
+
   try {
     const formData = new FormData();
     formData.append("marca", vehiculoEditado.marca);
@@ -88,7 +106,7 @@ export const editarVehiculosPorId = async (vehiculoEditado, id) => {
     const respuesta = await fetch(urlvehiculos + `/${id}`, {
       method: "PUT",
       headers: {
-        "x-token": JSON.parse(sessionStorage.getItem("userKey")).token,
+        "x-token": token,
       },
       body: formData,
     });
@@ -100,11 +118,14 @@ export const editarVehiculosPorId = async (vehiculoEditado, id) => {
 };
 
 export const borrarVehiculosPorId = async (id) => {
+  const token = obtenerToken();
+  if (!token) return respuestaSinSesion();
+
   try {
     const respuesta = await fetch(urlvehiculos + `/${id}`, {
       method: "DELETE",
       headers: {
-        "x-token": JSON.parse(sessionStorage.getItem("userKey")).token,
+        "x-token": token,
       },
     });
     return respuesta;

@@ -1,9 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { borrarVehiculosPorId } from "../../../../helpers/queries.js";
 
 const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila }) => {
+  const navegacion = useNavigate();
+
   const eliminarVehiculo = () => {
     Swal.fire({
       title: "Eliminar Vehículo",
@@ -25,9 +27,17 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila }) => {
             confirmButtonColor: "#09090b",
           });
 
-          // ACÁ EL CAMBIO: Simplemente ejecutamos la función que nos pasó el padre
-          // Esto va a disparar obtenerTodosLosVehiculos() en Administrador.jsx
           setListaVehiculos();
+        } else if (respuesta.status === 401) {
+          Swal.fire({
+            title: "Sesión expirada",
+            text: "Tu sesión venció o no es válida. Volvé a iniciar sesión para continuar.",
+            icon: "warning",
+            confirmButtonColor: "#09090b",
+          }).then(() => {
+            sessionStorage.removeItem("userKey");
+            navegacion("/login");
+          });
         } else {
           Swal.fire({
             title: "Ocurrió un error",

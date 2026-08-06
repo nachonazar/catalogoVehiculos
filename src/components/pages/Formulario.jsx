@@ -87,6 +87,16 @@ const Formulario = ({ titulo }) => {
           setArchivos([]);
           navegacion("/administrador");
         });
+      } else if (respuesta.status === 401) {
+        Swal.fire({
+          ...swalStyles,
+          title: "Sesión expirada",
+          text: "Tu sesión venció o no es válida. Volvé a iniciar sesión para continuar.",
+          icon: "warning",
+        }).then(() => {
+          sessionStorage.removeItem("userKey");
+          navegacion("/login");
+        });
       } else {
         const datosErroneos = await respuesta.json();
         // Leemos el error buscando la propiedad "errores", y si no existe caemos en un mensaje genérico
@@ -116,6 +126,16 @@ const Formulario = ({ titulo }) => {
           icon: "success",
         }).then(() => {
           navegacion("/administrador");
+        });
+      } else if (respuesta.status === 401) {
+        Swal.fire({
+          ...swalStyles,
+          title: "Sesión expirada",
+          text: "Tu sesión venció o no es válida. Volvé a iniciar sesión para continuar.",
+          icon: "warning",
+        }).then(() => {
+          sessionStorage.removeItem("userKey");
+          navegacion("/login");
         });
       } else {
         const datosErroneos = await respuesta.json();
