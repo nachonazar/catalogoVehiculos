@@ -133,7 +133,7 @@ export const login = async (datosAdmin) => {
 export const leerVehiculosPaginados = async (page, limit) => {
   try {
     const respuesta = await fetch(
-      `${urlvehiculos}/paginacion?page=${page}&limit=${limit}`,
+      `${urlvehiculos}?page=${page}&limit=${limit}`,
     );
     return respuesta;
   } catch (error) {
