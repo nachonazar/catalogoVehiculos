@@ -89,6 +89,11 @@ const Formulario = ({ titulo }) => {
         });
       } else {
         const datosErroneos = await respuesta.json();
+        // Leemos el error buscando la propiedad "errores", y si no existe caemos en un mensaje genérico
+        const mensajeError = datosErroneos.errores
+          ? datosErroneos.errores[0].mensaje
+          : datosErroneos.mensaje || "Error desconocido";
+
         Swal.fire({
           ...swalStyles,
           customClass: {
@@ -96,7 +101,7 @@ const Formulario = ({ titulo }) => {
             confirmButton: "btn-danger",
           },
           title: "Ocurrió un error",
-          text: `El vehículo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser creado. ${datosErroneos.mensaje}`,
+          text: `El vehículo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser creado. ${mensajeError}`,
           icon: "error",
         });
         setIsSubmitting(false);
@@ -114,6 +119,11 @@ const Formulario = ({ titulo }) => {
         });
       } else {
         const datosErroneos = await respuesta.json();
+        // Leemos el error buscando la propiedad "errores", y si no existe caemos en un mensaje genérico
+        const mensajeError = datosErroneos.errores
+          ? datosErroneos.errores[0].mensaje
+          : datosErroneos.mensaje || "Error desconocido";
+
         Swal.fire({
           ...swalStyles,
           customClass: {
@@ -121,7 +131,7 @@ const Formulario = ({ titulo }) => {
             confirmButton: "btn-danger",
           },
           title: "Ocurrió un error",
-          text: `El vehículo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser editado. ${datosErroneos[0]?.mensaje}`,
+          text: `El vehículo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser editado. ${mensajeError}`,
           icon: "error",
         });
         setIsSubmitting(false);
