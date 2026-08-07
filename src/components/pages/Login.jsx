@@ -30,9 +30,10 @@ const Login = ({ setUsuarioAdmin }) => {
       });
       navegacion("/administrador");
     } else {
+      const datosError = await respuesta.json();
       Swal.fire({
         title: "Error al iniciar sesión",
-        text: "Credenciales incorrectas",
+        text: datosError.mensaje || "Credenciales incorrectas",
         icon: "error",
         confirmButtonColor: "#dc2626",
       });

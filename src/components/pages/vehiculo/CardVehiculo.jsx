@@ -15,6 +15,7 @@ const CardVehiculo = ({ vehiculo }) => {
             <img
               src={vehiculo.imagenes[0]}
               alt={`${vehiculo.marca} ${vehiculo.modelo}`}
+              loading="lazy"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

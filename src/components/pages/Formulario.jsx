@@ -24,31 +24,40 @@ const Formulario = ({ titulo }) => {
   const [imagenActual, setImagenActual] = useState([]);
   const [preview, setPreview] = useState([]);
   const [archivos, setArchivos] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false); // Estado para evitar doble submit
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorCarga, setErrorCarga] = useState(false);
 
   useEffect(() => {
-    obtenerVehiculo();
-  }, []);
+    if (titulo === "Editar Vehiculo") {
+      obtenerVehiculo();
+    }
+  }, [id]);
 
   const obtenerVehiculo = async () => {
-    if (titulo === "Editar Vehiculo") {
-      const respuesta = await leerVehiculoPorId(id);
-      if (respuesta.status === 200) {
-        const vehiculoBuscado = await respuesta.json();
-        setValue("marca", vehiculoBuscado.marca);
-        setValue("modelo", vehiculoBuscado.modelo);
-        setValue("anio", vehiculoBuscado.anio);
-        setValue("categoria", vehiculoBuscado.categoria);
-        setValue("precio", vehiculoBuscado.precio);
-        setValue("km", vehiculoBuscado.km);
-        setValue("disponible", vehiculoBuscado.disponible);
-        setValue("descripcion", vehiculoBuscado.descripcion);
-        setImagenActual(vehiculoBuscado.imagenes);
-      }
+    const respuesta = await leerVehiculoPorId(id);
+    if (respuesta.status === 200) {
+      const vehiculoBuscado = await respuesta.json();
+      setValue("marca", vehiculoBuscado.marca);
+      setValue("modelo", vehiculoBuscado.modelo);
+      setValue("anio", vehiculoBuscado.anio);
+      setValue("categoria", vehiculoBuscado.categoria);
+      setValue("precio", vehiculoBuscado.precio);
+      setValue("km", vehiculoBuscado.km);
+      setValue("disponible", vehiculoBuscado.disponible);
+      setValue("descripcion", vehiculoBuscado.descripcion);
+      setImagenActual(vehiculoBuscado.imagenes);
+    } else {
+      setErrorCarga(true);
+      Swal.fire({
+        title: "Error",
+        text: "No se encontró el vehículo a editar.",
+        icon: "error",
+      }).then(() => {
+        navegacion("/administrador");
+      });
     }
   };
 
-  // Configuración de estilos base para SweetAlert integrando tu Design System
   const swalStyles = {
     customClass: {
       popup:
@@ -87,19 +96,8 @@ const Formulario = ({ titulo }) => {
           setArchivos([]);
           navegacion("/administrador");
         });
-      } else if (respuesta.status === 401) {
-        Swal.fire({
-          ...swalStyles,
-          title: "Sesión expirada",
-          text: "Tu sesión venció o no es válida. Volvé a iniciar sesión para continuar.",
-          icon: "warning",
-        }).then(() => {
-          sessionStorage.removeItem("userKey");
-          navegacion("/login");
-        });
       } else {
         const datosErroneos = await respuesta.json();
-        // Leemos el error buscando la propiedad "errores", y si no existe caemos en un mensaje genérico
         const mensajeError = datosErroneos.errores
           ? datosErroneos.errores[0].mensaje
           : datosErroneos.mensaje || "Error desconocido";
@@ -111,7 +109,7 @@ const Formulario = ({ titulo }) => {
             confirmButton: "btn-danger",
           },
           title: "Ocurrió un error",
-          text: `El vehículo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser creado. ${mensajeError}`,
+          text: `El vehículo no pudo ser creado. ${mensajeError}`,
           icon: "error",
         });
         setIsSubmitting(false);
@@ -127,19 +125,8 @@ const Formulario = ({ titulo }) => {
         }).then(() => {
           navegacion("/administrador");
         });
-      } else if (respuesta.status === 401) {
-        Swal.fire({
-          ...swalStyles,
-          title: "Sesión expirada",
-          text: "Tu sesión venció o no es válida. Volvé a iniciar sesión para continuar.",
-          icon: "warning",
-        }).then(() => {
-          sessionStorage.removeItem("userKey");
-          navegacion("/login");
-        });
       } else {
         const datosErroneos = await respuesta.json();
-        // Leemos el error buscando la propiedad "errores", y si no existe caemos en un mensaje genérico
         const mensajeError = datosErroneos.errores
           ? datosErroneos.errores[0].mensaje
           : datosErroneos.mensaje || "Error desconocido";
@@ -151,7 +138,7 @@ const Formulario = ({ titulo }) => {
             confirmButton: "btn-danger",
           },
           title: "Ocurrió un error",
-          text: `El vehículo ${vehiculo.marca} ${vehiculo.modelo} no pudo ser editado. ${mensajeError}`,
+          text: `El vehículo no pudo ser editado. ${mensajeError}`,
           icon: "error",
         });
         setIsSubmitting(false);
@@ -159,12 +146,11 @@ const Formulario = ({ titulo }) => {
     }
   };
 
+  if (errorCarga) return null;
+
   return (
-    // Overlay oscuro con desenfoque (Modal Background)
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-6">
-      {/* Contenedor Principal del Formulario ajustado para no romper en móvil */}
       <div className="bg-surface-container-lowest rounded-2xl shadow-elevated w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden">
-        {/* Header (Fijo dentro del modal, no usa sticky) */}
         <div className="px-6 py-4 border-b border-outline-variant flex justify-between items-center shrink-0 bg-surface-container-lowest">
           <h2 className="text-heading text-xl text-primary">{titulo}</h2>
           <button
@@ -176,7 +162,6 @@ const Formulario = ({ titulo }) => {
           </button>
         </div>
 
-        {/* Cuerpo del Formulario con scroll independiente */}
         <div className="p-6 overflow-y-auto">
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -191,11 +176,8 @@ const Formulario = ({ titulo }) => {
                   placeholder="Ej: Toyota"
                   className={`input-base ${errors.marca ? "input-error" : ""}`}
                   {...register("marca", {
-                    required: "La marca del vehiculo es un dato obligatorio",
-                    minLength: {
-                      value: 2,
-                      message: "Debe tener al menos 2 caracteres",
-                    },
+                    required: "La marca del vehiculo es obligatoria",
+                    minLength: { value: 2, message: "Mínimo 2 caracteres" },
                     maxLength: { value: 100, message: "Máximo 100 caracteres" },
                     pattern: {
                       value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s\-\.()]+$/,
@@ -218,10 +200,7 @@ const Formulario = ({ titulo }) => {
                   className={`input-base ${errors.modelo ? "input-error" : ""}`}
                   {...register("modelo", {
                     required: "El modelo del vehiculo es obligatorio",
-                    minLength: {
-                      value: 2,
-                      message: "Debe tener al menos 2 caracteres",
-                    },
+                    minLength: { value: 2, message: "Mínimo 2 caracteres" },
                     maxLength: { value: 100, message: "Máximo 100 caracteres" },
                     pattern: {
                       value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ0-9\s\-\.()/]+$/,
@@ -246,7 +225,7 @@ const Formulario = ({ titulo }) => {
                   placeholder="Ej: 2025"
                   className={`input-base ${errors.anio ? "input-error" : ""}`}
                   {...register("anio", {
-                    required: "El año es un dato obligatorio",
+                    required: "El año es obligatorio",
                     valueAsNumber: true,
                     min: { value: 1900, message: "Año inválido" },
                     max: {
@@ -268,7 +247,7 @@ const Formulario = ({ titulo }) => {
                   <select
                     className={`select-base ${errors.categoria ? "input-error" : ""}`}
                     {...register("categoria", {
-                      required: "Debe seleccionar una categoria",
+                      required: "Debe seleccionar una categoría",
                     })}
                   >
                     <option value="">Seleccione una opción</option>
@@ -299,6 +278,7 @@ const Formulario = ({ titulo }) => {
                   className={`input-base ${errors.precio ? "input-error" : ""}`}
                   {...register("precio", {
                     required: "El precio es obligatorio",
+                    valueAsNumber: true,
                     min: { value: 500000, message: "Mínimo $500.000" },
                     max: { value: 500000000, message: "Máximo $500.000.000" },
                   })}
@@ -318,6 +298,7 @@ const Formulario = ({ titulo }) => {
                   className={`input-base ${errors.km ? "input-error" : ""}`}
                   {...register("km", {
                     required: "El kilometraje es obligatorio",
+                    valueAsNumber: true,
                     min: { value: 0, message: "No puede ser negativo" },
                     max: { value: 500000, message: "Máximo 500.000" },
                   })}
@@ -337,19 +318,15 @@ const Formulario = ({ titulo }) => {
                 type="file"
                 accept="image/*"
                 multiple
-                className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-secondary/10 file:text-secondary hover:file:bg-secondary/20 transition-colors cursor-pointer text-sm text-on-surface-variant focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2"
+                className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-secondary/10 file:text-secondary hover:file:bg-secondary/20 transition-colors cursor-pointer text-sm text-on-surface-variant"
                 {...register("imagenes", {
                   required:
-                    titulo === "Crear Vehiculo" && archivos.length === 0
+                    titulo === "Crear Vehiculo" &&
+                    archivos.length === 0 &&
+                    imagenActual.length === 0
                       ? "La imagen es obligatoria"
                       : false,
                   validate: {
-                    fileSize: (files) =>
-                      !files[0] ||
-                      Array.from(files).every(
-                        (f) => f.size <= 2 * 1024 * 1024,
-                      ) ||
-                      "Alguna imagen supera los 2MB.",
                     imagenRequerida: () => {
                       if (
                         titulo === "Editar Vehiculo" &&
@@ -379,7 +356,7 @@ const Formulario = ({ titulo }) => {
                 </span>
               )}
 
-              {/* Previsualización de imágenes adaptada a táctil y escritorio */}
+              {/* Previsualización de imágenes */}
               {[...imagenActual, ...preview].length > 0 && (
                 <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-outline-variant">
                   {[...imagenActual, ...preview].map((src, index) => (
@@ -388,6 +365,7 @@ const Formulario = ({ titulo }) => {
                         src={src}
                         alt="Preview"
                         className="w-32 h-24 object-cover rounded-lg border border-outline-variant shadow-sm"
+                        loading="lazy"
                       />
                       <button
                         type="button"
@@ -408,7 +386,7 @@ const Formulario = ({ titulo }) => {
                             );
                           }
                         }}
-                        className="absolute -top-2 -right-2 bg-error text-white border-2 border-surface-container-lowest w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:scale-110 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-2"
+                        className="absolute -top-2 -right-2 bg-error text-white border-2 border-surface-container-lowest w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-all hover:scale-110 cursor-pointer"
                       >
                         <span className="material-symbols-outlined text-[16px]">
                           close
@@ -429,7 +407,7 @@ const Formulario = ({ titulo }) => {
                     className="sr-only peer"
                     {...register("disponible")}
                   />
-                  <div className="w-11 h-6 bg-surface-container-highest rounded-full peer peer-focus-visible:ring-2 peer-focus-visible:ring-secondary peer-focus-visible:ring-offset-2 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-outline-variant after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-success-green"></div>
+                  <div className="w-11 h-6 bg-surface-container-highest rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-outline-variant after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-success-green"></div>
                   <span
                     className={`ml-3 text-label ${watch("disponible") ? "text-success-green" : "text-error"}`}
                   >
@@ -448,7 +426,7 @@ const Formulario = ({ titulo }) => {
                 className={`textarea-base ${errors.descripcion ? "input-error" : ""}`}
                 {...register("descripcion", {
                   required: "La descripción es obligatoria",
-                  minLength: { value: 10, message: "Al menos 10 caracteres" },
+                  minLength: { value: 10, message: "Mínimo 10 caracteres" },
                   maxLength: { value: 500, message: "Máximo 500 caracteres" },
                 })}
               />
@@ -474,16 +452,7 @@ const Formulario = ({ titulo }) => {
                 disabled={isSubmitting}
                 className="btn-primary w-full sm:w-auto"
               >
-                {isSubmitting ? (
-                  <>
-                    <span className="material-symbols-outlined animate-spin text-[18px]">
-                      progress_activity
-                    </span>
-                    Guardando...
-                  </>
-                ) : (
-                  "Guardar Vehículo"
-                )}
+                {isSubmitting ? "Guardando..." : "Guardar Vehículo"}
               </button>
             </div>
           </form>

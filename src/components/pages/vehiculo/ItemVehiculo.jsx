@@ -61,6 +61,7 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila }) => {
             <img
               src={vehiculo.imagenes[0] || "https://via.placeholder.com/150"}
               alt={`${vehiculo.marca} ${vehiculo.modelo}`}
+              loading="lazy"
               className="w-full h-full object-cover"
             />
           </div>
