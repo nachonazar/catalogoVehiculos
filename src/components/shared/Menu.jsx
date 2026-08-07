@@ -40,12 +40,12 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
           <NavLink to="/" end onClick={irArriba} className={linkClass}>
             Inicio
           </NavLink>
-          <a
-            href="#contacto"
+          <Link
+            to="/#contacto"
             className="nav-link dark:!text-zinc-300 dark:hover:!text-white transition-colors"
           >
             Contacto
-          </a>
+          </Link>
           {usuarioAdmin.token && (
             <NavLink to="/administrador" className={linkClass}>
               Administrador
@@ -105,13 +105,13 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
           >
             Inicio
           </NavLink>
-          <a
-            href="#contacto"
+          <Link
+            to="/#contacto"
             onClick={() => setIsMobileOpen(false)}
             className="block px-4 py-3 rounded-xl text-sm font-medium text-on-surface-variant hover:bg-surface-container-low no-underline transition-colors"
           >
             Contacto
-          </a>
+          </Link>
           {usuarioAdmin.token && (
             <NavLink
               to="/administrador"

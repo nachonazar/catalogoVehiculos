@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import CardVehiculo from "./vehiculo/CardVehiculo";
 import Contacto from "../shared/Contacto";
 import { leerVehiculos } from "../../../helpers/queries.js";
 
 const Inicio = () => {
+  const location = useLocation();
+
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
   const [terminoDebounced, setTerminoDebounced] = useState("");
   const [vehiculosParaMostrar, setVehiculosParaMostrar] = useState([]);
@@ -14,16 +17,29 @@ const Inicio = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalResultados, setTotalResultados] = useState(0);
 
-  // Efecto para el debouncer (espera 500ms después de que el usuario deja de escribir)
+  useEffect(() => {
+    if (!cargando) {
+      if (location.hash) {
+        const elemento = document.querySelector(location.hash);
+        if (elemento) {
+          setTimeout(() => {
+            elemento.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 100);
+        }
+      } else if (location.pathname === "/") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  }, [location, cargando]);
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setTerminoDebounced(terminoBusqueda);
-      if (terminoBusqueda !== terminoDebounced) setPage(1); // Reiniciar a pag 1 si cambia la búsqueda
+      if (terminoBusqueda !== terminoDebounced) setPage(1);
     }, 500);
     return () => clearTimeout(handler);
   }, [terminoBusqueda, terminoDebounced]);
 
-  // Efecto principal: Pide al backend cada vez que cambian los filtros o la página
   useEffect(() => {
     obtenerVehiculosFiltrados();
   }, [page, categoriaElegida, terminoDebounced]);
@@ -35,7 +51,7 @@ const Inicio = () => {
       limit,
       categoria: categoriaElegida,
       termino: terminoDebounced,
-      disponible: true, // Solo mostramos los disponibles en el inicio
+      disponible: true,
     };
 
     const respuesta = await leerVehiculos(parametros);
@@ -191,7 +207,6 @@ const Inicio = () => {
             {[...Array(6)].map((_, i) => (
               <div key={i} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-6">
                 <div className="card overflow-hidden">
-                  {/* SKELETON ACTUALIZADO A 16:9 */}
                   <div className="skeleton aspect-[16/9] w-full !rounded-none" />
                   <div className="p-5 space-y-3">
                     <div className="skeleton h-4 w-1/3" />
@@ -277,7 +292,6 @@ const Inicio = () => {
           </nav>
         )}
       </section>
-
       <Contacto />
     </div>
   );

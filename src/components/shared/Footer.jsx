@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import logo from "../../assets/logo-transparente.png";
 
 const Footer = () => {
@@ -28,18 +28,18 @@ const Footer = () => {
               Navegación
             </h5>
             <nav className="flex flex-col gap-3 items-center md:items-start">
-              <a
-                href="#vehiculos"
+              <Link
+                to="/#vehiculos"
                 className="text-sm text-on-primary-container hover:text-on-primary no-underline transition-colors"
               >
                 Inventario
-              </a>
-              <a
-                href="#contacto"
+              </Link>
+              <Link
+                to="/#contacto"
                 className="text-sm text-on-primary-container hover:text-on-primary no-underline transition-colors"
               >
                 Contacto
-              </a>
+              </Link>
             </nav>
           </div>
 
