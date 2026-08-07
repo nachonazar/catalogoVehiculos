@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { optimizarImagenCloudinary } from "../../../../helpers/optimizarImagen.js";
 
 const CardVehiculo = ({ vehiculo }) => {
   return (
@@ -13,7 +14,7 @@ const CardVehiculo = ({ vehiculo }) => {
           {/* Image - Cambiado de aspect-[4/3] a aspect-[16/9] para reducir altura vertical */}
           <div className="relative w-full aspect-[16/9] overflow-hidden bg-surface-container">
             <img
-              src={vehiculo.imagenes[0]}
+              src={optimizarImagenCloudinary(vehiculo.imagenes[0], 500)}
               alt={`${vehiculo.marca} ${vehiculo.modelo}`}
               loading="lazy"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"

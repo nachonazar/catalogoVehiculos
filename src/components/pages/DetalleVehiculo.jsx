@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { leerVehiculoPorId } from "../../../helpers/queries";
+import { optimizarImagenCloudinary } from "../../../helpers/optimizarImagen.js";
 
 const DetalleVehiculo = () => {
   const { id } = useParams();
@@ -184,10 +185,13 @@ const DetalleVehiculo = () => {
             >
               {vehiculo.imagenes?.length > 0 ? (
                 <img
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                  src={vehiculo.imagenes[indexFoto]}
+                  src={optimizarImagenCloudinary(
+                    vehiculo.imagenes[indexFoto],
+                    1000,
+                  )}
                   alt={`${vehiculo.marca} ${vehiculo.modelo}`}
                   loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                 />
               ) : (
                 <img
@@ -220,10 +224,10 @@ const DetalleVehiculo = () => {
                     }`}
                   >
                     <img
-                      className="w-full h-full object-cover"
-                      src={img}
+                      src={optimizarImagenCloudinary(img, 150)}
                       alt={`Miniatura ${index + 1}`}
                       loading="lazy"
+                      className="w-full h-full object-cover"
                     />
                   </button>
                 ))}
@@ -328,7 +332,7 @@ const DetalleVehiculo = () => {
             <span className="material-symbols-outlined text-[24px]">close</span>
           </button>
           <img
-            src={vehiculo.imagenes[indexFoto]}
+            src={optimizarImagenCloudinary(vehiculo.imagenes[indexFoto], 1600)}
             alt={`${vehiculo.marca} ${vehiculo.modelo}`}
             className="max-w-[90vw] max-h-[85vh] object-contain select-none rounded-lg z-40 relative"
             onClick={(e) => e.stopPropagation()}

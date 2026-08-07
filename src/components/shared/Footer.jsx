@@ -24,9 +24,9 @@ const Footer = () => {
 
           {/* Links */}
           <div className="md:col-span-3 flex flex-col items-center md:items-start">
-            <h5 className="font-heading text-sm font-semibold text-on-primary mb-4 tracking-wide">
+            <h4 className="font-heading text-sm font-semibold text-on-primary mb-4 tracking-wide">
               Navegación
-            </h5>
+            </h4>
             <nav className="flex flex-col gap-3 items-center md:items-start">
               <Link
                 to="/#vehiculos"
@@ -45,9 +45,9 @@ const Footer = () => {
 
           {/* Social */}
           <div className="md:col-span-4 flex flex-col items-center md:items-end">
-            <h5 className="font-heading text-sm font-semibold text-on-primary mb-1 tracking-wide">
+            <h4 className="font-heading text-sm font-semibold text-on-primary mb-1 tracking-wide">
               Ignacio Nazar
-            </h5>
+            </h4>
             <p className="text-sm text-on-primary-container mb-5 text-center md:text-right">
               Seguime en mis redes
             </p>
