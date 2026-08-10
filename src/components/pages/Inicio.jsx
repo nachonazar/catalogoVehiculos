@@ -113,12 +113,11 @@ const Inicio = () => {
     <div className="bg-surface overflow-x-hidden">
       {/* HERO con overflow asegurado */}
       <section className="relative w-full min-h-[520px] md:min-h-[600px] flex items-center justify-center overflow-hidden pt-[72px]">
-        <div
-          className="absolute inset-0 bg-cover bg-center scale-105"
-          style={{
-            backgroundImage:
-              "url('https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg')",
-          }}
+        <img
+          className="absolute inset-0 w-full h-full object-cover object-center scale-105"
+          alt="Banner Automotores Tucumán"
+          src="/banner.avif"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-surface" />
 
@@ -133,6 +132,7 @@ const Inicio = () => {
           <p className="font-body-lg text-body-lg text-white/70 mb-10 max-w-xl mx-auto">
             El catálogo más completo de vehículos seleccionados para vos.
           </p>
+
           <a
             href="#vehiculos"
             className="btn-secondary !px-8 !py-3.5 no-underline shadow-float"
