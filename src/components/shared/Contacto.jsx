@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import emailjs from "@emailjs/browser";
 
@@ -12,6 +12,18 @@ const Contacto = () => {
 
   const [enviando, setEnviando] = useState(false);
   const [estado, setEstado] = useState(null);
+
+  // Estado para controlar la carga retrasada del mapa
+  const [mostrarMapa, setMostrarMapa] = useState(false);
+
+  // Retrasamos la carga del iframe de Google Maps para que no bloquee el hilo principal
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMostrarMapa(true);
+    }, 3500); // Se cargará 3.5 segundos después de que se monte el componente
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const onSubmit = async (form) => {
     setEnviando(true);
@@ -55,7 +67,10 @@ const Contacto = () => {
   ];
 
   return (
-    <section id="contacto" className="scroll-mt-24 bg-surface-container-low section-padding">
+    <section
+      id="contacto"
+      className="scroll-mt-24 bg-surface-container-low section-padding"
+    >
       <div className="container-app">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
@@ -91,7 +106,10 @@ const Contacto = () => {
 
         {/* Form + Map */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-          <form onSubmit={handleSubmit(onSubmit)} className="card p-6 md:p-8 flex flex-col gap-5">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="card p-6 md:p-8 flex flex-col gap-5"
+          >
             <div>
               <h3 className="font-heading text-lg font-semibold text-on-surface mb-1">
                 Enviá un mensaje
@@ -102,7 +120,10 @@ const Contacto = () => {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="from_name" className="text-label !normal-case !tracking-normal">
+              <label
+                htmlFor="from_name"
+                className="text-label !normal-case !tracking-normal"
+              >
                 Nombre
               </label>
               <input
@@ -112,7 +133,10 @@ const Contacto = () => {
                 className={`input-base ${errors.from_name ? "input-error" : ""}`}
                 {...register("from_name", {
                   required: "El nombre es un dato obligatorio",
-                  minLength: { value: 3, message: "Debe tener al menos 3 caracteres" },
+                  minLength: {
+                    value: 3,
+                    message: "Debe tener al menos 3 caracteres",
+                  },
                   maxLength: { value: 60, message: "Máximo 60 caracteres" },
                   pattern: {
                     value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
@@ -121,12 +145,17 @@ const Contacto = () => {
                 })}
               />
               {errors.from_name && (
-                <span className="text-error text-xs mt-0.5">{errors.from_name.message}</span>
+                <span className="text-error text-xs mt-0.5">
+                  {errors.from_name.message}
+                </span>
               )}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="from_email" className="text-label !normal-case !tracking-normal">
+              <label
+                htmlFor="from_email"
+                className="text-label !normal-case !tracking-normal"
+              >
                 Email
               </label>
               <input
@@ -143,12 +172,17 @@ const Contacto = () => {
                 })}
               />
               {errors.from_email && (
-                <span className="text-error text-xs mt-0.5">{errors.from_email.message}</span>
+                <span className="text-error text-xs mt-0.5">
+                  {errors.from_email.message}
+                </span>
               )}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="phone" className="text-label !normal-case !tracking-normal">
+              <label
+                htmlFor="phone"
+                className="text-label !normal-case !tracking-normal"
+              >
                 Teléfono
               </label>
               <input
@@ -158,7 +192,10 @@ const Contacto = () => {
                 className={`input-base ${errors.phone ? "input-error" : ""}`}
                 {...register("phone", {
                   required: "El teléfono es obligatorio",
-                  minLength: { value: 8, message: "Debe tener al menos 8 caracteres" },
+                  minLength: {
+                    value: 8,
+                    message: "Debe tener al menos 8 caracteres",
+                  },
                   maxLength: { value: 20, message: "Máximo 20 caracteres" },
                   pattern: {
                     value: /^[0-9+\-\s()]+$/,
@@ -167,12 +204,17 @@ const Contacto = () => {
                 })}
               />
               {errors.phone && (
-                <span className="text-error text-xs mt-0.5">{errors.phone.message}</span>
+                <span className="text-error text-xs mt-0.5">
+                  {errors.phone.message}
+                </span>
               )}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="message" className="text-label !normal-case !tracking-normal">
+              <label
+                htmlFor="message"
+                className="text-label !normal-case !tracking-normal"
+              >
                 Mensaje
               </label>
               <textarea
@@ -182,54 +224,87 @@ const Contacto = () => {
                 className={`textarea-base ${errors.message ? "input-error" : ""}`}
                 {...register("message", {
                   required: "El mensaje es obligatorio",
-                  minLength: { value: 10, message: "Debe tener al menos 10 caracteres" },
+                  minLength: {
+                    value: 10,
+                    message: "Debe tener al menos 10 caracteres",
+                  },
                   maxLength: { value: 500, message: "Máximo 500 caracteres" },
                 })}
               />
               {errors.message && (
-                <span className="text-error text-xs mt-0.5">{errors.message.message}</span>
+                <span className="text-error text-xs mt-0.5">
+                  {errors.message.message}
+                </span>
               )}
             </div>
 
             {estado === "ok" && (
               <div className="alert-success" role="status">
-                <span className="material-symbols-outlined text-[20px] shrink-0">check_circle</span>
-                <span>Mensaje enviado correctamente. Te contactaremos pronto.</span>
+                <span className="material-symbols-outlined text-[20px] shrink-0">
+                  check_circle
+                </span>
+                <span>
+                  Mensaje enviado correctamente. Te contactaremos pronto.
+                </span>
               </div>
             )}
             {estado === "error" && (
               <div className="alert-error" role="alert">
-                <span className="material-symbols-outlined text-[20px] shrink-0">error</span>
-                <span>Ocurrió un error. Intentá de nuevo o contactanos por WhatsApp.</span>
+                <span className="material-symbols-outlined text-[20px] shrink-0">
+                  error
+                </span>
+                <span>
+                  Ocurrió un error. Intentá de nuevo o contactanos por WhatsApp.
+                </span>
               </div>
             )}
 
-            <button type="submit" disabled={enviando} className="btn-primary w-full !mt-1">
+            <button
+              type="submit"
+              disabled={enviando}
+              className="btn-primary w-full !mt-1"
+            >
               {enviando ? (
                 <>
-                  <span className="material-symbols-outlined text-[18px] animate-spin">progress_activity</span>
+                  <span className="material-symbols-outlined text-[18px] animate-spin">
+                    progress_activity
+                  </span>
                   Enviando...
                 </>
               ) : (
                 <>
                   Enviar mensaje
-                  <span className="material-symbols-outlined text-[18px]">send</span>
+                  <span className="material-symbols-outlined text-[18px]">
+                    send
+                  </span>
                 </>
               )}
             </button>
           </form>
 
-          <div className="card overflow-hidden min-h-[400px] lg:min-h-0">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.4802989513896!2d-65.2342316253447!3d-26.82467178952945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94225c5ddae62d37%3A0x6678f7eb778713dc!2sLazarte%20Automoviles!5e0!3m2!1ses!2sar!4v1780874070504!5m2!1ses!2sar"
-              width="100%"
-              height="100%"
-              style={{ border: 0, minHeight: "400px" }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Mapa de Ubicación"
-            />
+          {/* Placeholder del mapa para mejorar el rendimiento del hilo principal */}
+          <div className="card overflow-hidden min-h-[400px] lg:min-h-0 relative flex items-center justify-center bg-surface-container">
+            {!mostrarMapa && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-on-surface-variant z-10">
+                <span className="material-symbols-outlined text-[32px] animate-spin mb-2">
+                  progress_activity
+                </span>
+                <span className="text-sm font-medium">Cargando mapa...</span>
+              </div>
+            )}
+            {mostrarMapa && (
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.4802989513896!2d-65.2342316253447!3d-26.82467178952945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94225c5ddae62d37%3A0x6678f7eb778713dc!2sLazarte%20Automoviles!5e0!3m2!1ses!2sar!4v1780874070504!5m2!1ses!2sar"
+                width="100%"
+                height="100%"
+                style={{ border: 0, minHeight: "400px" }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Mapa de Ubicación"
+                className="relative z-20 animate-fade-in"
+              />
+            )}
           </div>
         </div>
       </div>

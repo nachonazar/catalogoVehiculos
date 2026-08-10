@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { login } from "../../../helpers/queries.js";
 import Swal from "sweetalert2";
 import imgLogin from "../../assets/login.webp";
-import logo from "../../assets/logo-transparente.png";
+import logo from "../../assets/logo-transparente.webp";
 
 const Login = ({ setUsuarioAdmin }) => {
   const {

@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import logo from "../../assets/logo-transparente.png";
+import logo from "../../assets/logo-transparente.webp";
 
 const Footer = () => {
   return (
@@ -10,9 +10,12 @@ const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-5 flex flex-col items-center md:items-start text-center md:text-left">
             <NavLink to="/" className="inline-block mb-5">
+              {/* Se agregan width y height explícitos para el logo del footer */}
               <img
                 src={logo}
                 alt="Logo Catalogo de Vehiculos"
+                width="140"
+                height="109"
                 className="w-[140px] h-auto invert opacity-90 object-contain hover:opacity-100 transition-opacity"
               />
             </NavLink>
