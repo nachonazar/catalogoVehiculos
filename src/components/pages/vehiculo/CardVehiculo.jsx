@@ -14,11 +14,11 @@ const CardVehiculo = ({ vehiculo }) => {
           {/* Image - Cambiado de aspect-[4/3] a aspect-[16/9] para reducir altura vertical */}
           <div className="relative w-full aspect-[16/9] overflow-hidden bg-surface-container">
             <img
-              src={optimizarImagenCloudinary(vehiculo.imagenes[0], 500)}
+              src={optimizarImagenCloudinary(vehiculo.imagenes[0], 400)}
               alt={`${vehiculo.marca} ${vehiculo.modelo}`}
               loading="lazy"
-              width="500"
-              height="281"
+              width="400"
+              height="225"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
