@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { borrarVehiculosPorId } from "../../../../helpers/queries.js";
+import { optimizarImagenCloudinary } from "../../../../helpers/optimizarImagen.js";
 
 const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila }) => {
   const navegacion = useNavigate();
@@ -59,9 +60,15 @@ const ItemVehiculo = ({ vehiculo, setListaVehiculos, fila }) => {
           </span>
           <div className="w-16 h-11 rounded-xl overflow-hidden bg-surface-container border border-outline-variant shrink-0">
             <img
-              src={vehiculo.imagenes[0] || "https://via.placeholder.com/150"}
+              src={
+                vehiculo.imagenes[0]
+                  ? optimizarImagenCloudinary(vehiculo.imagenes[0], 150)
+                  : "https://via.placeholder.com/150"
+              }
               alt={`${vehiculo.marca} ${vehiculo.modelo}`}
               loading="lazy"
+              width="150"
+              height="100"
               className="w-full h-full object-cover"
             />
           </div>

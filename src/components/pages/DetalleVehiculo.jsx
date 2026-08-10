@@ -191,6 +191,8 @@ const DetalleVehiculo = () => {
                   )}
                   alt={`${vehiculo.marca} ${vehiculo.modelo}`}
                   loading="lazy"
+                  width="1000"
+                  height="562"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                 />
               ) : (
@@ -199,6 +201,8 @@ const DetalleVehiculo = () => {
                   src="https://via.placeholder.com/800x600?text=Sin+Imagen"
                   alt="Sin imagen"
                   loading="lazy"
+                  width="800"
+                  height="600"
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -227,6 +231,8 @@ const DetalleVehiculo = () => {
                       src={optimizarImagenCloudinary(img, 150)}
                       alt={`Miniatura ${index + 1}`}
                       loading="lazy"
+                      width="150"
+                      height="150"
                       className="w-full h-full object-cover"
                     />
                   </button>
@@ -334,6 +340,8 @@ const DetalleVehiculo = () => {
           <img
             src={optimizarImagenCloudinary(vehiculo.imagenes[indexFoto], 1600)}
             alt={`${vehiculo.marca} ${vehiculo.modelo}`}
+            width="1600"
+            height="900"
             className="max-w-[90vw] max-h-[85vh] object-contain select-none rounded-lg z-40 relative"
             onClick={(e) => e.stopPropagation()}
           />
