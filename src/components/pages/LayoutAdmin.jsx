@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../assets/logo-transparente.png";
+import logo from "../../assets/logo-transparente.webp";
 import { useTheme } from "../../context/ThemeContext";
 
 const LayoutAdmin = ({ titulo, headerExtra, children }) => {
