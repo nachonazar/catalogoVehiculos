@@ -155,10 +155,10 @@ const DetalleVehiculo = () => {
         className="mb-6 flex items-center flex-wrap gap-1.5 text-sm text-on-surface-variant"
       >
         <Link
-          to="/"
+          to="/#vehiculos"
           className="hover:text-on-surface no-underline transition-colors"
         >
-          Inicio
+          Inventario
         </Link>
         <span className="material-symbols-outlined text-[16px]">
           chevron_right

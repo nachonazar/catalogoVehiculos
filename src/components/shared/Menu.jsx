@@ -40,8 +40,8 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
-          <NavLink to="/" end onClick={irArriba} className={linkClass}>
-            Inicio
+          <NavLink to="/#vehiculos" className={linkClass}>
+            Inventario
           </NavLink>
           <Link
             to="/#contacto"
@@ -92,11 +92,9 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
       {isMobileOpen && (
         <div className="md:hidden border-t border-outline-variant/60 bg-surface-container-lowest/95 backdrop-blur-xl px-4 py-4 flex flex-col gap-1 animate-fade-in">
           <NavLink
-            to="/"
-            end
+            to="/#vehiculos"
             onClick={() => {
               setIsMobileOpen(false);
-              irArriba();
             }}
             className={({ isActive }) =>
               `block px-4 py-3 rounded-xl text-sm font-medium no-underline transition-colors ${
@@ -106,7 +104,7 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
               }`
             }
           >
-            Inicio
+            Inventario
           </NavLink>
           <Link
             to="/#contacto"
