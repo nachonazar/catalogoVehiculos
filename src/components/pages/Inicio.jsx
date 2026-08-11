@@ -18,19 +18,18 @@ const Inicio = () => {
   const [totalResultados, setTotalResultados] = useState(0);
 
   useEffect(() => {
-    if (!cargando) {
-      if (location.hash) {
-        const elemento = document.querySelector(location.hash);
-        if (elemento) {
-          setTimeout(() => {
-            elemento.scrollIntoView({ behavior: "smooth", block: "start" });
-          }, 100);
-        }
-      } else if (location.pathname === "/") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+    if (location.hash) {
+      const elemento = document.querySelector(location.hash);
+      if (elemento) {
+        setTimeout(() => {
+          const y = elemento.getBoundingClientRect().top + window.scrollY - 88;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }, 100);
       }
+    } else if (location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, [location, cargando]);
+  }, [location]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -71,7 +70,7 @@ const Inicio = () => {
     setPage(nuevaPagina);
     const seccion = document.getElementById("vehiculos");
     if (seccion) {
-      const y = seccion.getBoundingClientRect().top + window.scrollY - 100;
+      const y = seccion.getBoundingClientRect().top + window.scrollY - 88;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
@@ -118,7 +117,6 @@ const Inicio = () => {
           alt="Banner Automotores Tucumán"
           src="/banner.webp"
           fetchPriority="high"
-          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-surface" />
 

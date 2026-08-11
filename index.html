@@ -5,7 +5,6 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Preconexión al backend para eliminar el tiempo muerto inicial -->
     <link
       rel="preconnect"
       href="https://backend-catalogo-vehiculos.vercel.app"
@@ -15,15 +14,7 @@
       rel="dns-prefetch"
       href="https://backend-catalogo-vehiculos.vercel.app"
     />
-
-    <!-- Precarga del hero actualizada a WebP -->
-    <link
-      rel="preload"
-      as="image"
-      type="image/webp"
-      fetchpriority="high"
-      href="/banner.webp"
-    />
+    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
 
     <title>Automotores Tucumán | Venta de vehículos</title>
     <meta
@@ -63,15 +54,17 @@
         this.rel = 'stylesheet';
       "
     />
+
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@24,400,0..1&display=swap"
       onload="
         this.onload = null;
         this.rel = 'stylesheet';
       "
     />
+
     <noscript>
       <link
         rel="stylesheet"
@@ -79,7 +72,7 @@
       />
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@24,400,0..1&display=swap"
       />
     </noscript>
   </head>
