@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/logo-transparente.webp";
+import logo1x from "../../assets/logo-140.webp";
+import logo2x from "../../assets/logo-280.webp";
 
 const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
   const navegacion = useNavigate();
@@ -22,15 +23,14 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
   return (
     <header className="fixed top-0 w-full z-50 glass">
       <div className="container-app flex justify-between items-center h-16 md:h-[72px]">
-        {/* Logo */}
         <Link
           to="/"
           onClick={irArriba}
           className="flex items-center no-underline shrink-0 transition-opacity hover:opacity-80"
         >
-          {/* Se agregan width y height explícitos para mejorar el CLS */}
           <img
-            src={logo}
+            src={logo1x}
+            srcSet={`${logo1x} 1x, ${logo2x} 2x`}
             alt="Logo Catálogo de Vehículos"
             width="140"
             height="40"

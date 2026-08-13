@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../assets/logo-transparente.webp";
+import logo1x from "../../assets/logo-140.webp";
+import logo2x from "../../assets/logo-280.webp";
 import { useTheme } from "../../context/ThemeContext";
 
 const LayoutAdmin = ({ titulo, headerExtra, children }) => {
@@ -37,29 +38,35 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
   ];
 
   return (
-    /* Aplicamos la clase "dark" directamente al wrapper para aislar el tema */
-    <div className={`bg-neutral-bg text-on-surface font-body-md min-h-screen flex panel-admin ${tema === "oscuro" ? "dark" : ""}`}>
-      
-      {/* Overlay fondo oscuro móvil */}
+    <div
+      className={`bg-neutral-bg text-on-surface font-body-md min-h-screen flex panel-admin ${tema === "oscuro" ? "dark" : ""}`}
+    >
       {mobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
-      {/* Sidebar — desktop y móvil */}
-      <nav className={`
+      <nav
+        className={`
         fixed inset-y-0 left-0 z-50 w-[260px] flex flex-col bg-[#09090b] border-r border-white/5
         transform transition-transform duration-300 ease-in-out
         lg:translate-x-0 ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
-      `}>
+      `}
+      >
         <div className="p-5 border-b border-white/5 flex items-start justify-between">
           <div>
-            <Link to="/" className="block no-underline" onClick={() => setMobileMenuOpen(false)}>
+            <Link
+              to="/"
+              className="block no-underline"
+              onClick={() => setMobileMenuOpen(false)}
+            >
               <img
-                src={logo}
+                src={logo1x}
+                srcSet={`${logo1x} 1x, ${logo2x} 2x`}
                 alt="Logo Catalogo de Vehiculos"
+                width="130"
                 className="w-[130px] h-auto invert opacity-90 hover:opacity-100 transition-opacity object-contain mix-blend-screen"
               />
             </Link>
@@ -67,8 +74,7 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
               Panel de administración
             </p>
           </div>
-          {/* Botón cerrar en móvil */}
-          <button 
+          <button
             className="lg:hidden text-zinc-500 hover:text-white flex items-center justify-center p-1 cursor-pointer"
             onClick={() => setMobileMenuOpen(false)}
           >
@@ -123,17 +129,16 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
         </div>
       </nav>
 
-      {/* Main area */}
       <div className="flex-1 lg:ml-[260px] flex flex-col min-h-screen w-full">
-        {/* Top bar */}
         <header className="sticky top-0 z-30 h-16 bg-surface-container-lowest/80 backdrop-blur-xl border-b border-outline-variant flex justify-between items-center px-4 md:px-6">
           <div className="flex items-center gap-3">
-            {/* Hamburger para móvil */}
             <button
               className="lg:hidden flex items-center justify-center text-on-surface-variant hover:text-on-surface cursor-pointer bg-transparent border-0"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <span className="material-symbols-outlined text-[24px]">menu</span>
+              <span className="material-symbols-outlined text-[24px]">
+                menu
+              </span>
             </button>
             <h2 className="font-heading text-base font-semibold text-on-surface tracking-tight truncate">
               {titulo}
@@ -143,7 +148,6 @@ const LayoutAdmin = ({ titulo, headerExtra, children }) => {
           <div className="flex items-center gap-3 md:gap-4">
             {headerExtra}
 
-            {/* Theme toggle */}
             <div className="flex items-center bg-surface-container-low rounded-xl p-1 border border-outline-variant">
               <button
                 type="button"

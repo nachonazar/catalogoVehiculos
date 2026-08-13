@@ -1,18 +1,18 @@
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
-import logo from "../../assets/logo-transparente.webp";
+import logo1x from "../../assets/logo-140.webp";
+import logo2x from "../../assets/logo-280.webp";
 
 const Footer = () => {
   return (
     <footer className="w-full bg-primary text-on-primary mt-auto">
       <div className="container-app py-16 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
-          {/* Brand */}
           <div className="md:col-span-5 flex flex-col items-center md:items-start text-center md:text-left">
             <NavLink to="/" className="inline-block mb-5">
-              {/* Se agregan width y height explícitos para el logo del footer */}
               <img
-                src={logo}
+                src={logo1x}
+                srcSet={`${logo1x} 1x, ${logo2x} 2x`}
                 alt="Logo Catalogo de Vehiculos"
                 width="140"
                 height="109"

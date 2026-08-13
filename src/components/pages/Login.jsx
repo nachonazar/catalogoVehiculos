@@ -4,7 +4,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { login } from "../../../helpers/queries.js";
 import Swal from "sweetalert2";
 import imgLogin from "../../assets/login.webp";
-import logo from "../../assets/logo-transparente.webp";
+import logo1x from "../../assets/logo-140.webp";
+import logo2x from "../../assets/logo-280.webp";
 
 const Login = ({ setUsuarioAdmin }) => {
   const {
@@ -41,7 +42,6 @@ const Login = ({ setUsuarioAdmin }) => {
   };
 
   return (
-    /* Quitamos el pt-[72px] para que ocupe desde el borde superior exacto */
     <main className="flex w-full min-h-screen bg-surface overflow-x-hidden">
       {/* Form side */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 sm:px-12 py-12 lg:py-16">
@@ -58,9 +58,12 @@ const Login = ({ setUsuarioAdmin }) => {
 
           <div className="mb-6">
             <img
-              src={logo}
+              src={logo1x}
+              srcSet={`${logo1x} 1x, ${logo2x} 2x`}
               alt="Logo Automotores Tucumán"
               className="h-10 w-auto object-contain mb-4"
+              width="140"
+              height="40"
             />
             <h1 className="font-heading text-2xl font-bold text-on-surface mb-1">
               Iniciar sesión
@@ -172,7 +175,6 @@ const Login = ({ setUsuarioAdmin }) => {
         </div>
       </div>
 
-      {/* Visual side limpio sin textos encimados */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-primary overflow-hidden">
         <img
           src={imgLogin}
