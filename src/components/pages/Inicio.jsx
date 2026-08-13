@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 import CardVehiculo from "./vehiculo/CardVehiculo";
-import Contacto from "../shared/Contacto";
 import { leerVehiculos } from "../../../helpers/queries.js";
+
+const Contacto = lazy(() => import("../shared/Contacto"));
 
 const Inicio = () => {
   const location = useLocation();
@@ -22,8 +23,11 @@ const Inicio = () => {
       const elemento = document.querySelector(location.hash);
       if (elemento) {
         setTimeout(() => {
-          const y = elemento.getBoundingClientRect().top + window.scrollY - 88;
-          window.scrollTo({ top: y, behavior: "smooth" });
+          requestAnimationFrame(() => {
+            const y =
+              elemento.getBoundingClientRect().top + window.scrollY - 88;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          });
         }, 100);
       }
     } else if (location.pathname === "/") {
@@ -70,8 +74,10 @@ const Inicio = () => {
     setPage(nuevaPagina);
     const seccion = document.getElementById("vehiculos");
     if (seccion) {
-      const y = seccion.getBoundingClientRect().top + window.scrollY - 88;
-      window.scrollTo({ top: y, behavior: "smooth" });
+      requestAnimationFrame(() => {
+        const y = seccion.getBoundingClientRect().top + window.scrollY - 88;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      });
     }
   };
 
@@ -110,7 +116,6 @@ const Inicio = () => {
 
   return (
     <div className="bg-surface overflow-x-hidden">
-      {/* HERO con overflow asegurado */}
       <section className="relative w-full min-h-[520px] md:min-h-[600px] flex items-center justify-center overflow-hidden pt-[72px]">
         <img
           className="absolute inset-0 w-full h-full object-cover object-center scale-105"
@@ -144,7 +149,6 @@ const Inicio = () => {
         </div>
       </section>
 
-      {/* FILTERS */}
       <section className="relative z-20 -mt-8 container-app">
         <div className="card p-4 md:p-5 flex flex-col md:flex-row gap-3 shadow-float">
           <div className="relative flex-grow">
@@ -181,7 +185,6 @@ const Inicio = () => {
         </div>
       </section>
 
-      {/* CATALOG - Espacios reducidos */}
       <section className="container-app pt-8 pb-12" id="vehiculos">
         <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -240,7 +243,6 @@ const Inicio = () => {
           </div>
         )}
 
-        {/* PAGINATION CON SCROLL SUAVE */}
         {totalPages > 1 && (
           <nav
             aria-label="Paginación"
@@ -291,7 +293,10 @@ const Inicio = () => {
           </nav>
         )}
       </section>
-      <Contacto />
+
+      <Suspense fallback={null}>
+        <Contacto />
+      </Suspense>
     </div>
   );
 };
