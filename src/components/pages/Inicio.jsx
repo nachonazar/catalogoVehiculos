@@ -120,7 +120,9 @@ const Inicio = () => {
         <img
           className="absolute inset-0 w-full h-full object-cover object-center scale-105"
           alt="Banner Automotores Tucumán"
-          src="/banner.webp"
+          src="/banner-1080.webp"
+          srcSet="/banner-640.webp 640w, /banner-1080.webp 1080w, /banner-1920.webp 1920w"
+          sizes="100vw"
           fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-surface" />
