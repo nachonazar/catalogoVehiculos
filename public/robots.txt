@@ -3,4 +3,4 @@ Allow: /
 Disallow: /login
 Disallow: /administrador
 
-Sitemap: https://catalogos-vehiculos.netlify.app/sitemap.xml
+Sitemap: https://automotorestucuman.com.ar/sitemap.xml
