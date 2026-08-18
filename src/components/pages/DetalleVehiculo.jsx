@@ -308,7 +308,7 @@ const DetalleVehiculo = () => {
               </div>
 
               <a
-                href={`https://wa.me/5493816289462?text=Hola!%20Me%20interesa%20el%20${vehiculo.marca}%20${vehiculo.modelo}%20${vehiculo.anio}%20que%20vi%20en%20el%20catálogo`}
+                href={`https://wa.me/5493814447015?text=Hola!%20Me%20interesa%20el%20${vehiculo.marca}%20${vehiculo.modelo}%20${vehiculo.anio}%20que%20vi%20en%20el%20catálogo`}
                 target="_blank"
                 rel="noreferrer"
                 className="btn w-full no-underline !py-3.5 text-sm font-medium text-white border-0 shadow-md hover:shadow-lg bg-success-green hover:brightness-95 transition-all"

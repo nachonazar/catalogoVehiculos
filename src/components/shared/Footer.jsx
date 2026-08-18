@@ -49,14 +49,16 @@ const Footer = () => {
           {/* Social */}
           <div className="md:col-span-4 flex flex-col items-center md:items-end">
             <h4 className="font-heading text-sm font-semibold text-on-primary mb-1 tracking-wide">
-              Ignacio Nazar
+              Javier Nazar
             </h4>
             <p className="text-sm text-on-primary-container mb-5 text-center md:text-right">
               Seguime en mis redes
             </p>
             <div className="flex items-center gap-3">
               <a
-                href="#"
+                href="https://ig.me/m/javier_nazar64"
+                target="_blank"
+                rel="noreferrer"
                 aria-label="Instagram"
                 className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-on-primary-container hover:text-on-primary hover:bg-white/10 transition-all"
               >
@@ -71,7 +73,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://wa.me/5493816289462?text=Hola!%20Me%20interesa%20un%20vehículo%20del%20catálogo"
+                href="https://wa.me/5493814447015?text=Hola!%20Me%20interesa%20un%20vehículo%20del%20catálogo"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="WhatsApp"
@@ -88,7 +90,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://m.me/Ignacio Nazar"
+                href="https://m.me/javier.nazar.665392"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Facebook Messenger"
