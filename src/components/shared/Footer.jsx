@@ -25,7 +25,6 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Links */}
           <div className="md:col-span-3 flex flex-col items-center md:items-start">
             <h4 className="font-heading text-sm font-semibold text-on-primary mb-4 tracking-wide">
               Navegación
@@ -46,7 +45,6 @@ const Footer = () => {
             </nav>
           </div>
 
-          {/* Social */}
           <div className="md:col-span-4 flex flex-col items-center md:items-end">
             <h4 className="font-heading text-sm font-semibold text-on-primary mb-1 tracking-wide">
               Javier Nazar

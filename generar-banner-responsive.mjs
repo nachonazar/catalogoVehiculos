@@ -1,16 +1,12 @@
-// generar-banner-responsive.mjs
-// Genera 3 versiones responsivas de public/banner.webp
-// Correr una sola vez desde la raíz del proyecto: node generar-banner-responsive.mjs
-
 import sharp from "sharp";
 import path from "path";
 
 const origen = path.resolve("public/banner.webp");
 
 const tamaños = [
-  { ancho: 640, salida: "public/banner-640.webp" },   // mobile
-  { ancho: 1080, salida: "public/banner-1080.webp" }, // tablet / mobile grande
-  { ancho: 1920, salida: "public/banner-1920.webp" },  // desktop
+  { ancho: 640, salida: "public/banner-640.webp" },
+  { ancho: 1080, salida: "public/banner-1080.webp" },
+  { ancho: 1920, salida: "public/banner-1920.webp" },
 ];
 
 const generar = async () => {

@@ -17,7 +17,6 @@ import {
 import { leerVehiculos } from "../../../helpers/queries.js";
 import LayoutAdmin from "./LayoutAdmin";
 
-// Reemplazamos los colores fijos por las variables CSS del Design System
 const COLORES_CATEGORIA = [
   "var(--color-secondary)",
   "var(--color-primary)",
@@ -74,7 +73,6 @@ const EstadisticasVehiculos = () => {
     }
   };
 
-  // KPIs / Tarjetas de Resumen
   const totalVehiculos = vehiculos.length;
   const vehiculosDisponibles = vehiculos.filter((v) => v.disponible).length;
   const vehiculosVendidos = totalVehiculos - vehiculosDisponibles;
@@ -119,7 +117,6 @@ const EstadisticasVehiculos = () => {
     },
   ];
 
-  // 1. Vehículos por categoría
   const datosPorCategoria = useMemo(() => {
     const conteo = {};
     vehiculos.forEach((v) => {
@@ -138,7 +135,6 @@ const EstadisticasVehiculos = () => {
     return `$${valor}`;
   };
 
-  // 2. Rango de precios
   const datosPorRangoPrecio = useMemo(() => {
     if (vehiculos.length === 0) return [];
     const precios = vehiculos.map((v) => Number(v.precio) || 0);
@@ -169,7 +165,6 @@ const EstadisticasVehiculos = () => {
     return rangos;
   }, [vehiculos]);
 
-  // 3. Disponibles vs Vendidos
   const datosDisponibilidad = useMemo(() => {
     return [
       { name: "Disponibles", value: vehiculosDisponibles },
@@ -184,7 +179,6 @@ const EstadisticasVehiculos = () => {
     return new Date(segundosUnix * 1000);
   };
 
-  // 4. Evolución mensual
   const datosEvolucionMensual = useMemo(() => {
     const hoy = new Date();
     const meses = [];
@@ -209,7 +203,6 @@ const EstadisticasVehiculos = () => {
     return meses;
   }, [vehiculos]);
 
-  // Estilo reutilizable para los Tooltips de Recharts
   const tooltipStyle = {
     backgroundColor: COLOR_FONDO_TOOLTIP,
     borderColor: COLOR_GRILLA,
@@ -242,7 +235,6 @@ const EstadisticasVehiculos = () => {
         </div>
       ) : (
         <div className="flex flex-col gap-6 pb-12">
-          {/* Tarjetas de Resumen Superior */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {kpis.map((kpi) => (
               <div key={kpi.label} className="kpi-card">
@@ -266,9 +258,7 @@ const EstadisticasVehiculos = () => {
             ))}
           </div>
 
-          {/* Grillas de Gráficos */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* 1. Pie Chart - Categorías */}
             <div className="card p-6 h-full">
               <h3 className="font-heading text-lg font-bold text-on-surface mb-1">
                 Vehículos por Categoría
@@ -318,7 +308,6 @@ const EstadisticasVehiculos = () => {
               </div>
             </div>
 
-            {/* 2. Bar Chart - Precios (Optimizado con YAxis y márgenes holgados) */}
             <div className="card p-6 h-full">
               <h3 className="font-heading text-lg font-bold text-on-surface mb-1">
                 Rango de Precios
@@ -374,7 +363,6 @@ const EstadisticasVehiculos = () => {
               </div>
             </div>
 
-            {/* 3. Pie Chart - Disponibilidad */}
             <div className="card p-6 h-full">
               <h3 className="font-heading text-lg font-bold text-on-surface mb-1">
                 Disponibles vs Vendidos
@@ -427,7 +415,6 @@ const EstadisticasVehiculos = () => {
               </div>
             </div>
 
-            {/* 4. Line Chart - Evolución */}
             <div className="card p-6 h-full">
               <h3 className="font-heading text-lg font-bold text-on-surface mb-1">
                 Evolución del Inventario

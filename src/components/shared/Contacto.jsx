@@ -13,14 +13,12 @@ const Contacto = () => {
   const [enviando, setEnviando] = useState(false);
   const [estado, setEstado] = useState(null);
 
-  // Estado para controlar la carga retrasada del mapa
   const [mostrarMapa, setMostrarMapa] = useState(false);
 
-  // Retrasamos la carga del iframe de Google Maps para que no bloquee el hilo principal
   useEffect(() => {
     const timer = setTimeout(() => {
       setMostrarMapa(true);
-    }, 3500); // Se cargará 3.5 segundos después de que se monte el componente
+    }, 3500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -72,7 +70,6 @@ const Contacto = () => {
       className="scroll-mt-24 bg-surface-container-low section-padding"
     >
       <div className="container-app">
-        {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <p className="text-label mb-2">Contacto</p>
           <h2 className="font-heading text-headline-lg text-on-surface mb-3">
@@ -83,7 +80,6 @@ const Contacto = () => {
           </p>
         </div>
 
-        {/* Info cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-12 md:mb-16">
           {infoCards.map((card) => (
             <div
@@ -104,7 +100,6 @@ const Contacto = () => {
           ))}
         </div>
 
-        {/* Form + Map */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -282,7 +277,6 @@ const Contacto = () => {
             </button>
           </form>
 
-          {/* Placeholder del mapa para mejorar el rendimiento del hilo principal */}
           <div className="card overflow-hidden min-h-[400px] lg:min-h-0 relative flex items-center justify-center bg-surface-container">
             {!mostrarMapa && (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-on-surface-variant z-10">
