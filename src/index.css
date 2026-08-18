@@ -110,6 +110,8 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   body {
@@ -117,6 +119,8 @@
     background-color: var(--color-surface);
     color: var(--color-on-surface);
     transition: background-color 0.2s ease, color 0.2s ease;
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   #root {
