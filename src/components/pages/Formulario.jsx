@@ -167,7 +167,6 @@ const Formulario = ({ titulo }) => {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-6"
           >
-            {/* Fila 1: Marca y Modelo */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-1.5">
                 <label className="text-label">Marca*</label>
@@ -216,7 +215,6 @@ const Formulario = ({ titulo }) => {
               </div>
             </div>
 
-            {/* Fila 2: Año y Categoría */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-1.5">
                 <label className="text-label">Año*</label>
@@ -268,7 +266,6 @@ const Formulario = ({ titulo }) => {
               </div>
             </div>
 
-            {/* Fila 3: Precio y Kilometraje */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-1.5">
                 <label className="text-label">Precio ($)*</label>
@@ -311,7 +308,6 @@ const Formulario = ({ titulo }) => {
               </div>
             </div>
 
-            {/* Fila 4: Imágenes */}
             <div className="flex flex-col gap-1.5 border border-outline-variant rounded-xl p-4 md:p-5 bg-surface-container-low/50">
               <label className="text-label mb-1">Imágenes*</label>
               <input
@@ -356,7 +352,6 @@ const Formulario = ({ titulo }) => {
                 </span>
               )}
 
-              {/* Previsualización de imágenes */}
               {[...imagenActual, ...preview].length > 0 && (
                 <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-outline-variant">
                   {[...imagenActual, ...preview].map((src, index) => (
@@ -398,7 +393,6 @@ const Formulario = ({ titulo }) => {
               )}
             </div>
 
-            {/* Switch de Estado (Solo al Editar) */}
             {titulo === "Editar Vehiculo" && (
               <div className="flex items-center gap-3 py-2">
                 <label className="relative inline-flex items-center cursor-pointer">
@@ -417,7 +411,6 @@ const Formulario = ({ titulo }) => {
               </div>
             )}
 
-            {/* Fila 5: Descripción */}
             <div className="flex flex-col gap-1.5">
               <label className="text-label">Descripción*</label>
               <textarea
@@ -437,7 +430,6 @@ const Formulario = ({ titulo }) => {
               )}
             </div>
 
-            {/* Botones de Acción */}
             <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-4 pt-6 border-t border-outline-variant">
               <button
                 type="button"

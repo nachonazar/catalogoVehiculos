@@ -10,7 +10,6 @@ const Administrador = () => {
   const [limit] = useState(4);
   const [terminoBusqueda, setTerminoBusqueda] = useState("");
 
-  // Efecto inicial: Traemos TODOS los vehículos una sola vez
   useEffect(() => {
     obtenerTodosLosVehiculos();
   }, []);
@@ -26,7 +25,6 @@ const Administrador = () => {
     }
   };
 
-  // 1. Filtramos sobre EL TOTAL de la flota
   const vehiculosFiltrados = vehiculosTotales.filter((vehiculo) => {
     const termino = terminoBusqueda.toLowerCase();
     return (
@@ -36,10 +34,8 @@ const Administrador = () => {
     );
   });
 
-  // 2. Calculamos las páginas dinámicas basadas en los resultados del filtro
   const totalPages = Math.ceil(vehiculosFiltrados.length / limit) || 1;
 
-  // 3. Recortamos el array para mostrar solo los de la página actual
   const indiceUltimo = page * limit;
   const indicePrimer = indiceUltimo - limit;
   const vehiculosParaMostrar = vehiculosFiltrados.slice(
@@ -47,7 +43,6 @@ const Administrador = () => {
     indiceUltimo,
   );
 
-  // KPIs
   const totalFlota = vehiculosTotales.length;
   const vehiculosDisponibles = vehiculosTotales.filter(
     (v) => v.disponible,
@@ -105,7 +100,7 @@ const Administrador = () => {
         value={terminoBusqueda}
         onChange={(e) => {
           setTerminoBusqueda(e.target.value);
-          setPage(1); // CLAVE: Volver a página 1 al buscar
+          setPage(1);
         }}
         aria-label="Buscar vehículos"
         className="input-base !h-9 !pl-9 !text-xs !rounded-xl"
@@ -126,7 +121,6 @@ const Administrador = () => {
         </div>
       </div>
 
-      {/* KPI cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {kpis.map((kpi) => (
           <div key={kpi.label} className="kpi-card">
@@ -150,7 +144,6 @@ const Administrador = () => {
         ))}
       </div>
 
-      {/* Table */}
       <div className="card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[800px]">
@@ -185,7 +178,6 @@ const Administrador = () => {
                     key={vehiculo._id}
                     vehiculo={vehiculo}
                     fila={(page - 1) * limit + indice + 1}
-                    /* Le pasamos la funcion para que ItemVehiculo actualice la BD y vuelva a traer todo */
                     setListaVehiculos={obtenerTodosLosVehiculos}
                     page={page}
                     limit={limit}
@@ -196,7 +188,6 @@ const Administrador = () => {
           </table>
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="p-4 border-t border-outline-variant flex justify-between items-center bg-surface-container-low/50">
             <span className="text-xs text-on-surface-variant hidden md:block">

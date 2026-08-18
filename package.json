@@ -17,8 +17,7 @@
     "react-router": "^7.14.0",
     "react-router-dom": "^7.14.0",
     "recharts": "^3.10.1",
-    "sweetalert2": "^11.26.24",
-    "uuid": "^13.0.0"
+    "sweetalert2": "^11.26.24"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",

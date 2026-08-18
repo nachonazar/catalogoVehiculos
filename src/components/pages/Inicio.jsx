@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo, lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 import CardVehiculo from "./vehiculo/CardVehiculo";
 import { leerVehiculos } from "../../../helpers/queries.js";
+import WhatsAppButton from "../shared/WhatsAppButton.jsx";
 
 const Contacto = lazy(() => import("../shared/Contacto"));
 
@@ -299,6 +300,7 @@ const Inicio = () => {
       <Suspense fallback={null}>
         <Contacto />
       </Suspense>
+      <WhatsAppButton />
     </div>
   );
 };

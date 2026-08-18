@@ -38,7 +38,6 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
           />
         </Link>
 
-        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
           <NavLink to="/#vehiculos" className={linkClass}>
             Inventario
@@ -56,7 +55,6 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
           )}
         </nav>
 
-        {/* Actions */}
         <div className="flex items-center gap-3">
           {usuarioAdmin.token ? (
             <button
@@ -88,7 +86,6 @@ const Menu = ({ usuarioAdmin, setUsuarioAdmin }) => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {isMobileOpen && (
         <div className="md:hidden border-t border-outline-variant/60 bg-surface-container-lowest/95 backdrop-blur-xl px-4 py-4 flex flex-col gap-1 animate-fade-in">
           <NavLink
