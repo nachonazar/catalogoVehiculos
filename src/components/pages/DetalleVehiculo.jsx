@@ -12,6 +12,20 @@ const DetalleVehiculo = () => {
   const [indexFoto, setIndexFoto] = useState(0);
 
   const modalRef = useRef(null);
+  const touchStartX = useRef(null);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    const threshold = 50;
+    if (diff > threshold) nextImg(e);
+    else if (diff < -threshold) prevImg(e);
+    touchStartX.current = null;
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -23,6 +37,17 @@ const DetalleVehiculo = () => {
       if (e.key === "Escape" && showModal) {
         setShowModal(false);
         return;
+      }
+
+      if (showModal && vehiculo?.imagenes?.length > 1) {
+        if (e.key === "ArrowRight") {
+          nextImg(e);
+          return;
+        }
+        if (e.key === "ArrowLeft") {
+          prevImg(e);
+          return;
+        }
       }
 
       if (e.key === "Tab" && showModal && modalRef.current) {
@@ -337,14 +362,55 @@ const DetalleVehiculo = () => {
           >
             <span className="material-symbols-outlined text-[24px]">close</span>
           </button>
-          <img
-            src={optimizarImagenCloudinary(vehiculo.imagenes[indexFoto], 1600)}
-            alt={`${vehiculo.marca} ${vehiculo.modelo}`}
-            width="1600"
-            height="900"
-            className="max-w-[90vw] max-h-[85vh] object-contain select-none rounded-lg z-40 relative"
+
+          {vehiculo.imagenes?.length > 1 && (
+            <>
+              <button
+                type="button"
+                aria-label="Imagen anterior"
+                className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 transition-colors z-50 cursor-pointer"
+                onClick={prevImg}
+              >
+                <span className="material-symbols-outlined text-[26px]">
+                  chevron_left
+                </span>
+              </button>
+              <button
+                type="button"
+                aria-label="Imagen siguiente"
+                className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 transition-colors z-50 cursor-pointer"
+                onClick={nextImg}
+              >
+                <span className="material-symbols-outlined text-[26px]">
+                  chevron_right
+                </span>
+              </button>
+            </>
+          )}
+
+          <div
+            className="relative z-40"
             onClick={(e) => e.stopPropagation()}
-          />
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <img
+              src={optimizarImagenCloudinary(
+                vehiculo.imagenes[indexFoto],
+                1600,
+              )}
+              alt={`${vehiculo.marca} ${vehiculo.modelo}`}
+              width="1600"
+              height="900"
+              className="max-w-[90vw] max-h-[85vh] object-contain select-none rounded-lg"
+            />
+          </div>
+
+          {vehiculo.imagenes?.length > 1 && (
+            <span className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/70 text-sm bg-white/10 px-3 py-1 rounded-full z-50">
+              {indexFoto + 1} / {vehiculo.imagenes.length}
+            </span>
+          )}
         </div>
       )}
     </main>
