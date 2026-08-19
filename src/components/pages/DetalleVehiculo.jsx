@@ -94,6 +94,38 @@ const DetalleVehiculo = () => {
     };
   }, [showModal]);
 
+  // --- PRECARGA DE IMÁGENES ADYACENTES (Pre-fetching) ---
+  useEffect(() => {
+    if (!vehiculo || !vehiculo.imagenes || vehiculo.imagenes.length <= 1)
+      return;
+
+    const precargarImagen = (url) => {
+      const img = new Image();
+      img.src = url;
+    };
+
+    const totalImagenes = vehiculo.imagenes.length;
+    const prevIndex = indexFoto === 0 ? totalImagenes - 1 : indexFoto - 1;
+    const nextIndex = indexFoto === totalImagenes - 1 ? 0 : indexFoto + 1;
+
+    precargarImagen(
+      optimizarImagenCloudinary(vehiculo.imagenes[prevIndex], 1000),
+    );
+    precargarImagen(
+      optimizarImagenCloudinary(vehiculo.imagenes[nextIndex], 1000),
+    );
+
+    if (showModal) {
+      precargarImagen(
+        optimizarImagenCloudinary(vehiculo.imagenes[prevIndex], 1600),
+      );
+      precargarImagen(
+        optimizarImagenCloudinary(vehiculo.imagenes[nextIndex], 1600),
+      );
+    }
+  }, [vehiculo, indexFoto, showModal]);
+  // --------------------------------------------------------
+
   async function obtenerVehiculo() {
     setCargando(true);
     setErrorMensaje(null);
