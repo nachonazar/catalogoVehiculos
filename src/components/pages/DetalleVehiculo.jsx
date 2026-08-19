@@ -94,6 +94,38 @@ const DetalleVehiculo = () => {
     };
   }, [showModal]);
 
+  // --- PRECARGA DE IMÁGENES ADYACENTES (Pre-fetching) ---
+  useEffect(() => {
+    if (!vehiculo || !vehiculo.imagenes || vehiculo.imagenes.length <= 1)
+      return;
+
+    const precargarImagen = (url) => {
+      const img = new Image();
+      img.src = url;
+    };
+
+    const totalImagenes = vehiculo.imagenes.length;
+    const prevIndex = indexFoto === 0 ? totalImagenes - 1 : indexFoto - 1;
+    const nextIndex = indexFoto === totalImagenes - 1 ? 0 : indexFoto + 1;
+
+    precargarImagen(
+      optimizarImagenCloudinary(vehiculo.imagenes[prevIndex], 1000),
+    );
+    precargarImagen(
+      optimizarImagenCloudinary(vehiculo.imagenes[nextIndex], 1000),
+    );
+
+    if (showModal) {
+      precargarImagen(
+        optimizarImagenCloudinary(vehiculo.imagenes[prevIndex], 1600),
+      );
+      precargarImagen(
+        optimizarImagenCloudinary(vehiculo.imagenes[nextIndex], 1600),
+      );
+    }
+  }, [vehiculo, indexFoto, showModal]);
+  // --------------------------------------------------------
+
   async function obtenerVehiculo() {
     setCargando(true);
     setErrorMensaje(null);
@@ -336,8 +368,18 @@ const DetalleVehiculo = () => {
                 href={`https://wa.me/5493814447015?text=Hola!%20Me%20interesa%20el%20${vehiculo.marca}%20${vehiculo.modelo}%20${vehiculo.anio}%20que%20vi%20en%20el%20catálogo`}
                 target="_blank"
                 rel="noreferrer"
-                className="btn w-full no-underline !py-3.5 text-sm font-medium text-white border-0 shadow-md hover:shadow-lg bg-success-green hover:brightness-95 transition-all"
+                className="btn w-full no-underline !py-3.5 text-sm font-medium text-white border-0 shadow-md hover:shadow-lg bg-success-green hover:brightness-95 transition-all flex items-center justify-center gap-2"
               >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                  <path d="M12.004 2C6.486 2 2.01 6.476 2.01 11.994c0 2.113.552 4.09 1.514 5.803L2 22l4.32-1.494a9.94 9.94 0 0 0 5.684 1.78c5.518 0 9.994-4.476 9.994-9.994C21.998 6.476 17.522 2 12.004 2zm0 18.187a8.16 8.16 0 0 1-4.16-1.135l-.298-.177-3.09.938.828-3.024-.194-.31a8.153 8.153 0 0 1-1.264-4.489c0-4.51 3.669-8.18 8.18-8.18 4.512 0 8.18 3.67 8.18 8.18 0 4.512-3.668 8.197-8.182 8.197z" />
+                </svg>
                 Consultar por WhatsApp
               </a>
             </div>
