@@ -94,7 +94,6 @@ const DetalleVehiculo = () => {
     };
   }, [showModal]);
 
-  // --- PRECARGA DE IMÁGENES ADYACENTES (Pre-fetching) ---
   useEffect(() => {
     if (!vehiculo || !vehiculo.imagenes || vehiculo.imagenes.length <= 1)
       return;
@@ -109,10 +108,10 @@ const DetalleVehiculo = () => {
     const nextIndex = indexFoto === totalImagenes - 1 ? 0 : indexFoto + 1;
 
     precargarImagen(
-      optimizarImagenCloudinary(vehiculo.imagenes[prevIndex], 1000),
+      optimizarImagenCloudinary(vehiculo.imagenes[prevIndex], 1400),
     );
     precargarImagen(
-      optimizarImagenCloudinary(vehiculo.imagenes[nextIndex], 1000),
+      optimizarImagenCloudinary(vehiculo.imagenes[nextIndex], 1400),
     );
 
     if (showModal) {
@@ -244,7 +243,7 @@ const DetalleVehiculo = () => {
                 <img
                   src={optimizarImagenCloudinary(
                     vehiculo.imagenes[indexFoto],
-                    1000,
+                    1400,
                   )}
                   alt={`${vehiculo.marca} ${vehiculo.modelo}`}
                   loading="lazy"
@@ -285,7 +284,7 @@ const DetalleVehiculo = () => {
                     }`}
                   >
                     <img
-                      src={optimizarImagenCloudinary(img, 150)}
+                      src={optimizarImagenCloudinary(img, 300)}
                       alt={`Miniatura ${index + 1}`}
                       loading="lazy"
                       width="150"

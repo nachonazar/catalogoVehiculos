@@ -12,7 +12,7 @@ const CardVehiculo = ({ vehiculo }) => {
         <article className="flex flex-col h-full">
           <div className="relative w-full aspect-[16/9] overflow-hidden bg-surface-container">
             <img
-              src={optimizarImagenCloudinary(vehiculo.imagenes[0], 400)}
+              src={optimizarImagenCloudinary(vehiculo.imagenes[0], 800)}
               alt={`${vehiculo.marca} ${vehiculo.modelo}`}
               loading="lazy"
               width="400"
